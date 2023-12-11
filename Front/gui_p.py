@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from util.generic import GENERIC
+from Analizador.sintactico import parser
 class GUI_P:
     def __init__(self) :
         self.notebook=None
@@ -78,7 +79,10 @@ class GUI_P:
     def run_script(self):
         index=self.notebook.index("current")
         #texto=self.mat_text[index].get()
-        print("index: ",index,"- size mat_text: ",len(self.mat_text),self.mat_text[index].get("1.0", "end-1c"))
+        #self.mat_text[index].get("1.0", "end-1c")
+        entrada=self.mat_text[index].get("1.0", "end-1c")
+        print("index: ",index,"- size mat_text: ",len(self.mat_text),entrada)
+        parser(entrada)
 
     def run_sql(self):
         index=self.notebook.index("current")
@@ -86,4 +90,5 @@ class GUI_P:
         fila=cursor_posicion.split(".")[0]
         linea_actual=self.mat_text[index].get(f"{fila}.0", f"{fila}.end-1c")
         print("Texto en la línea actual:", linea_actual)
+        parser.parse(linea_actual)
 
