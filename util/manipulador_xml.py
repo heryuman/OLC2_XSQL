@@ -98,9 +98,11 @@ class CREATE_XML:
             for col in table._columns:
                 nc=col._column_name
                 nt=col._type
+                cz=col._col_size
                 n_col=ET.SubElement(colums,"COLUMNA")
                 n_col.attrib["nombrecol"]=nc
                 n_col.attrib["tipo"]=nt
+                n_col.attrib["col_size"]=str(cz)
             cadena_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
             xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
 
