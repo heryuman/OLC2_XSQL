@@ -11,63 +11,64 @@ Rule 5     comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC
 Rule 6     datostable -> datostable datotable
 Rule 7     datostable -> datotable
 Rule 8     datotable -> columnas
-Rule 9     columnas -> columna COMA columna
+Rule 9     columnas -> columnas COMA columna
 Rule 10    columnas -> columna
-Rule 11    columna -> ID tipo restriccion
-Rule 12    columna -> ID tipo
-Rule 13    columna -> ID tipo tamanios
-Rule 14    tamanios -> PARABRE tamanios COMA tamanio PARCIERRA
-Rule 15    tamanios -> PARABRE tamanio PARCIERRA
-Rule 16    tamanio -> NUMEROS
-Rule 17    restriccion -> PRIMARY KEY
-Rule 18    restriccion -> NOT NULL
-Rule 19    restriccion -> references
-Rule 20    references -> REFERENCES ID PARABRE ID PARCIERRA
-Rule 21    tipo -> INTEGER
-Rule 22    tipo -> TEXT
-Rule 23    tipo -> varchar
-Rule 24    tipo -> DATE
-Rule 25    tipo -> DECIMAL
-Rule 26    varchar -> VARCHAR PARABRE NUMEROS PARCIERRA
+Rule 11    columna -> ID tipo tamanios
+Rule 12    columna -> ID tipo restriccion
+Rule 13    columna -> ID tipo
+Rule 14    columna -> ID tipo tamanios restriccion
+Rule 15    tamanios -> PARABRE tamanios COMA tamanio PARCIERRA
+Rule 16    tamanios -> PARABRE tamanio PARCIERRA
+Rule 17    tamanio -> NUMEROS
+Rule 18    restriccion -> PRIMARY KEY
+Rule 19    restriccion -> NOT NULL
+Rule 20    restriccion -> reference
+Rule 21    reference -> REFERENCE ID PARABRE ID PARCIERRA
+Rule 22    tipo -> INT
+Rule 23    tipo -> TEXT
+Rule 24    tipo -> nvarchar
+Rule 25    tipo -> DATE
+Rule 26    tipo -> DECIMAL
+Rule 27    nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA
 
 Terminals, with rules where they appear
 
-COMA                 : 9 14
+COMA                 : 9 15
 CREATE               : 5
-DATE                 : 24
-DECIMAL              : 25
-ID                   : 5 11 12 13 20 20
-INTEGER              : 21
-KEY                  : 17
-NOT                  : 18
-NULL                 : 18
-NUMEROS              : 16 26
-PARABRE              : 5 14 15 20 26
-PARCIERRA            : 5 14 15 20 26
-PRIMARY              : 17
+DATE                 : 25
+DECIMAL              : 26
+ID                   : 5 11 12 13 14 21 21
+INT                  : 22
+KEY                  : 18
+NOT                  : 19
+NULL                 : 19
+NUMEROS              : 17 27
+NVARCHAR             : 27
+PARABRE              : 5 15 16 21 27
+PARCIERRA            : 5 15 16 21 27
+PRIMARY              : 18
 PYC                  : 5
-REFERENCES           : 20
+REFERENCE            : 21
 TABLE                : 5
-TEXT                 : 22
-VARCHAR              : 26
+TEXT                 : 23
 error                : 
 
 Nonterminals, with rules where they appear
 
-columna              : 9 9 10
-columnas             : 8
+columna              : 9 10
+columnas             : 8 9
 comandocreate        : 4
 datostable           : 5 6
 datotable            : 6 7
 inicio               : 0
 instruccion          : 2 3
 instrucciones        : 1 2
-references           : 19
-restriccion          : 11
-tamanio              : 14 15
-tamanios             : 13 14
-tipo                 : 11 12 13
-varchar              : 23
+nvarchar             : 24
+reference            : 20
+restriccion          : 12 14
+tamanio              : 15 16
+tamanios             : 11 14 15
+tipo                 : 11 12 13 14
 
 Parsing method: LALR
 
@@ -157,11 +158,12 @@ state 9
     (6) datostable -> . datostable datotable
     (7) datostable -> . datotable
     (8) datotable -> . columnas
-    (9) columnas -> . columna COMA columna
+    (9) columnas -> . columnas COMA columna
     (10) columnas -> . columna
-    (11) columna -> . ID tipo restriccion
-    (12) columna -> . ID tipo
-    (13) columna -> . ID tipo tamanios
+    (11) columna -> . ID tipo tamanios
+    (12) columna -> . ID tipo restriccion
+    (13) columna -> . ID tipo
+    (14) columna -> . ID tipo tamanios restriccion
 
     ID              shift and go to state 10
 
@@ -172,35 +174,37 @@ state 9
 
 state 10
 
-    (11) columna -> ID . tipo restriccion
-    (12) columna -> ID . tipo
-    (13) columna -> ID . tipo tamanios
-    (21) tipo -> . INTEGER
-    (22) tipo -> . TEXT
-    (23) tipo -> . varchar
-    (24) tipo -> . DATE
-    (25) tipo -> . DECIMAL
-    (26) varchar -> . VARCHAR PARABRE NUMEROS PARCIERRA
+    (11) columna -> ID . tipo tamanios
+    (12) columna -> ID . tipo restriccion
+    (13) columna -> ID . tipo
+    (14) columna -> ID . tipo tamanios restriccion
+    (22) tipo -> . INT
+    (23) tipo -> . TEXT
+    (24) tipo -> . nvarchar
+    (25) tipo -> . DATE
+    (26) tipo -> . DECIMAL
+    (27) nvarchar -> . NVARCHAR PARABRE NUMEROS PARCIERRA
 
-    INTEGER         shift and go to state 16
+    INT             shift and go to state 16
     TEXT            shift and go to state 17
     DATE            shift and go to state 19
     DECIMAL         shift and go to state 20
-    VARCHAR         shift and go to state 21
+    NVARCHAR        shift and go to state 21
 
     tipo                           shift and go to state 15
-    varchar                        shift and go to state 18
+    nvarchar                       shift and go to state 18
 
 state 11
 
     (5) comandocreate -> CREATE TABLE ID PARABRE datostable . PARCIERRA PYC
     (6) datostable -> datostable . datotable
     (8) datotable -> . columnas
-    (9) columnas -> . columna COMA columna
+    (9) columnas -> . columnas COMA columna
     (10) columnas -> . columna
-    (11) columna -> . ID tipo restriccion
-    (12) columna -> . ID tipo
-    (13) columna -> . ID tipo tamanios
+    (11) columna -> . ID tipo tamanios
+    (12) columna -> . ID tipo restriccion
+    (13) columna -> . ID tipo
+    (14) columna -> . ID tipo tamanios restriccion
 
     PARCIERRA       shift and go to state 22
     ID              shift and go to state 10
@@ -220,113 +224,115 @@ state 12
 state 13
 
     (8) datotable -> columnas .
+    (9) columnas -> columnas . COMA columna
 
     PARCIERRA       reduce using rule 8 (datotable -> columnas .)
     ID              reduce using rule 8 (datotable -> columnas .)
+    COMA            shift and go to state 24
 
 
 state 14
 
-    (9) columnas -> columna . COMA columna
     (10) columnas -> columna .
 
-    COMA            shift and go to state 24
+    COMA            reduce using rule 10 (columnas -> columna .)
     PARCIERRA       reduce using rule 10 (columnas -> columna .)
     ID              reduce using rule 10 (columnas -> columna .)
 
 
 state 15
 
-    (11) columna -> ID tipo . restriccion
-    (12) columna -> ID tipo .
-    (13) columna -> ID tipo . tamanios
-    (17) restriccion -> . PRIMARY KEY
-    (18) restriccion -> . NOT NULL
-    (19) restriccion -> . references
-    (14) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
-    (15) tamanios -> . PARABRE tamanio PARCIERRA
-    (20) references -> . REFERENCES ID PARABRE ID PARCIERRA
+    (11) columna -> ID tipo . tamanios
+    (12) columna -> ID tipo . restriccion
+    (13) columna -> ID tipo .
+    (14) columna -> ID tipo . tamanios restriccion
+    (15) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
+    (16) tamanios -> . PARABRE tamanio PARCIERRA
+    (18) restriccion -> . PRIMARY KEY
+    (19) restriccion -> . NOT NULL
+    (20) restriccion -> . reference
+    (21) reference -> . REFERENCE ID PARABRE ID PARCIERRA
 
-    COMA            reduce using rule 12 (columna -> ID tipo .)
-    PARCIERRA       reduce using rule 12 (columna -> ID tipo .)
-    ID              reduce using rule 12 (columna -> ID tipo .)
-    PRIMARY         shift and go to state 27
-    NOT             shift and go to state 28
-    PARABRE         shift and go to state 30
-    REFERENCES      shift and go to state 31
+    COMA            reduce using rule 13 (columna -> ID tipo .)
+    PARCIERRA       reduce using rule 13 (columna -> ID tipo .)
+    ID              reduce using rule 13 (columna -> ID tipo .)
+    PARABRE         shift and go to state 27
+    PRIMARY         shift and go to state 28
+    NOT             shift and go to state 29
+    REFERENCE       shift and go to state 31
 
-    restriccion                    shift and go to state 25
-    tamanios                       shift and go to state 26
-    references                     shift and go to state 29
+    tamanios                       shift and go to state 25
+    restriccion                    shift and go to state 26
+    reference                      shift and go to state 30
 
 state 16
 
-    (21) tipo -> INTEGER .
+    (22) tipo -> INT .
 
-    PRIMARY         reduce using rule 21 (tipo -> INTEGER .)
-    NOT             reduce using rule 21 (tipo -> INTEGER .)
-    PARABRE         reduce using rule 21 (tipo -> INTEGER .)
-    REFERENCES      reduce using rule 21 (tipo -> INTEGER .)
-    COMA            reduce using rule 21 (tipo -> INTEGER .)
-    PARCIERRA       reduce using rule 21 (tipo -> INTEGER .)
-    ID              reduce using rule 21 (tipo -> INTEGER .)
+    PARABRE         reduce using rule 22 (tipo -> INT .)
+    PRIMARY         reduce using rule 22 (tipo -> INT .)
+    NOT             reduce using rule 22 (tipo -> INT .)
+    REFERENCE       reduce using rule 22 (tipo -> INT .)
+    COMA            reduce using rule 22 (tipo -> INT .)
+    PARCIERRA       reduce using rule 22 (tipo -> INT .)
+    ID              reduce using rule 22 (tipo -> INT .)
 
 
 state 17
 
-    (22) tipo -> TEXT .
+    (23) tipo -> TEXT .
 
-    PRIMARY         reduce using rule 22 (tipo -> TEXT .)
-    NOT             reduce using rule 22 (tipo -> TEXT .)
-    PARABRE         reduce using rule 22 (tipo -> TEXT .)
-    REFERENCES      reduce using rule 22 (tipo -> TEXT .)
-    COMA            reduce using rule 22 (tipo -> TEXT .)
-    PARCIERRA       reduce using rule 22 (tipo -> TEXT .)
-    ID              reduce using rule 22 (tipo -> TEXT .)
+    PARABRE         reduce using rule 23 (tipo -> TEXT .)
+    PRIMARY         reduce using rule 23 (tipo -> TEXT .)
+    NOT             reduce using rule 23 (tipo -> TEXT .)
+    REFERENCE       reduce using rule 23 (tipo -> TEXT .)
+    COMA            reduce using rule 23 (tipo -> TEXT .)
+    PARCIERRA       reduce using rule 23 (tipo -> TEXT .)
+    ID              reduce using rule 23 (tipo -> TEXT .)
 
 
 state 18
 
-    (23) tipo -> varchar .
+    (24) tipo -> nvarchar .
 
-    PRIMARY         reduce using rule 23 (tipo -> varchar .)
-    NOT             reduce using rule 23 (tipo -> varchar .)
-    PARABRE         reduce using rule 23 (tipo -> varchar .)
-    REFERENCES      reduce using rule 23 (tipo -> varchar .)
-    COMA            reduce using rule 23 (tipo -> varchar .)
-    PARCIERRA       reduce using rule 23 (tipo -> varchar .)
-    ID              reduce using rule 23 (tipo -> varchar .)
+    PARABRE         reduce using rule 24 (tipo -> nvarchar .)
+    PRIMARY         reduce using rule 24 (tipo -> nvarchar .)
+    NOT             reduce using rule 24 (tipo -> nvarchar .)
+    REFERENCE       reduce using rule 24 (tipo -> nvarchar .)
+    COMA            reduce using rule 24 (tipo -> nvarchar .)
+    PARCIERRA       reduce using rule 24 (tipo -> nvarchar .)
+    ID              reduce using rule 24 (tipo -> nvarchar .)
 
 
 state 19
 
-    (24) tipo -> DATE .
+    (25) tipo -> DATE .
 
-    PRIMARY         reduce using rule 24 (tipo -> DATE .)
-    NOT             reduce using rule 24 (tipo -> DATE .)
-    PARABRE         reduce using rule 24 (tipo -> DATE .)
-    REFERENCES      reduce using rule 24 (tipo -> DATE .)
-    COMA            reduce using rule 24 (tipo -> DATE .)
-    PARCIERRA       reduce using rule 24 (tipo -> DATE .)
-    ID              reduce using rule 24 (tipo -> DATE .)
+    PARABRE         reduce using rule 25 (tipo -> DATE .)
+    PRIMARY         reduce using rule 25 (tipo -> DATE .)
+    NOT             reduce using rule 25 (tipo -> DATE .)
+    REFERENCE       reduce using rule 25 (tipo -> DATE .)
+    COMA            reduce using rule 25 (tipo -> DATE .)
+    PARCIERRA       reduce using rule 25 (tipo -> DATE .)
+    ID              reduce using rule 25 (tipo -> DATE .)
 
 
 state 20
 
-    (25) tipo -> DECIMAL .
+    (26) tipo -> DECIMAL .
 
-    PRIMARY         reduce using rule 25 (tipo -> DECIMAL .)
-    NOT             reduce using rule 25 (tipo -> DECIMAL .)
-    PARABRE         reduce using rule 25 (tipo -> DECIMAL .)
-    REFERENCES      reduce using rule 25 (tipo -> DECIMAL .)
-    COMA            reduce using rule 25 (tipo -> DECIMAL .)
-    PARCIERRA       reduce using rule 25 (tipo -> DECIMAL .)
-    ID              reduce using rule 25 (tipo -> DECIMAL .)
+    PARABRE         reduce using rule 26 (tipo -> DECIMAL .)
+    PRIMARY         reduce using rule 26 (tipo -> DECIMAL .)
+    NOT             reduce using rule 26 (tipo -> DECIMAL .)
+    REFERENCE       reduce using rule 26 (tipo -> DECIMAL .)
+    COMA            reduce using rule 26 (tipo -> DECIMAL .)
+    PARCIERRA       reduce using rule 26 (tipo -> DECIMAL .)
+    ID              reduce using rule 26 (tipo -> DECIMAL .)
 
 
 state 21
 
-    (26) varchar -> VARCHAR . PARABRE NUMEROS PARCIERRA
+    (27) nvarchar -> NVARCHAR . PARABRE NUMEROS PARCIERRA
 
     PARABRE         shift and go to state 32
 
@@ -348,10 +354,11 @@ state 23
 
 state 24
 
-    (9) columnas -> columna COMA . columna
-    (11) columna -> . ID tipo restriccion
-    (12) columna -> . ID tipo
-    (13) columna -> . ID tipo tamanios
+    (9) columnas -> columnas COMA . columna
+    (11) columna -> . ID tipo tamanios
+    (12) columna -> . ID tipo restriccion
+    (13) columna -> . ID tipo
+    (14) columna -> . ID tipo tamanios restriccion
 
     ID              shift and go to state 10
 
@@ -359,71 +366,81 @@ state 24
 
 state 25
 
-    (11) columna -> ID tipo restriccion .
+    (11) columna -> ID tipo tamanios .
+    (14) columna -> ID tipo tamanios . restriccion
+    (18) restriccion -> . PRIMARY KEY
+    (19) restriccion -> . NOT NULL
+    (20) restriccion -> . reference
+    (21) reference -> . REFERENCE ID PARABRE ID PARCIERRA
 
-    COMA            reduce using rule 11 (columna -> ID tipo restriccion .)
-    PARCIERRA       reduce using rule 11 (columna -> ID tipo restriccion .)
-    ID              reduce using rule 11 (columna -> ID tipo restriccion .)
+    COMA            reduce using rule 11 (columna -> ID tipo tamanios .)
+    PARCIERRA       reduce using rule 11 (columna -> ID tipo tamanios .)
+    ID              reduce using rule 11 (columna -> ID tipo tamanios .)
+    PRIMARY         shift and go to state 28
+    NOT             shift and go to state 29
+    REFERENCE       shift and go to state 31
 
+    restriccion                    shift and go to state 35
+    reference                      shift and go to state 30
 
 state 26
 
-    (13) columna -> ID tipo tamanios .
+    (12) columna -> ID tipo restriccion .
 
-    COMA            reduce using rule 13 (columna -> ID tipo tamanios .)
-    PARCIERRA       reduce using rule 13 (columna -> ID tipo tamanios .)
-    ID              reduce using rule 13 (columna -> ID tipo tamanios .)
+    COMA            reduce using rule 12 (columna -> ID tipo restriccion .)
+    PARCIERRA       reduce using rule 12 (columna -> ID tipo restriccion .)
+    ID              reduce using rule 12 (columna -> ID tipo restriccion .)
 
 
 state 27
 
-    (17) restriccion -> PRIMARY . KEY
+    (15) tamanios -> PARABRE . tamanios COMA tamanio PARCIERRA
+    (16) tamanios -> PARABRE . tamanio PARCIERRA
+    (15) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
+    (16) tamanios -> . PARABRE tamanio PARCIERRA
+    (17) tamanio -> . NUMEROS
 
-    KEY             shift and go to state 35
+    PARABRE         shift and go to state 27
+    NUMEROS         shift and go to state 38
 
+    tamanios                       shift and go to state 36
+    tamanio                        shift and go to state 37
 
 state 28
 
-    (18) restriccion -> NOT . NULL
+    (18) restriccion -> PRIMARY . KEY
 
-    NULL            shift and go to state 36
+    KEY             shift and go to state 39
 
 
 state 29
 
-    (19) restriccion -> references .
+    (19) restriccion -> NOT . NULL
 
-    COMA            reduce using rule 19 (restriccion -> references .)
-    PARCIERRA       reduce using rule 19 (restriccion -> references .)
-    ID              reduce using rule 19 (restriccion -> references .)
+    NULL            shift and go to state 40
 
 
 state 30
 
-    (14) tamanios -> PARABRE . tamanios COMA tamanio PARCIERRA
-    (15) tamanios -> PARABRE . tamanio PARCIERRA
-    (14) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
-    (15) tamanios -> . PARABRE tamanio PARCIERRA
-    (16) tamanio -> . NUMEROS
+    (20) restriccion -> reference .
 
-    PARABRE         shift and go to state 30
-    NUMEROS         shift and go to state 39
+    COMA            reduce using rule 20 (restriccion -> reference .)
+    PARCIERRA       reduce using rule 20 (restriccion -> reference .)
+    ID              reduce using rule 20 (restriccion -> reference .)
 
-    tamanios                       shift and go to state 37
-    tamanio                        shift and go to state 38
 
 state 31
 
-    (20) references -> REFERENCES . ID PARABRE ID PARCIERRA
+    (21) reference -> REFERENCE . ID PARABRE ID PARCIERRA
 
-    ID              shift and go to state 40
+    ID              shift and go to state 41
 
 
 state 32
 
-    (26) varchar -> VARCHAR PARABRE . NUMEROS PARCIERRA
+    (27) nvarchar -> NVARCHAR PARABRE . NUMEROS PARCIERRA
 
-    NUMEROS         shift and go to state 41
+    NUMEROS         shift and go to state 42
 
 
 state 33
@@ -436,131 +453,147 @@ state 33
 
 state 34
 
-    (9) columnas -> columna COMA columna .
+    (9) columnas -> columnas COMA columna .
 
-    PARCIERRA       reduce using rule 9 (columnas -> columna COMA columna .)
-    ID              reduce using rule 9 (columnas -> columna COMA columna .)
+    COMA            reduce using rule 9 (columnas -> columnas COMA columna .)
+    PARCIERRA       reduce using rule 9 (columnas -> columnas COMA columna .)
+    ID              reduce using rule 9 (columnas -> columnas COMA columna .)
 
 
 state 35
 
-    (17) restriccion -> PRIMARY KEY .
+    (14) columna -> ID tipo tamanios restriccion .
 
-    COMA            reduce using rule 17 (restriccion -> PRIMARY KEY .)
-    PARCIERRA       reduce using rule 17 (restriccion -> PRIMARY KEY .)
-    ID              reduce using rule 17 (restriccion -> PRIMARY KEY .)
+    COMA            reduce using rule 14 (columna -> ID tipo tamanios restriccion .)
+    PARCIERRA       reduce using rule 14 (columna -> ID tipo tamanios restriccion .)
+    ID              reduce using rule 14 (columna -> ID tipo tamanios restriccion .)
 
 
 state 36
 
-    (18) restriccion -> NOT NULL .
+    (15) tamanios -> PARABRE tamanios . COMA tamanio PARCIERRA
 
-    COMA            reduce using rule 18 (restriccion -> NOT NULL .)
-    PARCIERRA       reduce using rule 18 (restriccion -> NOT NULL .)
-    ID              reduce using rule 18 (restriccion -> NOT NULL .)
+    COMA            shift and go to state 43
 
 
 state 37
 
-    (14) tamanios -> PARABRE tamanios . COMA tamanio PARCIERRA
+    (16) tamanios -> PARABRE tamanio . PARCIERRA
 
-    COMA            shift and go to state 42
+    PARCIERRA       shift and go to state 44
 
 
 state 38
 
-    (15) tamanios -> PARABRE tamanio . PARCIERRA
+    (17) tamanio -> NUMEROS .
 
-    PARCIERRA       shift and go to state 43
+    PARCIERRA       reduce using rule 17 (tamanio -> NUMEROS .)
 
 
 state 39
 
-    (16) tamanio -> NUMEROS .
+    (18) restriccion -> PRIMARY KEY .
 
-    PARCIERRA       reduce using rule 16 (tamanio -> NUMEROS .)
+    COMA            reduce using rule 18 (restriccion -> PRIMARY KEY .)
+    PARCIERRA       reduce using rule 18 (restriccion -> PRIMARY KEY .)
+    ID              reduce using rule 18 (restriccion -> PRIMARY KEY .)
 
 
 state 40
 
-    (20) references -> REFERENCES ID . PARABRE ID PARCIERRA
+    (19) restriccion -> NOT NULL .
 
-    PARABRE         shift and go to state 44
+    COMA            reduce using rule 19 (restriccion -> NOT NULL .)
+    PARCIERRA       reduce using rule 19 (restriccion -> NOT NULL .)
+    ID              reduce using rule 19 (restriccion -> NOT NULL .)
 
 
 state 41
 
-    (26) varchar -> VARCHAR PARABRE NUMEROS . PARCIERRA
+    (21) reference -> REFERENCE ID . PARABRE ID PARCIERRA
 
-    PARCIERRA       shift and go to state 45
+    PARABRE         shift and go to state 45
 
 
 state 42
 
-    (14) tamanios -> PARABRE tamanios COMA . tamanio PARCIERRA
-    (16) tamanio -> . NUMEROS
+    (27) nvarchar -> NVARCHAR PARABRE NUMEROS . PARCIERRA
 
-    NUMEROS         shift and go to state 39
+    PARCIERRA       shift and go to state 46
 
-    tamanio                        shift and go to state 46
 
 state 43
 
-    (15) tamanios -> PARABRE tamanio PARCIERRA .
+    (15) tamanios -> PARABRE tamanios COMA . tamanio PARCIERRA
+    (17) tamanio -> . NUMEROS
 
-    COMA            reduce using rule 15 (tamanios -> PARABRE tamanio PARCIERRA .)
-    PARCIERRA       reduce using rule 15 (tamanios -> PARABRE tamanio PARCIERRA .)
-    ID              reduce using rule 15 (tamanios -> PARABRE tamanio PARCIERRA .)
+    NUMEROS         shift and go to state 38
 
+    tamanio                        shift and go to state 47
 
 state 44
 
-    (20) references -> REFERENCES ID PARABRE . ID PARCIERRA
+    (16) tamanios -> PARABRE tamanio PARCIERRA .
 
-    ID              shift and go to state 47
+    PRIMARY         reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
+    NOT             reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
+    REFERENCE       reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
+    COMA            reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
+    PARCIERRA       reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
+    ID              reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
 
 
 state 45
 
-    (26) varchar -> VARCHAR PARABRE NUMEROS PARCIERRA .
+    (21) reference -> REFERENCE ID PARABRE . ID PARCIERRA
 
-    PRIMARY         reduce using rule 26 (varchar -> VARCHAR PARABRE NUMEROS PARCIERRA .)
-    NOT             reduce using rule 26 (varchar -> VARCHAR PARABRE NUMEROS PARCIERRA .)
-    PARABRE         reduce using rule 26 (varchar -> VARCHAR PARABRE NUMEROS PARCIERRA .)
-    REFERENCES      reduce using rule 26 (varchar -> VARCHAR PARABRE NUMEROS PARCIERRA .)
-    COMA            reduce using rule 26 (varchar -> VARCHAR PARABRE NUMEROS PARCIERRA .)
-    PARCIERRA       reduce using rule 26 (varchar -> VARCHAR PARABRE NUMEROS PARCIERRA .)
-    ID              reduce using rule 26 (varchar -> VARCHAR PARABRE NUMEROS PARCIERRA .)
+    ID              shift and go to state 48
 
 
 state 46
 
-    (14) tamanios -> PARABRE tamanios COMA tamanio . PARCIERRA
+    (27) nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .
 
-    PARCIERRA       shift and go to state 48
+    PARABRE         reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    PRIMARY         reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    NOT             reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    REFERENCE       reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    COMA            reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    PARCIERRA       reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    ID              reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
 
 
 state 47
 
-    (20) references -> REFERENCES ID PARABRE ID . PARCIERRA
+    (15) tamanios -> PARABRE tamanios COMA tamanio . PARCIERRA
 
     PARCIERRA       shift and go to state 49
 
 
 state 48
 
-    (14) tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .
+    (21) reference -> REFERENCE ID PARABRE ID . PARCIERRA
 
-    COMA            reduce using rule 14 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    PARCIERRA       reduce using rule 14 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    ID              reduce using rule 14 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    PARCIERRA       shift and go to state 50
 
 
 state 49
 
-    (20) references -> REFERENCES ID PARABRE ID PARCIERRA .
+    (15) tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .
 
-    COMA            reduce using rule 20 (references -> REFERENCES ID PARABRE ID PARCIERRA .)
-    PARCIERRA       reduce using rule 20 (references -> REFERENCES ID PARABRE ID PARCIERRA .)
-    ID              reduce using rule 20 (references -> REFERENCES ID PARABRE ID PARCIERRA .)
+    PRIMARY         reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    NOT             reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    REFERENCE       reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    COMA            reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    PARCIERRA       reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    ID              reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+
+
+state 50
+
+    (21) reference -> REFERENCE ID PARABRE ID PARCIERRA .
+
+    COMA            reduce using rule 21 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
+    PARCIERRA       reduce using rule 21 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
+    ID              reduce using rule 21 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
 

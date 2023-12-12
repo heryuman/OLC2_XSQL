@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'COMA CREATE DATE DECIMAL ID INTEGER KEY NOT NULL NUMEROS PARABRE PARCIERRA PRIMARY PYC REFERENCES TABLE TEXT VARCHARinicio : instrucciones instrucciones : instrucciones instruccioninstrucciones : instruccioninstruccion : comandocreatecomandocreate : CREATE TABLE ID PARABRE datostable PARCIERRA PYCdatostable : datostable datotabledatostable : datotabledatotable : columnascolumnas : columna COMA columna\n                | columnacolumna : ID tipo restriccion\n              | ID tipo\n              | ID tipo tamaniostamanios : PARABRE tamanios COMA tamanio PARCIERRA\n                | PARABRE tamanio PARCIERRAtamanio : NUMEROSrestriccion : PRIMARY KEY\n                   | NOT NULL\n                   | referencesreferences : REFERENCES ID PARABRE ID PARCIERRAtipo : INTEGER\n            | TEXT\n            | varchar\n            | DATE\n            | DECIMALvarchar : VARCHAR PARABRE NUMEROS PARCIERRA'
+_lr_signature = 'COMA CREATE DATE DECIMAL ID INT KEY NOT NULL NUMEROS NVARCHAR PARABRE PARCIERRA PRIMARY PYC REFERENCE TABLE TEXTinicio : instrucciones instrucciones : instrucciones instruccioninstrucciones : instruccioninstruccion : comandocreatecomandocreate : CREATE TABLE ID PARABRE datostable PARCIERRA PYCdatostable : datostable datotabledatostable : datotabledatotable : columnascolumnas : columnas COMA columna\n                | columnacolumna : ID tipo tamanios\n              | ID tipo restriccion\n              | ID tipo \n              | ID tipo tamanios restricciontamanios : PARABRE tamanios COMA tamanio PARCIERRA\n                | PARABRE tamanio PARCIERRAtamanio : NUMEROSrestriccion : PRIMARY KEY\n                   | NOT NULL\n                   | referencereference : REFERENCE ID PARABRE ID PARCIERRAtipo : INT\n            | TEXT\n            | nvarchar\n            | DATE\n            | DECIMALnvarchar : NVARCHAR PARABRE NUMEROS PARCIERRA'
     
-_lr_action_items = {'CREATE':([0,2,3,4,6,33,],[5,5,-3,-4,-2,-5,]),'$end':([1,2,3,4,6,33,],[0,-1,-3,-4,-2,-5,]),'TABLE':([5,],[7,]),'ID':([7,9,11,12,13,14,15,16,17,18,19,20,23,24,25,26,29,31,34,35,36,43,44,45,48,49,],[8,10,10,-7,-8,-10,-12,-21,-22,-23,-24,-25,-6,10,-11,-13,-19,40,-9,-17,-18,-15,47,-26,-14,-20,]),'PARABRE':([8,15,16,17,18,19,20,21,30,40,45,],[9,30,-21,-22,-23,-24,-25,32,30,44,-26,]),'INTEGER':([10,],[16,]),'TEXT':([10,],[17,]),'DATE':([10,],[19,]),'DECIMAL':([10,],[20,]),'VARCHAR':([10,],[21,]),'PARCIERRA':([11,12,13,14,15,16,17,18,19,20,23,25,26,29,34,35,36,38,39,41,43,45,46,47,48,49,],[22,-7,-8,-10,-12,-21,-22,-23,-24,-25,-6,-11,-13,-19,-9,-17,-18,43,-16,45,-15,-26,48,49,-14,-20,]),'COMA':([14,15,16,17,18,19,20,25,26,29,35,36,37,43,45,48,49,],[24,-12,-21,-22,-23,-24,-25,-11,-13,-19,-17,-18,42,-15,-26,-14,-20,]),'PRIMARY':([15,16,17,18,19,20,45,],[27,-21,-22,-23,-24,-25,-26,]),'NOT':([15,16,17,18,19,20,45,],[28,-21,-22,-23,-24,-25,-26,]),'REFERENCES':([15,16,17,18,19,20,45,],[31,-21,-22,-23,-24,-25,-26,]),'PYC':([22,],[33,]),'KEY':([27,],[35,]),'NULL':([28,],[36,]),'NUMEROS':([30,32,42,],[39,41,39,]),}
+_lr_action_items = {'CREATE':([0,2,3,4,6,33,],[5,5,-3,-4,-2,-5,]),'$end':([1,2,3,4,6,33,],[0,-1,-3,-4,-2,-5,]),'TABLE':([5,],[7,]),'ID':([7,9,11,12,13,14,15,16,17,18,19,20,23,24,25,26,30,31,34,35,39,40,44,45,46,49,50,],[8,10,10,-7,-8,-10,-13,-22,-23,-24,-25,-26,-6,10,-11,-12,-20,41,-9,-14,-18,-19,-16,48,-27,-15,-21,]),'PARABRE':([8,15,16,17,18,19,20,21,27,41,46,],[9,27,-22,-23,-24,-25,-26,32,27,45,-27,]),'INT':([10,],[16,]),'TEXT':([10,],[17,]),'DATE':([10,],[19,]),'DECIMAL':([10,],[20,]),'NVARCHAR':([10,],[21,]),'PARCIERRA':([11,12,13,14,15,16,17,18,19,20,23,25,26,30,34,35,37,38,39,40,42,44,46,47,48,49,50,],[22,-7,-8,-10,-13,-22,-23,-24,-25,-26,-6,-11,-12,-20,-9,-14,44,-17,-18,-19,46,-16,-27,49,50,-15,-21,]),'COMA':([13,14,15,16,17,18,19,20,25,26,30,34,35,36,39,40,44,46,49,50,],[24,-10,-13,-22,-23,-24,-25,-26,-11,-12,-20,-9,-14,43,-18,-19,-16,-27,-15,-21,]),'PRIMARY':([15,16,17,18,19,20,25,44,46,49,],[28,-22,-23,-24,-25,-26,28,-16,-27,-15,]),'NOT':([15,16,17,18,19,20,25,44,46,49,],[29,-22,-23,-24,-25,-26,29,-16,-27,-15,]),'REFERENCE':([15,16,17,18,19,20,25,44,46,49,],[31,-22,-23,-24,-25,-26,31,-16,-27,-15,]),'PYC':([22,],[33,]),'NUMEROS':([27,32,43,],[38,42,38,]),'KEY':([28,],[39,]),'NULL':([29,],[40,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'inicio':([0,],[1,]),'instrucciones':([0,],[2,]),'instruccion':([0,2,],[3,6,]),'comandocreate':([0,2,],[4,4,]),'datostable':([9,],[11,]),'datotable':([9,11,],[12,23,]),'columnas':([9,11,],[13,13,]),'columna':([9,11,24,],[14,14,34,]),'tipo':([10,],[15,]),'varchar':([10,],[18,]),'restriccion':([15,],[25,]),'tamanios':([15,30,],[26,37,]),'references':([15,],[29,]),'tamanio':([30,42,],[38,46,]),}
+_lr_goto_items = {'inicio':([0,],[1,]),'instrucciones':([0,],[2,]),'instruccion':([0,2,],[3,6,]),'comandocreate':([0,2,],[4,4,]),'datostable':([9,],[11,]),'datotable':([9,11,],[12,23,]),'columnas':([9,11,],[13,13,]),'columna':([9,11,24,],[14,14,34,]),'tipo':([10,],[15,]),'nvarchar':([10,],[18,]),'tamanios':([15,27,],[25,36,]),'restriccion':([15,25,],[26,35,]),'reference':([15,25,],[30,30,]),'tamanio':([27,43,],[37,47,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,30 +27,31 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> inicio","S'",1,None,None,None),
-  ('inicio -> instrucciones','inicio',1,'p_inicio','sintactico.py',10),
-  ('instrucciones -> instrucciones instruccion','instrucciones',2,'p_instrucciones','sintactico.py',15),
-  ('instrucciones -> instruccion','instrucciones',1,'p_instrucciones_instruccion','sintactico.py',21),
-  ('instruccion -> comandocreate','instruccion',1,'p_instruccion','sintactico.py',28),
-  ('comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC','comandocreate',7,'p_comandocreate','sintactico.py',33),
-  ('datostable -> datostable datotable','datostable',2,'p_datostable','sintactico.py',40),
-  ('datostable -> datotable','datostable',1,'p_datostable_datotable','sintactico.py',46),
-  ('datotable -> columnas','datotable',1,'p_datotable','sintactico.py',53),
-  ('columnas -> columna COMA columna','columnas',3,'p_columnas','sintactico.py',57),
-  ('columnas -> columna','columnas',1,'p_columnas','sintactico.py',58),
-  ('columna -> ID tipo restriccion','columna',3,'p_columna','sintactico.py',62),
-  ('columna -> ID tipo','columna',2,'p_columna','sintactico.py',63),
-  ('columna -> ID tipo tamanios','columna',3,'p_columna','sintactico.py',64),
-  ('tamanios -> PARABRE tamanios COMA tamanio PARCIERRA','tamanios',5,'p_tamanios','sintactico.py',74),
-  ('tamanios -> PARABRE tamanio PARCIERRA','tamanios',3,'p_tamanios','sintactico.py',75),
-  ('tamanio -> NUMEROS','tamanio',1,'p_tamanio','sintactico.py',79),
-  ('restriccion -> PRIMARY KEY','restriccion',2,'p_restriccion','sintactico.py',83),
-  ('restriccion -> NOT NULL','restriccion',2,'p_restriccion','sintactico.py',84),
-  ('restriccion -> references','restriccion',1,'p_restriccion','sintactico.py',85),
-  ('references -> REFERENCES ID PARABRE ID PARCIERRA','references',5,'p_references','sintactico.py',92),
-  ('tipo -> INTEGER','tipo',1,'p_tipo','sintactico.py',98),
-  ('tipo -> TEXT','tipo',1,'p_tipo','sintactico.py',99),
-  ('tipo -> varchar','tipo',1,'p_tipo','sintactico.py',100),
-  ('tipo -> DATE','tipo',1,'p_tipo','sintactico.py',101),
-  ('tipo -> DECIMAL','tipo',1,'p_tipo','sintactico.py',102),
-  ('varchar -> VARCHAR PARABRE NUMEROS PARCIERRA','varchar',4,'p_varchar','sintactico.py',106),
+  ('inicio -> instrucciones','inicio',1,'p_inicio','sintactico.py',11),
+  ('instrucciones -> instrucciones instruccion','instrucciones',2,'p_instrucciones','sintactico.py',16),
+  ('instrucciones -> instruccion','instrucciones',1,'p_instrucciones_instruccion','sintactico.py',22),
+  ('instruccion -> comandocreate','instruccion',1,'p_instruccion','sintactico.py',29),
+  ('comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC','comandocreate',7,'p_comandocreate','sintactico.py',34),
+  ('datostable -> datostable datotable','datostable',2,'p_datostable','sintactico.py',41),
+  ('datostable -> datotable','datostable',1,'p_datostable_datotable','sintactico.py',47),
+  ('datotable -> columnas','datotable',1,'p_datotable','sintactico.py',54),
+  ('columnas -> columnas COMA columna','columnas',3,'p_columnas','sintactico.py',58),
+  ('columnas -> columna','columnas',1,'p_columnas','sintactico.py',59),
+  ('columna -> ID tipo tamanios','columna',3,'p_columna','sintactico.py',66),
+  ('columna -> ID tipo restriccion','columna',3,'p_columna','sintactico.py',67),
+  ('columna -> ID tipo','columna',2,'p_columna','sintactico.py',68),
+  ('columna -> ID tipo tamanios restriccion','columna',4,'p_columna','sintactico.py',69),
+  ('tamanios -> PARABRE tamanios COMA tamanio PARCIERRA','tamanios',5,'p_tamanios','sintactico.py',109),
+  ('tamanios -> PARABRE tamanio PARCIERRA','tamanios',3,'p_tamanios','sintactico.py',110),
+  ('tamanio -> NUMEROS','tamanio',1,'p_tamanio','sintactico.py',117),
+  ('restriccion -> PRIMARY KEY','restriccion',2,'p_restriccion','sintactico.py',121),
+  ('restriccion -> NOT NULL','restriccion',2,'p_restriccion','sintactico.py',122),
+  ('restriccion -> reference','restriccion',1,'p_restriccion','sintactico.py',123),
+  ('reference -> REFERENCE ID PARABRE ID PARCIERRA','reference',5,'p_reference','sintactico.py',130),
+  ('tipo -> INT','tipo',1,'p_tipo','sintactico.py',135),
+  ('tipo -> TEXT','tipo',1,'p_tipo','sintactico.py',136),
+  ('tipo -> nvarchar','tipo',1,'p_tipo','sintactico.py',137),
+  ('tipo -> DATE','tipo',1,'p_tipo','sintactico.py',138),
+  ('tipo -> DECIMAL','tipo',1,'p_tipo','sintactico.py',139),
+  ('nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA','nvarchar',4,'p_nvarchar','sintactico.py',143),
 ]
