@@ -52,14 +52,7 @@ def t_nuevalinea(t):
 
 
 def t_error(t):
-    from Operaciones.ManipuladorDeOperaciones import ManipuladorDeOperaciones
-    from Operaciones.Log import Log
     print(f"Error Lexico {t.value!r}")
-    ahora = ManipuladorDeOperaciones().getDate()
-    fecha = ahora.date()
-    hora = ahora.time().isoformat()
-    log = Log(fecha.day, fecha.month, fecha.year, hora, f"ERROR","Error Lexico en : {t.value}","Sintaxis incorrecta en   "+t.value)
-    ManipuladorDeOperaciones().crearLog(log)
     t.lexer.skip(1)
 
 
