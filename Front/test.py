@@ -1,27 +1,30 @@
-import tkinter as tk
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
 
-def obtener_linea_actual():
-    # Obtener la posición del cursor
-    cursor_posicion = text_widget.index(tk.INSERT)
+# Crear el elemento raíz
+raiz = ET.Element("Libros")
 
-    # Extraer la parte de la fila de la posición
-    fila = cursor_posicion.split(".")[0]
+# Crear elementos secundarios
+libro1 = ET.SubElement(raiz, "Libro")
+titulo1 = ET.SubElement(libro1, "Titulo")
+titulo1.text = "Python para Principiantes"
+autor1 = ET.SubElement(libro1, "Autor")
+autor1.text = "John Doe"
 
-    # Obtener el texto de la línea actual
-    linea_actual = text_widget.get(f"{fila}.0", f"{fila}.end-1c")
-    print("Texto en la línea actual:", linea_actual)
+libro2 = ET.SubElement(raiz, "Libro")
+titulo2 = ET.SubElement(libro2, "Titulo")
+titulo2.text = "Programación Avanzada en Python"
+autor2 = ET.SubElement(libro2, "Autor")
+autor2.text = "Jane Smith"
 
-# Crear la aplicación principal
-app = tk.Tk()
-app.title("Ejemplo de Texto - Línea Actual")
+# Crear el árbol XML
+arbol = ET.ElementTree(raiz)
 
-# Crear un widget Text
-text_widget = tk.Text(app, height=5, width=30)
-text_widget.pack(padx=10, pady=10)
+# Generar una cadena XML con formato
+xml_con_formato = minidom.parseString(ET.tostring(raiz)).toprettyxml(indent="  ")
 
-# Botón para obtener la línea actual
-boton_obtener_linea = tk.Button(app, text="Obtener Línea Actual", command=obtener_linea_actual)
-boton_obtener_linea.pack(pady=10)
+# Guardar el XML en un archivo
+with open("libros_con_formato.xml", "w", encoding="utf-8") as archivo:
+    archivo.write(xml_con_formato)
 
-# Iniciar el bucle principal de la aplicación
-app.mainloop()
+print("Archivo XML con formato creado.")
