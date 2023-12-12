@@ -77,12 +77,12 @@ class GUI_P:
         self.mat_text.append(texto)
 
     def run_script(self):
-        index=self.notebook.index("current")
-        #texto=self.mat_text[index].get()
-        #self.mat_text[index].get("1.0", "end-1c")
-        entrada=self.mat_text[index].get("1.0", "end-1c")
-        print("index: ",index,"- size mat_text: ",len(self.mat_text),entrada)
-        parser(entrada)
+        index = self.notebook.index("current")
+        entrada = self.mat_text[index].get("1.0", "end-1c")
+        #print("index: ", index, "- size mat_text: ", len(self.mat_text), entrada)
+        
+        # Suponiendo que 'parser' es una instancia de LRParser
+        parser.parse(entrada)
 
     def run_sql(self):
         index=self.notebook.index("current")
