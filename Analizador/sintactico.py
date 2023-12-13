@@ -106,7 +106,6 @@ def getTamxTipo(tipo):
     elif tipo.lower() == "nvarchar":
         return 15
 
-
 def p_tamanios(p):
     '''tamanios : PARABRE tamanios COMA tamanio PARCIERRA
                 | PARABRE tamanio PARCIERRA'''
@@ -147,6 +146,9 @@ def p_nvarchar(p):
 def p_error(p):
     if p:
         print(f"Error de sintaxis en '{p.value}'")
+
+
+
 
 import ply.yacc as yacc
 parser=yacc.yacc()
