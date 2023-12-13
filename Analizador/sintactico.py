@@ -26,7 +26,11 @@ def p_instrucciones_instruccion(p):
         p[0] = [p[1]]
 
 def p_instruccion(p):
-    '''instruccion : comandocreate'''
+    '''instruccion : comandocreate
+                   | comandoalter
+                   | comandotruncate
+                   | comandodrop
+                   | comandouse'''
     p[0] = (p[1])
     
 
@@ -35,7 +39,7 @@ def p_comandocreate(p):
     print("create: ", p[1])
     print("table: ", p[2])
     print("datos: ", p[5])
-    
+
     
 def p_datostable(p):
     '''datostable : datostable datotable'''
@@ -141,6 +145,28 @@ def p_tipo(p):
 def p_nvarchar(p):
     '''nvarchar : NVARCHAR PARABRE NUMEROS PARCIERRA'''
     p[0] = p[3]
+
+
+def p_comandoalter(p):
+    '''comandoalter : ALTER TABLE ID ADD COLUMN ID tipo PYC
+                    | ALTER TABLE ID comandodrop'''
+    print("alter " , p[3])
+
+
+def p_comandotruncate(p):
+    '''comandotruncate : TRUNCATE TABLE ID PYC'''
+    print("truncate " , p[3])
+
+
+def p_comandodrop(p):
+    '''comandodrop : DROP COLUMN ID PYC
+                   | DROP TABLE ID PYC'''
+    print("drop ", p[3])
+
+def p_comandouse(p):
+    '''comandouse : USE ID PYC'''
+    p[0] = p[2]
+
 
 def p_error(p):
     if p:
