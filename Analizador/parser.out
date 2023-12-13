@@ -7,68 +7,88 @@ Rule 1     inicio -> instrucciones
 Rule 2     instrucciones -> instrucciones instruccion
 Rule 3     instrucciones -> instruccion
 Rule 4     instruccion -> comandocreate
-Rule 5     comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC
-Rule 6     datostable -> datostable datotable
-Rule 7     datostable -> datotable
-Rule 8     datotable -> columnas
-Rule 9     columnas -> columnas COMA columna
-Rule 10    columnas -> columna
-Rule 11    columna -> ID tipo tamanios
-Rule 12    columna -> ID tipo restriccion
-Rule 13    columna -> ID tipo
-Rule 14    columna -> ID tipo tamanios restriccion
-Rule 15    tamanios -> PARABRE tamanios COMA tamanio PARCIERRA
-Rule 16    tamanios -> PARABRE tamanio PARCIERRA
-Rule 17    tamanio -> NUMEROS
-Rule 18    restriccion -> PRIMARY KEY
-Rule 19    restriccion -> NOT NULL
-Rule 20    restriccion -> reference
-Rule 21    reference -> REFERENCE ID PARABRE ID PARCIERRA
-Rule 22    tipo -> INT
-Rule 23    tipo -> TEXT
-Rule 24    tipo -> nvarchar
-Rule 25    tipo -> DATE
-Rule 26    tipo -> DECIMAL
-Rule 27    nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA
+Rule 5     instruccion -> comandoalter
+Rule 6     instruccion -> comandotruncate
+Rule 7     instruccion -> comandodrop
+Rule 8     instruccion -> comandouse
+Rule 9     comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC
+Rule 10    datostable -> datostable datotable
+Rule 11    datostable -> datotable
+Rule 12    datotable -> columnas
+Rule 13    columnas -> columnas COMA columna
+Rule 14    columnas -> columna
+Rule 15    columna -> ID tipo tamanios
+Rule 16    columna -> ID tipo restriccion
+Rule 17    columna -> ID tipo
+Rule 18    columna -> ID tipo tamanios restriccion
+Rule 19    tamanios -> PARABRE tamanios COMA tamanio PARCIERRA
+Rule 20    tamanios -> PARABRE tamanio PARCIERRA
+Rule 21    tamanio -> NUMEROS
+Rule 22    restriccion -> PRIMARY KEY
+Rule 23    restriccion -> NOT NULL
+Rule 24    restriccion -> reference
+Rule 25    reference -> REFERENCE ID PARABRE ID PARCIERRA
+Rule 26    tipo -> INT
+Rule 27    tipo -> TEXT
+Rule 28    tipo -> nvarchar
+Rule 29    tipo -> DATE
+Rule 30    tipo -> DECIMAL
+Rule 31    nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA
+Rule 32    comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC
+Rule 33    comandoalter -> ALTER TABLE ID comandodrop
+Rule 34    comandotruncate -> TRUNCATE TABLE ID PYC
+Rule 35    comandodrop -> DROP COLUMN ID PYC
+Rule 36    comandodrop -> DROP TABLE ID PYC
+Rule 37    comandouse -> USE ID PYC
 
 Terminals, with rules where they appear
 
-COMA                 : 9 15
-CREATE               : 5
-DATE                 : 25
-DECIMAL              : 26
-ID                   : 5 11 12 13 14 21 21
-INT                  : 22
-KEY                  : 18
-NOT                  : 19
-NULL                 : 19
-NUMEROS              : 17 27
-NVARCHAR             : 27
-PARABRE              : 5 15 16 21 27
-PARCIERRA            : 5 15 16 21 27
-PRIMARY              : 18
-PYC                  : 5
-REFERENCE            : 21
-TABLE                : 5
-TEXT                 : 23
+ADD                  : 32
+ALTER                : 32 33
+COLUMN               : 32 35
+COMA                 : 13 19
+CREATE               : 9
+DATE                 : 29
+DECIMAL              : 30
+DROP                 : 35 36
+ID                   : 9 15 16 17 18 25 25 32 32 33 34 35 36 37
+INT                  : 26
+KEY                  : 22
+NOT                  : 23
+NULL                 : 23
+NUMEROS              : 21 31
+NVARCHAR             : 31
+PARABRE              : 9 19 20 25 31
+PARCIERRA            : 9 19 20 25 31
+PRIMARY              : 22
+PYC                  : 9 32 34 35 36 37
+REFERENCE            : 25
+TABLE                : 9 32 33 34 36
+TEXT                 : 27
+TRUNCATE             : 34
+USE                  : 37
 error                : 
 
 Nonterminals, with rules where they appear
 
-columna              : 9 10
-columnas             : 8 9
+columna              : 13 14
+columnas             : 12 13
+comandoalter         : 5
 comandocreate        : 4
-datostable           : 5 6
-datotable            : 6 7
+comandodrop          : 7 33
+comandotruncate      : 6
+comandouse           : 8
+datostable           : 9 10
+datotable            : 10 11
 inicio               : 0
 instruccion          : 2 3
 instrucciones        : 1 2
-nvarchar             : 24
-reference            : 20
-restriccion          : 12 14
-tamanio              : 15 16
-tamanios             : 11 14 15
-tipo                 : 11 12 13 14
+nvarchar             : 28
+reference            : 24
+restriccion          : 16 18
+tamanio              : 19 20
+tamanios             : 15 18 19
+tipo                 : 15 16 17 18 32
 
 Parsing method: LALR
 
@@ -79,14 +99,32 @@ state 0
     (2) instrucciones -> . instrucciones instruccion
     (3) instrucciones -> . instruccion
     (4) instruccion -> . comandocreate
-    (5) comandocreate -> . CREATE TABLE ID PARABRE datostable PARCIERRA PYC
+    (5) instruccion -> . comandoalter
+    (6) instruccion -> . comandotruncate
+    (7) instruccion -> . comandodrop
+    (8) instruccion -> . comandouse
+    (9) comandocreate -> . CREATE TABLE ID PARABRE datostable PARCIERRA PYC
+    (32) comandoalter -> . ALTER TABLE ID ADD COLUMN ID tipo PYC
+    (33) comandoalter -> . ALTER TABLE ID comandodrop
+    (34) comandotruncate -> . TRUNCATE TABLE ID PYC
+    (35) comandodrop -> . DROP COLUMN ID PYC
+    (36) comandodrop -> . DROP TABLE ID PYC
+    (37) comandouse -> . USE ID PYC
 
-    CREATE          shift and go to state 5
+    CREATE          shift and go to state 9
+    ALTER           shift and go to state 10
+    TRUNCATE        shift and go to state 11
+    DROP            shift and go to state 12
+    USE             shift and go to state 13
 
     inicio                         shift and go to state 1
     instrucciones                  shift and go to state 2
     instruccion                    shift and go to state 3
     comandocreate                  shift and go to state 4
+    comandoalter                   shift and go to state 5
+    comandotruncate                shift and go to state 6
+    comandodrop                    shift and go to state 7
+    comandouse                     shift and go to state 8
 
 state 1
 
@@ -99,19 +137,41 @@ state 2
     (1) inicio -> instrucciones .
     (2) instrucciones -> instrucciones . instruccion
     (4) instruccion -> . comandocreate
-    (5) comandocreate -> . CREATE TABLE ID PARABRE datostable PARCIERRA PYC
+    (5) instruccion -> . comandoalter
+    (6) instruccion -> . comandotruncate
+    (7) instruccion -> . comandodrop
+    (8) instruccion -> . comandouse
+    (9) comandocreate -> . CREATE TABLE ID PARABRE datostable PARCIERRA PYC
+    (32) comandoalter -> . ALTER TABLE ID ADD COLUMN ID tipo PYC
+    (33) comandoalter -> . ALTER TABLE ID comandodrop
+    (34) comandotruncate -> . TRUNCATE TABLE ID PYC
+    (35) comandodrop -> . DROP COLUMN ID PYC
+    (36) comandodrop -> . DROP TABLE ID PYC
+    (37) comandouse -> . USE ID PYC
 
     $end            reduce using rule 1 (inicio -> instrucciones .)
-    CREATE          shift and go to state 5
+    CREATE          shift and go to state 9
+    ALTER           shift and go to state 10
+    TRUNCATE        shift and go to state 11
+    DROP            shift and go to state 12
+    USE             shift and go to state 13
 
-    instruccion                    shift and go to state 6
+    instruccion                    shift and go to state 14
     comandocreate                  shift and go to state 4
+    comandoalter                   shift and go to state 5
+    comandotruncate                shift and go to state 6
+    comandodrop                    shift and go to state 7
+    comandouse                     shift and go to state 8
 
 state 3
 
     (3) instrucciones -> instruccion .
 
     CREATE          reduce using rule 3 (instrucciones -> instruccion .)
+    ALTER           reduce using rule 3 (instrucciones -> instruccion .)
+    TRUNCATE        reduce using rule 3 (instrucciones -> instruccion .)
+    DROP            reduce using rule 3 (instrucciones -> instruccion .)
+    USE             reduce using rule 3 (instrucciones -> instruccion .)
     $end            reduce using rule 3 (instrucciones -> instruccion .)
 
 
@@ -120,480 +180,758 @@ state 4
     (4) instruccion -> comandocreate .
 
     CREATE          reduce using rule 4 (instruccion -> comandocreate .)
+    ALTER           reduce using rule 4 (instruccion -> comandocreate .)
+    TRUNCATE        reduce using rule 4 (instruccion -> comandocreate .)
+    DROP            reduce using rule 4 (instruccion -> comandocreate .)
+    USE             reduce using rule 4 (instruccion -> comandocreate .)
     $end            reduce using rule 4 (instruccion -> comandocreate .)
 
 
 state 5
 
-    (5) comandocreate -> CREATE . TABLE ID PARABRE datostable PARCIERRA PYC
+    (5) instruccion -> comandoalter .
 
-    TABLE           shift and go to state 7
+    CREATE          reduce using rule 5 (instruccion -> comandoalter .)
+    ALTER           reduce using rule 5 (instruccion -> comandoalter .)
+    TRUNCATE        reduce using rule 5 (instruccion -> comandoalter .)
+    DROP            reduce using rule 5 (instruccion -> comandoalter .)
+    USE             reduce using rule 5 (instruccion -> comandoalter .)
+    $end            reduce using rule 5 (instruccion -> comandoalter .)
 
 
 state 6
 
-    (2) instrucciones -> instrucciones instruccion .
+    (6) instruccion -> comandotruncate .
 
-    CREATE          reduce using rule 2 (instrucciones -> instrucciones instruccion .)
-    $end            reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    CREATE          reduce using rule 6 (instruccion -> comandotruncate .)
+    ALTER           reduce using rule 6 (instruccion -> comandotruncate .)
+    TRUNCATE        reduce using rule 6 (instruccion -> comandotruncate .)
+    DROP            reduce using rule 6 (instruccion -> comandotruncate .)
+    USE             reduce using rule 6 (instruccion -> comandotruncate .)
+    $end            reduce using rule 6 (instruccion -> comandotruncate .)
 
 
 state 7
 
-    (5) comandocreate -> CREATE TABLE . ID PARABRE datostable PARCIERRA PYC
+    (7) instruccion -> comandodrop .
 
-    ID              shift and go to state 8
+    CREATE          reduce using rule 7 (instruccion -> comandodrop .)
+    ALTER           reduce using rule 7 (instruccion -> comandodrop .)
+    TRUNCATE        reduce using rule 7 (instruccion -> comandodrop .)
+    DROP            reduce using rule 7 (instruccion -> comandodrop .)
+    USE             reduce using rule 7 (instruccion -> comandodrop .)
+    $end            reduce using rule 7 (instruccion -> comandodrop .)
 
 
 state 8
 
-    (5) comandocreate -> CREATE TABLE ID . PARABRE datostable PARCIERRA PYC
+    (8) instruccion -> comandouse .
 
-    PARABRE         shift and go to state 9
+    CREATE          reduce using rule 8 (instruccion -> comandouse .)
+    ALTER           reduce using rule 8 (instruccion -> comandouse .)
+    TRUNCATE        reduce using rule 8 (instruccion -> comandouse .)
+    DROP            reduce using rule 8 (instruccion -> comandouse .)
+    USE             reduce using rule 8 (instruccion -> comandouse .)
+    $end            reduce using rule 8 (instruccion -> comandouse .)
 
 
 state 9
 
-    (5) comandocreate -> CREATE TABLE ID PARABRE . datostable PARCIERRA PYC
-    (6) datostable -> . datostable datotable
-    (7) datostable -> . datotable
-    (8) datotable -> . columnas
-    (9) columnas -> . columnas COMA columna
-    (10) columnas -> . columna
-    (11) columna -> . ID tipo tamanios
-    (12) columna -> . ID tipo restriccion
-    (13) columna -> . ID tipo
-    (14) columna -> . ID tipo tamanios restriccion
+    (9) comandocreate -> CREATE . TABLE ID PARABRE datostable PARCIERRA PYC
 
-    ID              shift and go to state 10
+    TABLE           shift and go to state 15
 
-    datostable                     shift and go to state 11
-    datotable                      shift and go to state 12
-    columnas                       shift and go to state 13
-    columna                        shift and go to state 14
 
 state 10
 
-    (11) columna -> ID . tipo tamanios
-    (12) columna -> ID . tipo restriccion
-    (13) columna -> ID . tipo
-    (14) columna -> ID . tipo tamanios restriccion
-    (22) tipo -> . INT
-    (23) tipo -> . TEXT
-    (24) tipo -> . nvarchar
-    (25) tipo -> . DATE
-    (26) tipo -> . DECIMAL
-    (27) nvarchar -> . NVARCHAR PARABRE NUMEROS PARCIERRA
+    (32) comandoalter -> ALTER . TABLE ID ADD COLUMN ID tipo PYC
+    (33) comandoalter -> ALTER . TABLE ID comandodrop
 
-    INT             shift and go to state 16
-    TEXT            shift and go to state 17
-    DATE            shift and go to state 19
-    DECIMAL         shift and go to state 20
-    NVARCHAR        shift and go to state 21
+    TABLE           shift and go to state 16
 
-    tipo                           shift and go to state 15
-    nvarchar                       shift and go to state 18
 
 state 11
 
-    (5) comandocreate -> CREATE TABLE ID PARABRE datostable . PARCIERRA PYC
-    (6) datostable -> datostable . datotable
-    (8) datotable -> . columnas
-    (9) columnas -> . columnas COMA columna
-    (10) columnas -> . columna
-    (11) columna -> . ID tipo tamanios
-    (12) columna -> . ID tipo restriccion
-    (13) columna -> . ID tipo
-    (14) columna -> . ID tipo tamanios restriccion
+    (34) comandotruncate -> TRUNCATE . TABLE ID PYC
 
-    PARCIERRA       shift and go to state 22
-    ID              shift and go to state 10
+    TABLE           shift and go to state 17
 
-    datotable                      shift and go to state 23
-    columnas                       shift and go to state 13
-    columna                        shift and go to state 14
 
 state 12
 
-    (7) datostable -> datotable .
+    (35) comandodrop -> DROP . COLUMN ID PYC
+    (36) comandodrop -> DROP . TABLE ID PYC
 
-    PARCIERRA       reduce using rule 7 (datostable -> datotable .)
-    ID              reduce using rule 7 (datostable -> datotable .)
+    COLUMN          shift and go to state 18
+    TABLE           shift and go to state 19
 
 
 state 13
 
-    (8) datotable -> columnas .
-    (9) columnas -> columnas . COMA columna
+    (37) comandouse -> USE . ID PYC
 
-    PARCIERRA       reduce using rule 8 (datotable -> columnas .)
-    ID              reduce using rule 8 (datotable -> columnas .)
-    COMA            shift and go to state 24
+    ID              shift and go to state 20
 
 
 state 14
 
-    (10) columnas -> columna .
+    (2) instrucciones -> instrucciones instruccion .
 
-    COMA            reduce using rule 10 (columnas -> columna .)
-    PARCIERRA       reduce using rule 10 (columnas -> columna .)
-    ID              reduce using rule 10 (columnas -> columna .)
+    CREATE          reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    ALTER           reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    TRUNCATE        reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    DROP            reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    USE             reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    $end            reduce using rule 2 (instrucciones -> instrucciones instruccion .)
 
 
 state 15
 
-    (11) columna -> ID tipo . tamanios
-    (12) columna -> ID tipo . restriccion
-    (13) columna -> ID tipo .
-    (14) columna -> ID tipo . tamanios restriccion
-    (15) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
-    (16) tamanios -> . PARABRE tamanio PARCIERRA
-    (18) restriccion -> . PRIMARY KEY
-    (19) restriccion -> . NOT NULL
-    (20) restriccion -> . reference
-    (21) reference -> . REFERENCE ID PARABRE ID PARCIERRA
+    (9) comandocreate -> CREATE TABLE . ID PARABRE datostable PARCIERRA PYC
 
-    COMA            reduce using rule 13 (columna -> ID tipo .)
-    PARCIERRA       reduce using rule 13 (columna -> ID tipo .)
-    ID              reduce using rule 13 (columna -> ID tipo .)
-    PARABRE         shift and go to state 27
-    PRIMARY         shift and go to state 28
-    NOT             shift and go to state 29
-    REFERENCE       shift and go to state 31
+    ID              shift and go to state 21
 
-    tamanios                       shift and go to state 25
-    restriccion                    shift and go to state 26
-    reference                      shift and go to state 30
 
 state 16
 
-    (22) tipo -> INT .
+    (32) comandoalter -> ALTER TABLE . ID ADD COLUMN ID tipo PYC
+    (33) comandoalter -> ALTER TABLE . ID comandodrop
 
-    PARABRE         reduce using rule 22 (tipo -> INT .)
-    PRIMARY         reduce using rule 22 (tipo -> INT .)
-    NOT             reduce using rule 22 (tipo -> INT .)
-    REFERENCE       reduce using rule 22 (tipo -> INT .)
-    COMA            reduce using rule 22 (tipo -> INT .)
-    PARCIERRA       reduce using rule 22 (tipo -> INT .)
-    ID              reduce using rule 22 (tipo -> INT .)
+    ID              shift and go to state 22
 
 
 state 17
 
-    (23) tipo -> TEXT .
+    (34) comandotruncate -> TRUNCATE TABLE . ID PYC
 
-    PARABRE         reduce using rule 23 (tipo -> TEXT .)
-    PRIMARY         reduce using rule 23 (tipo -> TEXT .)
-    NOT             reduce using rule 23 (tipo -> TEXT .)
-    REFERENCE       reduce using rule 23 (tipo -> TEXT .)
-    COMA            reduce using rule 23 (tipo -> TEXT .)
-    PARCIERRA       reduce using rule 23 (tipo -> TEXT .)
-    ID              reduce using rule 23 (tipo -> TEXT .)
+    ID              shift and go to state 23
 
 
 state 18
 
-    (24) tipo -> nvarchar .
+    (35) comandodrop -> DROP COLUMN . ID PYC
 
-    PARABRE         reduce using rule 24 (tipo -> nvarchar .)
-    PRIMARY         reduce using rule 24 (tipo -> nvarchar .)
-    NOT             reduce using rule 24 (tipo -> nvarchar .)
-    REFERENCE       reduce using rule 24 (tipo -> nvarchar .)
-    COMA            reduce using rule 24 (tipo -> nvarchar .)
-    PARCIERRA       reduce using rule 24 (tipo -> nvarchar .)
-    ID              reduce using rule 24 (tipo -> nvarchar .)
+    ID              shift and go to state 24
 
 
 state 19
 
-    (25) tipo -> DATE .
+    (36) comandodrop -> DROP TABLE . ID PYC
 
-    PARABRE         reduce using rule 25 (tipo -> DATE .)
-    PRIMARY         reduce using rule 25 (tipo -> DATE .)
-    NOT             reduce using rule 25 (tipo -> DATE .)
-    REFERENCE       reduce using rule 25 (tipo -> DATE .)
-    COMA            reduce using rule 25 (tipo -> DATE .)
-    PARCIERRA       reduce using rule 25 (tipo -> DATE .)
-    ID              reduce using rule 25 (tipo -> DATE .)
+    ID              shift and go to state 25
 
 
 state 20
 
-    (26) tipo -> DECIMAL .
+    (37) comandouse -> USE ID . PYC
 
-    PARABRE         reduce using rule 26 (tipo -> DECIMAL .)
-    PRIMARY         reduce using rule 26 (tipo -> DECIMAL .)
-    NOT             reduce using rule 26 (tipo -> DECIMAL .)
-    REFERENCE       reduce using rule 26 (tipo -> DECIMAL .)
-    COMA            reduce using rule 26 (tipo -> DECIMAL .)
-    PARCIERRA       reduce using rule 26 (tipo -> DECIMAL .)
-    ID              reduce using rule 26 (tipo -> DECIMAL .)
+    PYC             shift and go to state 26
 
 
 state 21
 
-    (27) nvarchar -> NVARCHAR . PARABRE NUMEROS PARCIERRA
+    (9) comandocreate -> CREATE TABLE ID . PARABRE datostable PARCIERRA PYC
 
-    PARABRE         shift and go to state 32
+    PARABRE         shift and go to state 27
 
 
 state 22
 
-    (5) comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA . PYC
+    (32) comandoalter -> ALTER TABLE ID . ADD COLUMN ID tipo PYC
+    (33) comandoalter -> ALTER TABLE ID . comandodrop
+    (35) comandodrop -> . DROP COLUMN ID PYC
+    (36) comandodrop -> . DROP TABLE ID PYC
 
-    PYC             shift and go to state 33
+    ADD             shift and go to state 28
+    DROP            shift and go to state 12
 
+    comandodrop                    shift and go to state 29
 
 state 23
 
-    (6) datostable -> datostable datotable .
+    (34) comandotruncate -> TRUNCATE TABLE ID . PYC
 
-    PARCIERRA       reduce using rule 6 (datostable -> datostable datotable .)
-    ID              reduce using rule 6 (datostable -> datostable datotable .)
+    PYC             shift and go to state 30
 
 
 state 24
 
-    (9) columnas -> columnas COMA . columna
-    (11) columna -> . ID tipo tamanios
-    (12) columna -> . ID tipo restriccion
-    (13) columna -> . ID tipo
-    (14) columna -> . ID tipo tamanios restriccion
+    (35) comandodrop -> DROP COLUMN ID . PYC
 
-    ID              shift and go to state 10
+    PYC             shift and go to state 31
 
-    columna                        shift and go to state 34
 
 state 25
 
-    (11) columna -> ID tipo tamanios .
-    (14) columna -> ID tipo tamanios . restriccion
-    (18) restriccion -> . PRIMARY KEY
-    (19) restriccion -> . NOT NULL
-    (20) restriccion -> . reference
-    (21) reference -> . REFERENCE ID PARABRE ID PARCIERRA
+    (36) comandodrop -> DROP TABLE ID . PYC
 
-    COMA            reduce using rule 11 (columna -> ID tipo tamanios .)
-    PARCIERRA       reduce using rule 11 (columna -> ID tipo tamanios .)
-    ID              reduce using rule 11 (columna -> ID tipo tamanios .)
-    PRIMARY         shift and go to state 28
-    NOT             shift and go to state 29
-    REFERENCE       shift and go to state 31
+    PYC             shift and go to state 32
 
-    restriccion                    shift and go to state 35
-    reference                      shift and go to state 30
 
 state 26
 
-    (12) columna -> ID tipo restriccion .
+    (37) comandouse -> USE ID PYC .
 
-    COMA            reduce using rule 12 (columna -> ID tipo restriccion .)
-    PARCIERRA       reduce using rule 12 (columna -> ID tipo restriccion .)
-    ID              reduce using rule 12 (columna -> ID tipo restriccion .)
+    CREATE          reduce using rule 37 (comandouse -> USE ID PYC .)
+    ALTER           reduce using rule 37 (comandouse -> USE ID PYC .)
+    TRUNCATE        reduce using rule 37 (comandouse -> USE ID PYC .)
+    DROP            reduce using rule 37 (comandouse -> USE ID PYC .)
+    USE             reduce using rule 37 (comandouse -> USE ID PYC .)
+    $end            reduce using rule 37 (comandouse -> USE ID PYC .)
 
 
 state 27
 
-    (15) tamanios -> PARABRE . tamanios COMA tamanio PARCIERRA
-    (16) tamanios -> PARABRE . tamanio PARCIERRA
-    (15) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
-    (16) tamanios -> . PARABRE tamanio PARCIERRA
-    (17) tamanio -> . NUMEROS
+    (9) comandocreate -> CREATE TABLE ID PARABRE . datostable PARCIERRA PYC
+    (10) datostable -> . datostable datotable
+    (11) datostable -> . datotable
+    (12) datotable -> . columnas
+    (13) columnas -> . columnas COMA columna
+    (14) columnas -> . columna
+    (15) columna -> . ID tipo tamanios
+    (16) columna -> . ID tipo restriccion
+    (17) columna -> . ID tipo
+    (18) columna -> . ID tipo tamanios restriccion
 
-    PARABRE         shift and go to state 27
-    NUMEROS         shift and go to state 38
+    ID              shift and go to state 33
 
-    tamanios                       shift and go to state 36
-    tamanio                        shift and go to state 37
+    datostable                     shift and go to state 34
+    datotable                      shift and go to state 35
+    columnas                       shift and go to state 36
+    columna                        shift and go to state 37
 
 state 28
 
-    (18) restriccion -> PRIMARY . KEY
+    (32) comandoalter -> ALTER TABLE ID ADD . COLUMN ID tipo PYC
 
-    KEY             shift and go to state 39
+    COLUMN          shift and go to state 38
 
 
 state 29
 
-    (19) restriccion -> NOT . NULL
+    (33) comandoalter -> ALTER TABLE ID comandodrop .
 
-    NULL            shift and go to state 40
+    CREATE          reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
+    ALTER           reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
+    TRUNCATE        reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
+    DROP            reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
+    USE             reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
+    $end            reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
 
 
 state 30
 
-    (20) restriccion -> reference .
+    (34) comandotruncate -> TRUNCATE TABLE ID PYC .
 
-    COMA            reduce using rule 20 (restriccion -> reference .)
-    PARCIERRA       reduce using rule 20 (restriccion -> reference .)
-    ID              reduce using rule 20 (restriccion -> reference .)
+    CREATE          reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
+    ALTER           reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
+    TRUNCATE        reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
+    DROP            reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
+    USE             reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
+    $end            reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
 
 
 state 31
 
-    (21) reference -> REFERENCE . ID PARABRE ID PARCIERRA
+    (35) comandodrop -> DROP COLUMN ID PYC .
 
-    ID              shift and go to state 41
+    CREATE          reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
+    ALTER           reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
+    TRUNCATE        reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
+    DROP            reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
+    USE             reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
+    $end            reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
 
 
 state 32
 
-    (27) nvarchar -> NVARCHAR PARABRE . NUMEROS PARCIERRA
+    (36) comandodrop -> DROP TABLE ID PYC .
 
-    NUMEROS         shift and go to state 42
+    CREATE          reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
+    ALTER           reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
+    TRUNCATE        reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
+    DROP            reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
+    USE             reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
+    $end            reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
 
 
 state 33
 
-    (5) comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .
+    (15) columna -> ID . tipo tamanios
+    (16) columna -> ID . tipo restriccion
+    (17) columna -> ID . tipo
+    (18) columna -> ID . tipo tamanios restriccion
+    (26) tipo -> . INT
+    (27) tipo -> . TEXT
+    (28) tipo -> . nvarchar
+    (29) tipo -> . DATE
+    (30) tipo -> . DECIMAL
+    (31) nvarchar -> . NVARCHAR PARABRE NUMEROS PARCIERRA
 
-    CREATE          reduce using rule 5 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
-    $end            reduce using rule 5 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
+    INT             shift and go to state 40
+    TEXT            shift and go to state 41
+    DATE            shift and go to state 43
+    DECIMAL         shift and go to state 44
+    NVARCHAR        shift and go to state 45
 
+    tipo                           shift and go to state 39
+    nvarchar                       shift and go to state 42
 
 state 34
 
-    (9) columnas -> columnas COMA columna .
+    (9) comandocreate -> CREATE TABLE ID PARABRE datostable . PARCIERRA PYC
+    (10) datostable -> datostable . datotable
+    (12) datotable -> . columnas
+    (13) columnas -> . columnas COMA columna
+    (14) columnas -> . columna
+    (15) columna -> . ID tipo tamanios
+    (16) columna -> . ID tipo restriccion
+    (17) columna -> . ID tipo
+    (18) columna -> . ID tipo tamanios restriccion
 
-    COMA            reduce using rule 9 (columnas -> columnas COMA columna .)
-    PARCIERRA       reduce using rule 9 (columnas -> columnas COMA columna .)
-    ID              reduce using rule 9 (columnas -> columnas COMA columna .)
+    PARCIERRA       shift and go to state 46
+    ID              shift and go to state 33
 
+    datotable                      shift and go to state 47
+    columnas                       shift and go to state 36
+    columna                        shift and go to state 37
 
 state 35
 
-    (14) columna -> ID tipo tamanios restriccion .
+    (11) datostable -> datotable .
 
-    COMA            reduce using rule 14 (columna -> ID tipo tamanios restriccion .)
-    PARCIERRA       reduce using rule 14 (columna -> ID tipo tamanios restriccion .)
-    ID              reduce using rule 14 (columna -> ID tipo tamanios restriccion .)
+    PARCIERRA       reduce using rule 11 (datostable -> datotable .)
+    ID              reduce using rule 11 (datostable -> datotable .)
 
 
 state 36
 
-    (15) tamanios -> PARABRE tamanios . COMA tamanio PARCIERRA
+    (12) datotable -> columnas .
+    (13) columnas -> columnas . COMA columna
 
-    COMA            shift and go to state 43
+    PARCIERRA       reduce using rule 12 (datotable -> columnas .)
+    ID              reduce using rule 12 (datotable -> columnas .)
+    COMA            shift and go to state 48
 
 
 state 37
 
-    (16) tamanios -> PARABRE tamanio . PARCIERRA
+    (14) columnas -> columna .
 
-    PARCIERRA       shift and go to state 44
+    COMA            reduce using rule 14 (columnas -> columna .)
+    PARCIERRA       reduce using rule 14 (columnas -> columna .)
+    ID              reduce using rule 14 (columnas -> columna .)
 
 
 state 38
 
-    (17) tamanio -> NUMEROS .
+    (32) comandoalter -> ALTER TABLE ID ADD COLUMN . ID tipo PYC
 
-    PARCIERRA       reduce using rule 17 (tamanio -> NUMEROS .)
+    ID              shift and go to state 49
 
 
 state 39
 
-    (18) restriccion -> PRIMARY KEY .
+    (15) columna -> ID tipo . tamanios
+    (16) columna -> ID tipo . restriccion
+    (17) columna -> ID tipo .
+    (18) columna -> ID tipo . tamanios restriccion
+    (19) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
+    (20) tamanios -> . PARABRE tamanio PARCIERRA
+    (22) restriccion -> . PRIMARY KEY
+    (23) restriccion -> . NOT NULL
+    (24) restriccion -> . reference
+    (25) reference -> . REFERENCE ID PARABRE ID PARCIERRA
 
-    COMA            reduce using rule 18 (restriccion -> PRIMARY KEY .)
-    PARCIERRA       reduce using rule 18 (restriccion -> PRIMARY KEY .)
-    ID              reduce using rule 18 (restriccion -> PRIMARY KEY .)
+    COMA            reduce using rule 17 (columna -> ID tipo .)
+    PARCIERRA       reduce using rule 17 (columna -> ID tipo .)
+    ID              reduce using rule 17 (columna -> ID tipo .)
+    PARABRE         shift and go to state 52
+    PRIMARY         shift and go to state 53
+    NOT             shift and go to state 54
+    REFERENCE       shift and go to state 56
 
+    tamanios                       shift and go to state 50
+    restriccion                    shift and go to state 51
+    reference                      shift and go to state 55
 
 state 40
 
-    (19) restriccion -> NOT NULL .
+    (26) tipo -> INT .
 
-    COMA            reduce using rule 19 (restriccion -> NOT NULL .)
-    PARCIERRA       reduce using rule 19 (restriccion -> NOT NULL .)
-    ID              reduce using rule 19 (restriccion -> NOT NULL .)
+    PARABRE         reduce using rule 26 (tipo -> INT .)
+    PRIMARY         reduce using rule 26 (tipo -> INT .)
+    NOT             reduce using rule 26 (tipo -> INT .)
+    REFERENCE       reduce using rule 26 (tipo -> INT .)
+    COMA            reduce using rule 26 (tipo -> INT .)
+    PARCIERRA       reduce using rule 26 (tipo -> INT .)
+    ID              reduce using rule 26 (tipo -> INT .)
+    PYC             reduce using rule 26 (tipo -> INT .)
 
 
 state 41
 
-    (21) reference -> REFERENCE ID . PARABRE ID PARCIERRA
+    (27) tipo -> TEXT .
 
-    PARABRE         shift and go to state 45
+    PARABRE         reduce using rule 27 (tipo -> TEXT .)
+    PRIMARY         reduce using rule 27 (tipo -> TEXT .)
+    NOT             reduce using rule 27 (tipo -> TEXT .)
+    REFERENCE       reduce using rule 27 (tipo -> TEXT .)
+    COMA            reduce using rule 27 (tipo -> TEXT .)
+    PARCIERRA       reduce using rule 27 (tipo -> TEXT .)
+    ID              reduce using rule 27 (tipo -> TEXT .)
+    PYC             reduce using rule 27 (tipo -> TEXT .)
 
 
 state 42
 
-    (27) nvarchar -> NVARCHAR PARABRE NUMEROS . PARCIERRA
+    (28) tipo -> nvarchar .
 
-    PARCIERRA       shift and go to state 46
+    PARABRE         reduce using rule 28 (tipo -> nvarchar .)
+    PRIMARY         reduce using rule 28 (tipo -> nvarchar .)
+    NOT             reduce using rule 28 (tipo -> nvarchar .)
+    REFERENCE       reduce using rule 28 (tipo -> nvarchar .)
+    COMA            reduce using rule 28 (tipo -> nvarchar .)
+    PARCIERRA       reduce using rule 28 (tipo -> nvarchar .)
+    ID              reduce using rule 28 (tipo -> nvarchar .)
+    PYC             reduce using rule 28 (tipo -> nvarchar .)
 
 
 state 43
 
-    (15) tamanios -> PARABRE tamanios COMA . tamanio PARCIERRA
-    (17) tamanio -> . NUMEROS
+    (29) tipo -> DATE .
 
-    NUMEROS         shift and go to state 38
+    PARABRE         reduce using rule 29 (tipo -> DATE .)
+    PRIMARY         reduce using rule 29 (tipo -> DATE .)
+    NOT             reduce using rule 29 (tipo -> DATE .)
+    REFERENCE       reduce using rule 29 (tipo -> DATE .)
+    COMA            reduce using rule 29 (tipo -> DATE .)
+    PARCIERRA       reduce using rule 29 (tipo -> DATE .)
+    ID              reduce using rule 29 (tipo -> DATE .)
+    PYC             reduce using rule 29 (tipo -> DATE .)
 
-    tamanio                        shift and go to state 47
 
 state 44
 
-    (16) tamanios -> PARABRE tamanio PARCIERRA .
+    (30) tipo -> DECIMAL .
 
-    PRIMARY         reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
-    NOT             reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
-    REFERENCE       reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
-    COMA            reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
-    PARCIERRA       reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
-    ID              reduce using rule 16 (tamanios -> PARABRE tamanio PARCIERRA .)
+    PARABRE         reduce using rule 30 (tipo -> DECIMAL .)
+    PRIMARY         reduce using rule 30 (tipo -> DECIMAL .)
+    NOT             reduce using rule 30 (tipo -> DECIMAL .)
+    REFERENCE       reduce using rule 30 (tipo -> DECIMAL .)
+    COMA            reduce using rule 30 (tipo -> DECIMAL .)
+    PARCIERRA       reduce using rule 30 (tipo -> DECIMAL .)
+    ID              reduce using rule 30 (tipo -> DECIMAL .)
+    PYC             reduce using rule 30 (tipo -> DECIMAL .)
 
 
 state 45
 
-    (21) reference -> REFERENCE ID PARABRE . ID PARCIERRA
+    (31) nvarchar -> NVARCHAR . PARABRE NUMEROS PARCIERRA
 
-    ID              shift and go to state 48
+    PARABRE         shift and go to state 57
 
 
 state 46
 
-    (27) nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .
+    (9) comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA . PYC
 
-    PARABRE         reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    PRIMARY         reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    NOT             reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    REFERENCE       reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    COMA            reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    PARCIERRA       reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    ID              reduce using rule 27 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    PYC             shift and go to state 58
 
 
 state 47
 
-    (15) tamanios -> PARABRE tamanios COMA tamanio . PARCIERRA
+    (10) datostable -> datostable datotable .
 
-    PARCIERRA       shift and go to state 49
+    PARCIERRA       reduce using rule 10 (datostable -> datostable datotable .)
+    ID              reduce using rule 10 (datostable -> datostable datotable .)
 
 
 state 48
 
-    (21) reference -> REFERENCE ID PARABRE ID . PARCIERRA
+    (13) columnas -> columnas COMA . columna
+    (15) columna -> . ID tipo tamanios
+    (16) columna -> . ID tipo restriccion
+    (17) columna -> . ID tipo
+    (18) columna -> . ID tipo tamanios restriccion
 
-    PARCIERRA       shift and go to state 50
+    ID              shift and go to state 33
 
+    columna                        shift and go to state 59
 
 state 49
 
-    (15) tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .
+    (32) comandoalter -> ALTER TABLE ID ADD COLUMN ID . tipo PYC
+    (26) tipo -> . INT
+    (27) tipo -> . TEXT
+    (28) tipo -> . nvarchar
+    (29) tipo -> . DATE
+    (30) tipo -> . DECIMAL
+    (31) nvarchar -> . NVARCHAR PARABRE NUMEROS PARCIERRA
 
-    PRIMARY         reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    NOT             reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    REFERENCE       reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    COMA            reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    PARCIERRA       reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    ID              reduce using rule 15 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    INT             shift and go to state 40
+    TEXT            shift and go to state 41
+    DATE            shift and go to state 43
+    DECIMAL         shift and go to state 44
+    NVARCHAR        shift and go to state 45
 
+    tipo                           shift and go to state 60
+    nvarchar                       shift and go to state 42
 
 state 50
 
-    (21) reference -> REFERENCE ID PARABRE ID PARCIERRA .
+    (15) columna -> ID tipo tamanios .
+    (18) columna -> ID tipo tamanios . restriccion
+    (22) restriccion -> . PRIMARY KEY
+    (23) restriccion -> . NOT NULL
+    (24) restriccion -> . reference
+    (25) reference -> . REFERENCE ID PARABRE ID PARCIERRA
 
-    COMA            reduce using rule 21 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
-    PARCIERRA       reduce using rule 21 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
-    ID              reduce using rule 21 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
+    COMA            reduce using rule 15 (columna -> ID tipo tamanios .)
+    PARCIERRA       reduce using rule 15 (columna -> ID tipo tamanios .)
+    ID              reduce using rule 15 (columna -> ID tipo tamanios .)
+    PRIMARY         shift and go to state 53
+    NOT             shift and go to state 54
+    REFERENCE       shift and go to state 56
+
+    restriccion                    shift and go to state 61
+    reference                      shift and go to state 55
+
+state 51
+
+    (16) columna -> ID tipo restriccion .
+
+    COMA            reduce using rule 16 (columna -> ID tipo restriccion .)
+    PARCIERRA       reduce using rule 16 (columna -> ID tipo restriccion .)
+    ID              reduce using rule 16 (columna -> ID tipo restriccion .)
+
+
+state 52
+
+    (19) tamanios -> PARABRE . tamanios COMA tamanio PARCIERRA
+    (20) tamanios -> PARABRE . tamanio PARCIERRA
+    (19) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
+    (20) tamanios -> . PARABRE tamanio PARCIERRA
+    (21) tamanio -> . NUMEROS
+
+    PARABRE         shift and go to state 52
+    NUMEROS         shift and go to state 64
+
+    tamanios                       shift and go to state 62
+    tamanio                        shift and go to state 63
+
+state 53
+
+    (22) restriccion -> PRIMARY . KEY
+
+    KEY             shift and go to state 65
+
+
+state 54
+
+    (23) restriccion -> NOT . NULL
+
+    NULL            shift and go to state 66
+
+
+state 55
+
+    (24) restriccion -> reference .
+
+    COMA            reduce using rule 24 (restriccion -> reference .)
+    PARCIERRA       reduce using rule 24 (restriccion -> reference .)
+    ID              reduce using rule 24 (restriccion -> reference .)
+
+
+state 56
+
+    (25) reference -> REFERENCE . ID PARABRE ID PARCIERRA
+
+    ID              shift and go to state 67
+
+
+state 57
+
+    (31) nvarchar -> NVARCHAR PARABRE . NUMEROS PARCIERRA
+
+    NUMEROS         shift and go to state 68
+
+
+state 58
+
+    (9) comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .
+
+    CREATE          reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
+    ALTER           reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
+    TRUNCATE        reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
+    DROP            reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
+    USE             reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
+    $end            reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
+
+
+state 59
+
+    (13) columnas -> columnas COMA columna .
+
+    COMA            reduce using rule 13 (columnas -> columnas COMA columna .)
+    PARCIERRA       reduce using rule 13 (columnas -> columnas COMA columna .)
+    ID              reduce using rule 13 (columnas -> columnas COMA columna .)
+
+
+state 60
+
+    (32) comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo . PYC
+
+    PYC             shift and go to state 69
+
+
+state 61
+
+    (18) columna -> ID tipo tamanios restriccion .
+
+    COMA            reduce using rule 18 (columna -> ID tipo tamanios restriccion .)
+    PARCIERRA       reduce using rule 18 (columna -> ID tipo tamanios restriccion .)
+    ID              reduce using rule 18 (columna -> ID tipo tamanios restriccion .)
+
+
+state 62
+
+    (19) tamanios -> PARABRE tamanios . COMA tamanio PARCIERRA
+
+    COMA            shift and go to state 70
+
+
+state 63
+
+    (20) tamanios -> PARABRE tamanio . PARCIERRA
+
+    PARCIERRA       shift and go to state 71
+
+
+state 64
+
+    (21) tamanio -> NUMEROS .
+
+    PARCIERRA       reduce using rule 21 (tamanio -> NUMEROS .)
+
+
+state 65
+
+    (22) restriccion -> PRIMARY KEY .
+
+    COMA            reduce using rule 22 (restriccion -> PRIMARY KEY .)
+    PARCIERRA       reduce using rule 22 (restriccion -> PRIMARY KEY .)
+    ID              reduce using rule 22 (restriccion -> PRIMARY KEY .)
+
+
+state 66
+
+    (23) restriccion -> NOT NULL .
+
+    COMA            reduce using rule 23 (restriccion -> NOT NULL .)
+    PARCIERRA       reduce using rule 23 (restriccion -> NOT NULL .)
+    ID              reduce using rule 23 (restriccion -> NOT NULL .)
+
+
+state 67
+
+    (25) reference -> REFERENCE ID . PARABRE ID PARCIERRA
+
+    PARABRE         shift and go to state 72
+
+
+state 68
+
+    (31) nvarchar -> NVARCHAR PARABRE NUMEROS . PARCIERRA
+
+    PARCIERRA       shift and go to state 73
+
+
+state 69
+
+    (32) comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .
+
+    CREATE          reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
+    ALTER           reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
+    TRUNCATE        reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
+    DROP            reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
+    USE             reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
+    $end            reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
+
+
+state 70
+
+    (19) tamanios -> PARABRE tamanios COMA . tamanio PARCIERRA
+    (21) tamanio -> . NUMEROS
+
+    NUMEROS         shift and go to state 64
+
+    tamanio                        shift and go to state 74
+
+state 71
+
+    (20) tamanios -> PARABRE tamanio PARCIERRA .
+
+    PRIMARY         reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
+    NOT             reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
+    REFERENCE       reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
+    COMA            reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
+    PARCIERRA       reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
+    ID              reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
+
+
+state 72
+
+    (25) reference -> REFERENCE ID PARABRE . ID PARCIERRA
+
+    ID              shift and go to state 75
+
+
+state 73
+
+    (31) nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .
+
+    PARABRE         reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    PRIMARY         reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    NOT             reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    REFERENCE       reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    COMA            reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    PARCIERRA       reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    ID              reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    PYC             reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+
+
+state 74
+
+    (19) tamanios -> PARABRE tamanios COMA tamanio . PARCIERRA
+
+    PARCIERRA       shift and go to state 76
+
+
+state 75
+
+    (25) reference -> REFERENCE ID PARABRE ID . PARCIERRA
+
+    PARCIERRA       shift and go to state 77
+
+
+state 76
+
+    (19) tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .
+
+    PRIMARY         reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    NOT             reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    REFERENCE       reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    COMA            reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    PARCIERRA       reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    ID              reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+
+
+state 77
+
+    (25) reference -> REFERENCE ID PARABRE ID PARCIERRA .
+
+    COMA            reduce using rule 25 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
+    PARCIERRA       reduce using rule 25 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
+    ID              reduce using rule 25 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
 

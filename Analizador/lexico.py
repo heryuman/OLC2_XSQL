@@ -2,6 +2,7 @@ reservadas={
 
         'create':'CREATE',
         'table':'TABLE',
+        'use' : 'USE',
         'primary': 'PRIMARY',
         'key' : 'KEY',
         'nvarchar' : 'NVARCHAR',
@@ -11,8 +12,15 @@ reservadas={
         'reference' : 'REFERENCE',
         'int' : 'INT',
         'text' : 'TEXT',
-        'decimal' : 'DECIMAL'
-
+        'decimal' : 'DECIMAL',
+        
+        'alter' : 'ALTER',
+        'add' : 'ADD',
+        'column' : 'COLUMN',
+        
+        'truncate' : 'TRUNCATE',
+        
+        'drop' : 'DROP'
 }
 
 
@@ -35,11 +43,10 @@ t_COMA = r'\,'
 def t_NUMEROS(t):
     r"-?\d+"
     return t
-''' #esto es para la parte de los decimales
-def t_NUMEROS(t):
-    r"-?\d+(\.\d+)?"
-    return t
-'''
+#esto es para la parte de los decimales
+#def t_NUMEROS(t):
+#    r"-?\d+(\.\d+)?"
+#    return t
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
