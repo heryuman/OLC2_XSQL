@@ -363,7 +363,13 @@ def p_comandodelete(p):
   
 
 def p_comandoif(p):
-    '''comandoif : IF PARABRE listacentencias PARCIERRA PYC'''
+    '''comandoif : produccionesif
+                 | exprecionides COMA comandoif
+                 | exprecionides'''
+
+def p_produccionesif(p):
+    '''produccionesif : IF PARABRE listacentencias PARCIERRA PYC
+                      | IF PARABRE listacentencias PARCIERRA AS valordeoperacion FROM exprecionides PYC'''
 
 def p_listacentencias(p):
     '''listacentencias : listacentencias COMA listacentencia
@@ -373,7 +379,6 @@ def p_listacentencia(p):
     '''listacentencia : valordeoperacion
                       | expresion'''
     print(p[1])
-    
 def p_error(p):
     if p:
         print(f"Error de sintaxis en '{p.value}'")   
