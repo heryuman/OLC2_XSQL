@@ -34,7 +34,9 @@ reservadas={
         
         'insert' : 'INSERT',
         'into' : 'INTO',
-        'values' : 'VALUES'
+        'values' : 'VALUES',
+        
+        'delete' : 'DELETE'
 }
 
 

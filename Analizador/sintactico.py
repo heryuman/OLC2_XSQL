@@ -38,7 +38,8 @@ def p_instruccion(p):
                    | comandouse
                    | comandoselect
                    | comandoupdate
-                   | comandoinsert'''
+                   | comandoinsert
+                   | comandodelete'''
     p[0] = (p[1])
     
 
@@ -206,7 +207,8 @@ def p_datoswhere(p): #oparitmeticas -> expresion
                   | WHERE expresion
                   | WHERE expresion exprecionides
                   | WHERE exprecionides BETWEEN listasbitween
-                  | WHERE exprecionides IGUAL expresion'''
+                  | WHERE exprecionides IGUAL expresion
+                  | WHERE exprecionides IGUAL valordeoperacion'''
     if len(p)==5:
         p[0] = p[4]
     elif len(p)==4:
@@ -214,6 +216,7 @@ def p_datoswhere(p): #oparitmeticas -> expresion
     else:
         p[0] = p[2]
     print(p[0])
+    
 def p_listasbitween(p):
     '''listasbitween : listasbitween listabitween'''
     if p[2] != "":
@@ -349,6 +352,16 @@ def p_listavalores(p):
         p[0] =p[1] + "," + p[3]
     else:
         p[0] = p[1]
+  
+
+def p_comandodelete(p):
+    '''comandodelete : DELETE FROM exprecionides datoswhere PYC'''
+    print(p[3])
+    print(p[4])
+  
+  
+  
+  
   
 def p_error(p):
     if p:
