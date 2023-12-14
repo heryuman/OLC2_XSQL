@@ -37,7 +37,8 @@ def p_instruccion(p):
                    | comandodrop
                    | comandouse
                    | comandoselect
-                   | comandoupdate'''
+                   | comandoupdate
+                   | comandoinsert'''
     p[0] = (p[1])
     
 
@@ -293,7 +294,8 @@ def p_signoscomparacion(p):
 
 def p_valordeoperacion(p):
     '''valordeoperacion : exprecionides
-                        | NUMEROS'''
+                        | NUMEROS
+                        | CADENA'''
     p[0] = p[1]
     
 
@@ -310,8 +312,7 @@ def p_listaupdate(p):
         p[0] = p[1]
 
 def p_valorupdate(p):
-    '''valorupdate : exprecionides IGUAL CADENA
-                   | exprecionides IGUAL valordeoperacion
+    '''valorupdate : exprecionides IGUAL valordeoperacion
                    | exprecionides IGUAL expresion
                    | exprecionides IGUAL valordeoperacion datoswhere'''
     if len(p) == 5:
@@ -325,6 +326,29 @@ def p_listaIDES(p):
         p[0] = [p[1]]  # Si es solo un ID, devuelve una lista con un elemento
     else:
         p[0] = p[1] + [p[3]]  # Si es una expresión seguida de un ID, concatena la lista con el nuevo ID
+
+def p_comandoinsert(p):
+    '''comandoinsert : INSERT INTO exprecionides PARABRE listacolumna PARCIERRA VALUES PARABRE listavalores PARCIERRA PYC'''
+    print(p[3])
+    print(p[5])
+    print(p[9])
+
+def p_listacolumna(p):
+    '''listacolumna : exprecionides COMA exprecionides
+                    | exprecionides'''
+    if len(p) == 4:
+        p[0] =p[1] + "," + p[3]
+    else:
+        p[0] = p[1]
+
+def p_listavalores(p):
+    '''listavalores : valordeoperacion COMA valordeoperacion
+                    | valordeoperacion'''
+    
+    if len(p) == 4:
+        p[0] =p[1] + "," + p[3]
+    else:
+        p[0] = p[1]
   
 def p_error(p):
     if p:

@@ -33,7 +33,8 @@ reservadas={
         'set' : 'SET',
         
         'insert' : 'INSERT',
-        'into' : 'INTO'
+        'into' : 'INTO',
+        'values' : 'VALUES'
 }
 
 
