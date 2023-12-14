@@ -178,7 +178,8 @@ def p_comandouse(p):
 
 def p_comandoselect(p):
     '''comandoselect : SELECT valoresselected FROM datosselect PYC
-                     | SELECT valoresselected FROM datosselect datoswhere PYC'''
+                     | SELECT valoresselected FROM datosselect datoswhere PYC
+                     | SELECT comandoif'''
     print("valoresselected " , p[2])
     print("datosselect " , p[4])
     p[0]=""
@@ -276,7 +277,8 @@ def p_factor(p):
               | expresion MAYORQ expresion'''
     if len(p) ==4:
         if p[2] == ">":
-            p[0] = p[1] > p[2]
+            p[0] =str(p[1]) > str(p[2])
+            print(p[0] )
         elif p[2] == "<":
             p[0] = p[1] < p[2]
         elif p[2] == ">=":
@@ -359,10 +361,19 @@ def p_comandodelete(p):
     print(p[3])
     print(p[4])
   
-  
-  
-  
-  
+
+def p_comandoif(p):
+    '''comandoif : IF PARABRE listacentencias PARCIERRA PYC'''
+
+def p_listacentencias(p):
+    '''listacentencias : listacentencias COMA listacentencia
+                       | listacentencia'''
+
+def p_listacentencia(p):
+    '''listacentencia : valordeoperacion
+                      | expresion'''
+    print(p[1])
+    
 def p_error(p):
     if p:
         print(f"Error de sintaxis en '{p.value}'")   

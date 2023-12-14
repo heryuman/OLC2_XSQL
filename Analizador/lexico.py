@@ -36,7 +36,10 @@ reservadas={
         'into' : 'INTO',
         'values' : 'VALUES',
         
-        'delete' : 'DELETE'
+        'delete' : 'DELETE',
+        
+        'if' : 'IF',
+        'as' : 'AS'
 }
 
 
