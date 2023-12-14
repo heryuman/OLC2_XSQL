@@ -6,6 +6,11 @@ from object.tamanio import TAMANIO
 lista=[]
 listaErrores=[]
 
+precedence = (
+    ('left', 'SUMA', 'RESTA'),
+    ('left', 'MULTI', 'DIV'),
+    ('nonassoc', 'MAYORQ', 'MENORQ', 'MAYORIGUAL', 'MENORIGUAL', 'IGUAL')
+)
 
 def  p_inicio(p):
     '''inicio : instrucciones'''
@@ -30,12 +35,14 @@ def p_instruccion(p):
                    | comandoalter
                    | comandotruncate
                    | comandodrop
-                   | comandouse'''
+                   | comandouse
+                   | comandoselect
+                   | comandoupdate'''
     p[0] = (p[1])
     
 
 def p_comandocreate(p):
-    '''comandocreate : CREATE TABLE ID PARABRE datostable PARCIERRA PYC'''
+    '''comandocreate : CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC'''
     print("create: ", p[1])
     print("table: ", p[2])
     print("datos: ", p[5])
@@ -67,10 +74,10 @@ def p_columnas(p):
         p[0] = p[1]
     
 def p_columna(p):
-    '''columna : ID tipo tamanios
-              | ID tipo restriccion
-              | ID tipo 
-              | ID tipo tamanios restriccion'''
+    '''columna : exprecionides tipo tamanios
+              | exprecionides tipo restriccion
+              | exprecionides tipo 
+              | exprecionides tipo tamanios restriccion'''
     columna=None
     listColum=[]
     if len(p) == 4:
@@ -97,15 +104,15 @@ def p_columna(p):
     p[0]=listColum
 
 def getTamxTipo(tipo):
-    if tipo.lower() == "int":
+    if tipo == "int":
         return 11
-    elif tipo.lower() == "text":
+    elif tipo == "text":
         return 20
-    elif tipo.lower() == "date":
+    elif tipo == "date":
         return 11
-    elif tipo.lower() == "decimal":
+    elif tipo == "decimal":
         return 5
-    elif tipo.lower() == "nvarchar":
+    elif tipo == "nvarchar":
         return 15
 
 def p_tamanios(p):
@@ -130,7 +137,7 @@ def p_restriccion(p):
         p[0] = p[1]
 
 def p_reference(p):
-    '''reference : REFERENCE ID PARABRE ID PARCIERRA'''
+    '''reference : REFERENCE exprecionides PARABRE exprecionides PARCIERRA'''
     p[0] = REFERENCE(p[2],p[4])
 
 def p_tipo(p):
@@ -147,31 +154,181 @@ def p_nvarchar(p):
 
 
 def p_comandoalter(p):
-    '''comandoalter : ALTER TABLE ID ADD COLUMN ID tipo PYC
-                    | ALTER TABLE ID comandodrop'''
+    '''comandoalter : ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC
+                    | ALTER TABLE exprecionides comandodrop'''
     print("alter " , p[3])
 
 
 def p_comandotruncate(p):
-    '''comandotruncate : TRUNCATE TABLE ID PYC'''
+    '''comandotruncate : TRUNCATE TABLE exprecionides PYC'''
     print("truncate " , p[3])
 
 
 def p_comandodrop(p):
-    '''comandodrop : DROP COLUMN ID PYC
-                   | DROP TABLE ID PYC'''
+    '''comandodrop : DROP COLUMN exprecionides PYC
+                   | DROP TABLE exprecionides PYC'''
     print("drop ", p[3])
 
 def p_comandouse(p):
-    '''comandouse : USE ID PYC'''
+    '''comandouse : USE exprecionides PYC'''
     p[0] = p[2]
 
 
+def p_comandoselect(p):
+    '''comandoselect : SELECT valoresselected FROM datosselect PYC
+                     | SELECT valoresselected FROM datosselect datoswhere PYC'''
+    print("valoresselected " , p[2])
+    print("datosselect " , p[4])
+    p[0]=""
+    
+def p_valoresselected(p):
+    '''valoresselected : MULTI
+                       | datosselect'''
+    p[0] = p[1]
+    
+def p_datosselect(p): #utilizar  isinstance para diferenciar si es una suma o un id
+    '''datosselect : datosselect COMA datoselect
+                   | datosselect COMA expresion
+                   | datoselect
+                   | expresion'''
+    if len(p) == 4:
+        p[0] = str(p[1]) + "," + str(p[3])
+    else:
+        p[0] = str(p[1])
+        
+def p_datoselect(p):
+    '''datoselect : exprecionides'''
+    p[0] = p[1]
+
+def p_datoswhere(p): #oparitmeticas -> expresion
+    '''datoswhere : WHERE exprecionides
+                  | WHERE expresion
+                  | WHERE expresion exprecionides
+                  | WHERE exprecionides BETWEEN listasbitween
+                  | WHERE exprecionides IGUAL expresion'''
+    if len(p)==5:
+        p[0] = p[4]
+    elif len(p)==4:
+        p[0]=p[3]
+    else:
+        p[0] = p[2]
+    print(p[0])
+def p_listasbitween(p):
+    '''listasbitween : listasbitween listabitween'''
+    if p[2] != "":
+        p[1].append(p[2])
+    p[0] = p[1]
+
+def p_listasbitweenlistabitween(p):
+    '''listasbitween : listabitween'''
+    if p[1] == "":
+        p[0] = []
+    else:
+        p[0] = [p[1]]
+
+def p_listabitween(p):
+    '''listabitween : CADENA
+                    | AND
+                    | OR
+                    | exprecionides PARABRE PARCIERRA
+                    | exprecionides IGUAL expresion'''
+    if len(p) == 4:
+        if p[2] == "(":
+            print(p[1])
+        elif p[2] =="=":
+            print(p[1])
+    print(p[1])
+    
+def p_oparitmeticas(p): #falta ver las producciones de las operaciones aritmeticas
+    '''expresion : expresion SUMA termino 
+                 | expresion RESTA termino 
+                 | termino'''
+    #por el momento esta de esta forma, es de enviar los datos y manipularlos desde la otra clase
+    if len(p) == 4:
+        if p[2] == '+':
+            p[0] = p[1] + p[3]
+        elif p[2] == '-':
+            p[0] = p[1] - p[3]
+    else:
+        p[0] = p[1]
+
+
+def p_termino(p):
+    '''termino : termino MULTI factor
+               | termino DIV factor
+               | factor'''
+    if len(p) == 4:
+        if p[2] == '*':
+            p[0] = p[1] * p[3]
+        elif p[2] == '/':
+            p[0] = p[1] / p[3]
+    else:
+        p[0] = p[1]
+
+def p_factor(p):
+    '''factor : exprecionides
+              | NUMEROS
+              | PARABRE expresion PARCIERRA
+              | expresion MAYORQ expresion'''
+    if len(p) ==4:
+        if p[2] == ">":
+            p[0] = p[1] > p[2]
+        elif p[2] == "<":
+            p[0] = p[1] < p[2]
+        elif p[2] == ">=":
+            p[0] = p[1] >= p[2]
+        elif p[2] == "<=":
+            p[0] = p[1] <= p[2]
+        else:
+            p[0] = p[2]
+    else:
+        p[0] = p[1]
+
+def p_signoscomparacion(p):
+    '''signoscomparacion : MAYORQ
+                         | MENORQ
+                         | MAYORIGUAL
+                         | MENORIGUAL'''
+    p[0] = p[1]
+
+def p_valordeoperacion(p):
+    '''valordeoperacion : exprecionides
+                        | NUMEROS'''
+    p[0] = p[1]
+    
+
+def p_comandoupdate(p):
+    '''comandoupdate : UPDATE exprecionides SET listaupdate PYC'''
+    print("listaupdate " , p[4])
+
+def p_listaupdate(p):
+    '''listaupdate : listaupdate COMA valorupdate
+                   | valorupdate'''
+    if len(p) ==4:
+        p[0]=p[3]        
+    else:
+        p[0] = p[1]
+
+def p_valorupdate(p):
+    '''valorupdate : exprecionides IGUAL CADENA
+                   | exprecionides IGUAL valordeoperacion
+                   | exprecionides IGUAL expresion
+                   | exprecionides IGUAL valordeoperacion datoswhere'''
+    if len(p) == 5:
+        p[0] = p[4]
+
+
+def p_listaIDES(p):
+    '''exprecionides : exprecionides PUNTO ID
+                     | ID'''
+    if len(p) == 2:
+        p[0] = [p[1]]  # Si es solo un ID, devuelve una lista con un elemento
+    else:
+        p[0] = p[1] + [p[3]]  # Si es una expresión seguida de un ID, concatena la lista con el nuevo ID
+  
 def p_error(p):
     if p:
-        print(f"Error de sintaxis en '{p.value}'")
-
-
+        print(f"Error de sintaxis en '{p.value}'")   
 
 
 import ply.yacc as yacc

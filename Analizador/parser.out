@@ -1,5 +1,13 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    COMILLADOBLE
+    COMILLASIMPRE
+    INSERT
+    INTO
+    NUMEROSDECIMALES
+
 Grammar
 
 Rule 0     S' -> inicio
@@ -11,84 +19,172 @@ Rule 5     instruccion -> comandoalter
 Rule 6     instruccion -> comandotruncate
 Rule 7     instruccion -> comandodrop
 Rule 8     instruccion -> comandouse
-Rule 9     comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC
-Rule 10    datostable -> datostable datotable
-Rule 11    datostable -> datotable
-Rule 12    datotable -> columnas
-Rule 13    columnas -> columnas COMA columna
-Rule 14    columnas -> columna
-Rule 15    columna -> ID tipo tamanios
-Rule 16    columna -> ID tipo restriccion
-Rule 17    columna -> ID tipo
-Rule 18    columna -> ID tipo tamanios restriccion
-Rule 19    tamanios -> PARABRE tamanios COMA tamanio PARCIERRA
-Rule 20    tamanios -> PARABRE tamanio PARCIERRA
-Rule 21    tamanio -> NUMEROS
-Rule 22    restriccion -> PRIMARY KEY
-Rule 23    restriccion -> NOT NULL
-Rule 24    restriccion -> reference
-Rule 25    reference -> REFERENCE ID PARABRE ID PARCIERRA
-Rule 26    tipo -> INT
-Rule 27    tipo -> TEXT
-Rule 28    tipo -> nvarchar
-Rule 29    tipo -> DATE
-Rule 30    tipo -> DECIMAL
-Rule 31    nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA
-Rule 32    comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC
-Rule 33    comandoalter -> ALTER TABLE ID comandodrop
-Rule 34    comandotruncate -> TRUNCATE TABLE ID PYC
-Rule 35    comandodrop -> DROP COLUMN ID PYC
-Rule 36    comandodrop -> DROP TABLE ID PYC
-Rule 37    comandouse -> USE ID PYC
+Rule 9     instruccion -> comandoselect
+Rule 10    instruccion -> comandoupdate
+Rule 11    comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC
+Rule 12    datostable -> datostable datotable
+Rule 13    datostable -> datotable
+Rule 14    datotable -> columnas
+Rule 15    columnas -> columnas COMA columna
+Rule 16    columnas -> columna
+Rule 17    columna -> exprecionides tipo tamanios
+Rule 18    columna -> exprecionides tipo restriccion
+Rule 19    columna -> exprecionides tipo
+Rule 20    columna -> exprecionides tipo tamanios restriccion
+Rule 21    tamanios -> PARABRE tamanios COMA tamanio PARCIERRA
+Rule 22    tamanios -> PARABRE tamanio PARCIERRA
+Rule 23    tamanio -> NUMEROS
+Rule 24    restriccion -> PRIMARY KEY
+Rule 25    restriccion -> NOT NULL
+Rule 26    restriccion -> reference
+Rule 27    reference -> REFERENCE exprecionides PARABRE exprecionides PARCIERRA
+Rule 28    tipo -> INT
+Rule 29    tipo -> TEXT
+Rule 30    tipo -> nvarchar
+Rule 31    tipo -> DATE
+Rule 32    tipo -> DECIMAL
+Rule 33    nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA
+Rule 34    comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC
+Rule 35    comandoalter -> ALTER TABLE exprecionides comandodrop
+Rule 36    comandotruncate -> TRUNCATE TABLE exprecionides PYC
+Rule 37    comandodrop -> DROP COLUMN exprecionides PYC
+Rule 38    comandodrop -> DROP TABLE exprecionides PYC
+Rule 39    comandouse -> USE exprecionides PYC
+Rule 40    comandoselect -> SELECT valoresselected FROM datosselect PYC
+Rule 41    comandoselect -> SELECT valoresselected FROM datosselect datoswhere PYC
+Rule 42    valoresselected -> MULTI
+Rule 43    valoresselected -> datosselect
+Rule 44    datosselect -> datosselect COMA datoselect
+Rule 45    datosselect -> datosselect COMA expresion
+Rule 46    datosselect -> datoselect
+Rule 47    datosselect -> expresion
+Rule 48    datoselect -> exprecionides
+Rule 49    datoswhere -> WHERE exprecionides
+Rule 50    datoswhere -> WHERE expresion
+Rule 51    datoswhere -> WHERE expresion exprecionides
+Rule 52    datoswhere -> WHERE exprecionides BETWEEN listasbitween
+Rule 53    datoswhere -> WHERE exprecionides IGUAL expresion
+Rule 54    listasbitween -> listasbitween listabitween
+Rule 55    listasbitween -> listabitween
+Rule 56    listabitween -> CADENA
+Rule 57    listabitween -> AND
+Rule 58    listabitween -> OR
+Rule 59    listabitween -> exprecionides PARABRE PARCIERRA
+Rule 60    listabitween -> exprecionides IGUAL expresion
+Rule 61    expresion -> expresion SUMA termino
+Rule 62    expresion -> expresion RESTA termino
+Rule 63    expresion -> termino
+Rule 64    termino -> termino MULTI factor
+Rule 65    termino -> termino DIV factor
+Rule 66    termino -> factor
+Rule 67    factor -> exprecionides
+Rule 68    factor -> NUMEROS
+Rule 69    factor -> PARABRE expresion PARCIERRA
+Rule 70    factor -> expresion MAYORQ expresion
+Rule 71    signoscomparacion -> MAYORQ
+Rule 72    signoscomparacion -> MENORQ
+Rule 73    signoscomparacion -> MAYORIGUAL
+Rule 74    signoscomparacion -> MENORIGUAL
+Rule 75    valordeoperacion -> exprecionides
+Rule 76    valordeoperacion -> NUMEROS
+Rule 77    comandoupdate -> UPDATE exprecionides SET listaupdate PYC
+Rule 78    listaupdate -> listaupdate COMA valorupdate
+Rule 79    listaupdate -> valorupdate
+Rule 80    valorupdate -> exprecionides IGUAL CADENA
+Rule 81    valorupdate -> exprecionides IGUAL valordeoperacion
+Rule 82    valorupdate -> exprecionides IGUAL expresion
+Rule 83    valorupdate -> exprecionides IGUAL valordeoperacion datoswhere
+Rule 84    exprecionides -> exprecionides PUNTO ID
+Rule 85    exprecionides -> ID
 
 Terminals, with rules where they appear
 
-ADD                  : 32
-ALTER                : 32 33
-COLUMN               : 32 35
-COMA                 : 13 19
-CREATE               : 9
-DATE                 : 29
-DECIMAL              : 30
-DROP                 : 35 36
-ID                   : 9 15 16 17 18 25 25 32 32 33 34 35 36 37
-INT                  : 26
-KEY                  : 22
-NOT                  : 23
-NULL                 : 23
-NUMEROS              : 21 31
-NVARCHAR             : 31
-PARABRE              : 9 19 20 25 31
-PARCIERRA            : 9 19 20 25 31
-PRIMARY              : 22
-PYC                  : 9 32 34 35 36 37
-REFERENCE            : 25
-TABLE                : 9 32 33 34 36
-TEXT                 : 27
-TRUNCATE             : 34
-USE                  : 37
+ADD                  : 34
+ALTER                : 34 35
+AND                  : 57
+BETWEEN              : 52
+CADENA               : 56 80
+COLUMN               : 34 37
+COMA                 : 15 21 44 45 78
+COMILLADOBLE         : 
+COMILLASIMPRE        : 
+CREATE               : 11
+DATE                 : 31
+DECIMAL              : 32
+DIV                  : 65
+DROP                 : 37 38
+FROM                 : 40 41
+ID                   : 84 85
+IGUAL                : 53 60 80 81 82 83
+INSERT               : 
+INT                  : 28
+INTO                 : 
+KEY                  : 24
+MAYORIGUAL           : 73
+MAYORQ               : 70 71
+MENORIGUAL           : 74
+MENORQ               : 72
+MULTI                : 42 64
+NOT                  : 25
+NULL                 : 25
+NUMEROS              : 23 33 68 76
+NUMEROSDECIMALES     : 
+NVARCHAR             : 33
+OR                   : 58
+PARABRE              : 11 21 22 27 33 59 69
+PARCIERRA            : 11 21 22 27 33 59 69
+PRIMARY              : 24
+PUNTO                : 84
+PYC                  : 11 34 36 37 38 39 40 41 77
+REFERENCE            : 27
+RESTA                : 62
+SELECT               : 40 41
+SET                  : 77
+SUMA                 : 61
+TABLE                : 11 34 35 36 38
+TEXT                 : 29
+TRUNCATE             : 36
+UPDATE               : 77
+USE                  : 39
+WHERE                : 49 50 51 52 53
 error                : 
 
 Nonterminals, with rules where they appear
 
-columna              : 13 14
-columnas             : 12 13
+columna              : 15 16
+columnas             : 14 15
 comandoalter         : 5
 comandocreate        : 4
-comandodrop          : 7 33
+comandodrop          : 7 35
+comandoselect        : 9
 comandotruncate      : 6
+comandoupdate        : 10
 comandouse           : 8
-datostable           : 9 10
-datotable            : 10 11
+datoselect           : 44 46
+datosselect          : 40 41 43 44 45
+datostable           : 11 12
+datoswhere           : 41 83
+datotable            : 12 13
+exprecionides        : 11 17 18 19 20 27 27 34 34 35 36 37 38 39 48 49 51 52 53 59 60 67 75 77 80 81 82 83 84
+expresion            : 45 47 50 51 53 60 61 62 69 70 70 82
+factor               : 64 65 66
 inicio               : 0
 instruccion          : 2 3
 instrucciones        : 1 2
-nvarchar             : 28
-reference            : 24
-restriccion          : 16 18
-tamanio              : 19 20
-tamanios             : 15 18 19
-tipo                 : 15 16 17 18 32
+listabitween         : 54 55
+listasbitween        : 52 54
+listaupdate          : 77 78
+nvarchar             : 30
+reference            : 26
+restriccion          : 18 20
+signoscomparacion    : 
+tamanio              : 21 22
+tamanios             : 17 20 21
+termino              : 61 62 63 64 65
+tipo                 : 17 18 19 20 34
+valordeoperacion     : 81 83
+valoresselected      : 40 41
+valorupdate          : 78 79
 
 Parsing method: LALR
 
@@ -103,19 +199,26 @@ state 0
     (6) instruccion -> . comandotruncate
     (7) instruccion -> . comandodrop
     (8) instruccion -> . comandouse
-    (9) comandocreate -> . CREATE TABLE ID PARABRE datostable PARCIERRA PYC
-    (32) comandoalter -> . ALTER TABLE ID ADD COLUMN ID tipo PYC
-    (33) comandoalter -> . ALTER TABLE ID comandodrop
-    (34) comandotruncate -> . TRUNCATE TABLE ID PYC
-    (35) comandodrop -> . DROP COLUMN ID PYC
-    (36) comandodrop -> . DROP TABLE ID PYC
-    (37) comandouse -> . USE ID PYC
+    (9) instruccion -> . comandoselect
+    (10) instruccion -> . comandoupdate
+    (11) comandocreate -> . CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC
+    (34) comandoalter -> . ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC
+    (35) comandoalter -> . ALTER TABLE exprecionides comandodrop
+    (36) comandotruncate -> . TRUNCATE TABLE exprecionides PYC
+    (37) comandodrop -> . DROP COLUMN exprecionides PYC
+    (38) comandodrop -> . DROP TABLE exprecionides PYC
+    (39) comandouse -> . USE exprecionides PYC
+    (40) comandoselect -> . SELECT valoresselected FROM datosselect PYC
+    (41) comandoselect -> . SELECT valoresselected FROM datosselect datoswhere PYC
+    (77) comandoupdate -> . UPDATE exprecionides SET listaupdate PYC
 
-    CREATE          shift and go to state 9
-    ALTER           shift and go to state 10
-    TRUNCATE        shift and go to state 11
-    DROP            shift and go to state 12
-    USE             shift and go to state 13
+    CREATE          shift and go to state 11
+    ALTER           shift and go to state 12
+    TRUNCATE        shift and go to state 13
+    DROP            shift and go to state 14
+    USE             shift and go to state 15
+    SELECT          shift and go to state 16
+    UPDATE          shift and go to state 17
 
     inicio                         shift and go to state 1
     instrucciones                  shift and go to state 2
@@ -125,6 +228,8 @@ state 0
     comandotruncate                shift and go to state 6
     comandodrop                    shift and go to state 7
     comandouse                     shift and go to state 8
+    comandoselect                  shift and go to state 9
+    comandoupdate                  shift and go to state 10
 
 state 1
 
@@ -141,27 +246,36 @@ state 2
     (6) instruccion -> . comandotruncate
     (7) instruccion -> . comandodrop
     (8) instruccion -> . comandouse
-    (9) comandocreate -> . CREATE TABLE ID PARABRE datostable PARCIERRA PYC
-    (32) comandoalter -> . ALTER TABLE ID ADD COLUMN ID tipo PYC
-    (33) comandoalter -> . ALTER TABLE ID comandodrop
-    (34) comandotruncate -> . TRUNCATE TABLE ID PYC
-    (35) comandodrop -> . DROP COLUMN ID PYC
-    (36) comandodrop -> . DROP TABLE ID PYC
-    (37) comandouse -> . USE ID PYC
+    (9) instruccion -> . comandoselect
+    (10) instruccion -> . comandoupdate
+    (11) comandocreate -> . CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC
+    (34) comandoalter -> . ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC
+    (35) comandoalter -> . ALTER TABLE exprecionides comandodrop
+    (36) comandotruncate -> . TRUNCATE TABLE exprecionides PYC
+    (37) comandodrop -> . DROP COLUMN exprecionides PYC
+    (38) comandodrop -> . DROP TABLE exprecionides PYC
+    (39) comandouse -> . USE exprecionides PYC
+    (40) comandoselect -> . SELECT valoresselected FROM datosselect PYC
+    (41) comandoselect -> . SELECT valoresselected FROM datosselect datoswhere PYC
+    (77) comandoupdate -> . UPDATE exprecionides SET listaupdate PYC
 
     $end            reduce using rule 1 (inicio -> instrucciones .)
-    CREATE          shift and go to state 9
-    ALTER           shift and go to state 10
-    TRUNCATE        shift and go to state 11
-    DROP            shift and go to state 12
-    USE             shift and go to state 13
+    CREATE          shift and go to state 11
+    ALTER           shift and go to state 12
+    TRUNCATE        shift and go to state 13
+    DROP            shift and go to state 14
+    USE             shift and go to state 15
+    SELECT          shift and go to state 16
+    UPDATE          shift and go to state 17
 
-    instruccion                    shift and go to state 14
+    instruccion                    shift and go to state 18
     comandocreate                  shift and go to state 4
     comandoalter                   shift and go to state 5
     comandotruncate                shift and go to state 6
     comandodrop                    shift and go to state 7
     comandouse                     shift and go to state 8
+    comandoselect                  shift and go to state 9
+    comandoupdate                  shift and go to state 10
 
 state 3
 
@@ -172,6 +286,8 @@ state 3
     TRUNCATE        reduce using rule 3 (instrucciones -> instruccion .)
     DROP            reduce using rule 3 (instrucciones -> instruccion .)
     USE             reduce using rule 3 (instrucciones -> instruccion .)
+    SELECT          reduce using rule 3 (instrucciones -> instruccion .)
+    UPDATE          reduce using rule 3 (instrucciones -> instruccion .)
     $end            reduce using rule 3 (instrucciones -> instruccion .)
 
 
@@ -184,6 +300,8 @@ state 4
     TRUNCATE        reduce using rule 4 (instruccion -> comandocreate .)
     DROP            reduce using rule 4 (instruccion -> comandocreate .)
     USE             reduce using rule 4 (instruccion -> comandocreate .)
+    SELECT          reduce using rule 4 (instruccion -> comandocreate .)
+    UPDATE          reduce using rule 4 (instruccion -> comandocreate .)
     $end            reduce using rule 4 (instruccion -> comandocreate .)
 
 
@@ -196,6 +314,8 @@ state 5
     TRUNCATE        reduce using rule 5 (instruccion -> comandoalter .)
     DROP            reduce using rule 5 (instruccion -> comandoalter .)
     USE             reduce using rule 5 (instruccion -> comandoalter .)
+    SELECT          reduce using rule 5 (instruccion -> comandoalter .)
+    UPDATE          reduce using rule 5 (instruccion -> comandoalter .)
     $end            reduce using rule 5 (instruccion -> comandoalter .)
 
 
@@ -208,6 +328,8 @@ state 6
     TRUNCATE        reduce using rule 6 (instruccion -> comandotruncate .)
     DROP            reduce using rule 6 (instruccion -> comandotruncate .)
     USE             reduce using rule 6 (instruccion -> comandotruncate .)
+    SELECT          reduce using rule 6 (instruccion -> comandotruncate .)
+    UPDATE          reduce using rule 6 (instruccion -> comandotruncate .)
     $end            reduce using rule 6 (instruccion -> comandotruncate .)
 
 
@@ -220,6 +342,8 @@ state 7
     TRUNCATE        reduce using rule 7 (instruccion -> comandodrop .)
     DROP            reduce using rule 7 (instruccion -> comandodrop .)
     USE             reduce using rule 7 (instruccion -> comandodrop .)
+    SELECT          reduce using rule 7 (instruccion -> comandodrop .)
+    UPDATE          reduce using rule 7 (instruccion -> comandodrop .)
     $end            reduce using rule 7 (instruccion -> comandodrop .)
 
 
@@ -232,48 +356,128 @@ state 8
     TRUNCATE        reduce using rule 8 (instruccion -> comandouse .)
     DROP            reduce using rule 8 (instruccion -> comandouse .)
     USE             reduce using rule 8 (instruccion -> comandouse .)
+    SELECT          reduce using rule 8 (instruccion -> comandouse .)
+    UPDATE          reduce using rule 8 (instruccion -> comandouse .)
     $end            reduce using rule 8 (instruccion -> comandouse .)
 
 
 state 9
 
-    (9) comandocreate -> CREATE . TABLE ID PARABRE datostable PARCIERRA PYC
+    (9) instruccion -> comandoselect .
 
-    TABLE           shift and go to state 15
+    CREATE          reduce using rule 9 (instruccion -> comandoselect .)
+    ALTER           reduce using rule 9 (instruccion -> comandoselect .)
+    TRUNCATE        reduce using rule 9 (instruccion -> comandoselect .)
+    DROP            reduce using rule 9 (instruccion -> comandoselect .)
+    USE             reduce using rule 9 (instruccion -> comandoselect .)
+    SELECT          reduce using rule 9 (instruccion -> comandoselect .)
+    UPDATE          reduce using rule 9 (instruccion -> comandoselect .)
+    $end            reduce using rule 9 (instruccion -> comandoselect .)
 
 
 state 10
 
-    (32) comandoalter -> ALTER . TABLE ID ADD COLUMN ID tipo PYC
-    (33) comandoalter -> ALTER . TABLE ID comandodrop
+    (10) instruccion -> comandoupdate .
 
-    TABLE           shift and go to state 16
+    CREATE          reduce using rule 10 (instruccion -> comandoupdate .)
+    ALTER           reduce using rule 10 (instruccion -> comandoupdate .)
+    TRUNCATE        reduce using rule 10 (instruccion -> comandoupdate .)
+    DROP            reduce using rule 10 (instruccion -> comandoupdate .)
+    USE             reduce using rule 10 (instruccion -> comandoupdate .)
+    SELECT          reduce using rule 10 (instruccion -> comandoupdate .)
+    UPDATE          reduce using rule 10 (instruccion -> comandoupdate .)
+    $end            reduce using rule 10 (instruccion -> comandoupdate .)
 
 
 state 11
 
-    (34) comandotruncate -> TRUNCATE . TABLE ID PYC
+    (11) comandocreate -> CREATE . TABLE exprecionides PARABRE datostable PARCIERRA PYC
 
-    TABLE           shift and go to state 17
+    TABLE           shift and go to state 19
 
 
 state 12
 
-    (35) comandodrop -> DROP . COLUMN ID PYC
-    (36) comandodrop -> DROP . TABLE ID PYC
+    (34) comandoalter -> ALTER . TABLE exprecionides ADD COLUMN exprecionides tipo PYC
+    (35) comandoalter -> ALTER . TABLE exprecionides comandodrop
 
-    COLUMN          shift and go to state 18
-    TABLE           shift and go to state 19
+    TABLE           shift and go to state 20
 
 
 state 13
 
-    (37) comandouse -> USE . ID PYC
+    (36) comandotruncate -> TRUNCATE . TABLE exprecionides PYC
 
-    ID              shift and go to state 20
+    TABLE           shift and go to state 21
 
 
 state 14
+
+    (37) comandodrop -> DROP . COLUMN exprecionides PYC
+    (38) comandodrop -> DROP . TABLE exprecionides PYC
+
+    COLUMN          shift and go to state 22
+    TABLE           shift and go to state 23
+
+
+state 15
+
+    (39) comandouse -> USE . exprecionides PYC
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    ID              shift and go to state 25
+
+    exprecionides                  shift and go to state 24
+
+state 16
+
+    (40) comandoselect -> SELECT . valoresselected FROM datosselect PYC
+    (41) comandoselect -> SELECT . valoresselected FROM datosselect datoswhere PYC
+    (42) valoresselected -> . MULTI
+    (43) valoresselected -> . datosselect
+    (44) datosselect -> . datosselect COMA datoselect
+    (45) datosselect -> . datosselect COMA expresion
+    (46) datosselect -> . datoselect
+    (47) datosselect -> . expresion
+    (48) datoselect -> . exprecionides
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+
+    MULTI           shift and go to state 28
+    ID              shift and go to state 25
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
+
+    valoresselected                shift and go to state 26
+    datosselect                    shift and go to state 27
+    datoselect                     shift and go to state 29
+    expresion                      shift and go to state 30
+    exprecionides                  shift and go to state 31
+    termino                        shift and go to state 32
+    factor                         shift and go to state 33
+
+state 17
+
+    (77) comandoupdate -> UPDATE . exprecionides SET listaupdate PYC
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    ID              shift and go to state 25
+
+    exprecionides                  shift and go to state 36
+
+state 18
 
     (2) instrucciones -> instrucciones instruccion .
 
@@ -282,656 +486,1986 @@ state 14
     TRUNCATE        reduce using rule 2 (instrucciones -> instrucciones instruccion .)
     DROP            reduce using rule 2 (instrucciones -> instrucciones instruccion .)
     USE             reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    SELECT          reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    UPDATE          reduce using rule 2 (instrucciones -> instrucciones instruccion .)
     $end            reduce using rule 2 (instrucciones -> instrucciones instruccion .)
-
-
-state 15
-
-    (9) comandocreate -> CREATE TABLE . ID PARABRE datostable PARCIERRA PYC
-
-    ID              shift and go to state 21
-
-
-state 16
-
-    (32) comandoalter -> ALTER TABLE . ID ADD COLUMN ID tipo PYC
-    (33) comandoalter -> ALTER TABLE . ID comandodrop
-
-    ID              shift and go to state 22
-
-
-state 17
-
-    (34) comandotruncate -> TRUNCATE TABLE . ID PYC
-
-    ID              shift and go to state 23
-
-
-state 18
-
-    (35) comandodrop -> DROP COLUMN . ID PYC
-
-    ID              shift and go to state 24
 
 
 state 19
 
-    (36) comandodrop -> DROP TABLE . ID PYC
+    (11) comandocreate -> CREATE TABLE . exprecionides PARABRE datostable PARCIERRA PYC
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
 
     ID              shift and go to state 25
 
+    exprecionides                  shift and go to state 37
 
 state 20
 
-    (37) comandouse -> USE ID . PYC
+    (34) comandoalter -> ALTER TABLE . exprecionides ADD COLUMN exprecionides tipo PYC
+    (35) comandoalter -> ALTER TABLE . exprecionides comandodrop
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
 
-    PYC             shift and go to state 26
+    ID              shift and go to state 25
 
+    exprecionides                  shift and go to state 38
 
 state 21
 
-    (9) comandocreate -> CREATE TABLE ID . PARABRE datostable PARCIERRA PYC
+    (36) comandotruncate -> TRUNCATE TABLE . exprecionides PYC
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
 
-    PARABRE         shift and go to state 27
+    ID              shift and go to state 25
 
+    exprecionides                  shift and go to state 39
 
 state 22
 
-    (32) comandoalter -> ALTER TABLE ID . ADD COLUMN ID tipo PYC
-    (33) comandoalter -> ALTER TABLE ID . comandodrop
-    (35) comandodrop -> . DROP COLUMN ID PYC
-    (36) comandodrop -> . DROP TABLE ID PYC
+    (37) comandodrop -> DROP COLUMN . exprecionides PYC
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
 
-    ADD             shift and go to state 28
-    DROP            shift and go to state 12
+    ID              shift and go to state 25
 
-    comandodrop                    shift and go to state 29
+    exprecionides                  shift and go to state 40
 
 state 23
 
-    (34) comandotruncate -> TRUNCATE TABLE ID . PYC
+    (38) comandodrop -> DROP TABLE . exprecionides PYC
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
 
-    PYC             shift and go to state 30
+    ID              shift and go to state 25
 
+    exprecionides                  shift and go to state 41
 
 state 24
 
-    (35) comandodrop -> DROP COLUMN ID . PYC
+    (39) comandouse -> USE exprecionides . PYC
+    (84) exprecionides -> exprecionides . PUNTO ID
 
-    PYC             shift and go to state 31
+    PYC             shift and go to state 42
+    PUNTO           shift and go to state 43
 
 
 state 25
 
-    (36) comandodrop -> DROP TABLE ID . PYC
+    (85) exprecionides -> ID .
 
-    PYC             shift and go to state 32
+    PYC             reduce using rule 85 (exprecionides -> ID .)
+    PUNTO           reduce using rule 85 (exprecionides -> ID .)
+    COMA            reduce using rule 85 (exprecionides -> ID .)
+    FROM            reduce using rule 85 (exprecionides -> ID .)
+    MULTI           reduce using rule 85 (exprecionides -> ID .)
+    DIV             reduce using rule 85 (exprecionides -> ID .)
+    SUMA            reduce using rule 85 (exprecionides -> ID .)
+    RESTA           reduce using rule 85 (exprecionides -> ID .)
+    MAYORQ          reduce using rule 85 (exprecionides -> ID .)
+    SET             reduce using rule 85 (exprecionides -> ID .)
+    PARABRE         reduce using rule 85 (exprecionides -> ID .)
+    ADD             reduce using rule 85 (exprecionides -> ID .)
+    DROP            reduce using rule 85 (exprecionides -> ID .)
+    PARCIERRA       reduce using rule 85 (exprecionides -> ID .)
+    WHERE           reduce using rule 85 (exprecionides -> ID .)
+    ID              reduce using rule 85 (exprecionides -> ID .)
+    CADENA          reduce using rule 85 (exprecionides -> ID .)
+    AND             reduce using rule 85 (exprecionides -> ID .)
+    OR              reduce using rule 85 (exprecionides -> ID .)
+    IGUAL           reduce using rule 85 (exprecionides -> ID .)
+    INT             reduce using rule 85 (exprecionides -> ID .)
+    TEXT            reduce using rule 85 (exprecionides -> ID .)
+    DATE            reduce using rule 85 (exprecionides -> ID .)
+    DECIMAL         reduce using rule 85 (exprecionides -> ID .)
+    NVARCHAR        reduce using rule 85 (exprecionides -> ID .)
+    BETWEEN         reduce using rule 85 (exprecionides -> ID .)
 
 
 state 26
 
-    (37) comandouse -> USE ID PYC .
+    (40) comandoselect -> SELECT valoresselected . FROM datosselect PYC
+    (41) comandoselect -> SELECT valoresselected . FROM datosselect datoswhere PYC
 
-    CREATE          reduce using rule 37 (comandouse -> USE ID PYC .)
-    ALTER           reduce using rule 37 (comandouse -> USE ID PYC .)
-    TRUNCATE        reduce using rule 37 (comandouse -> USE ID PYC .)
-    DROP            reduce using rule 37 (comandouse -> USE ID PYC .)
-    USE             reduce using rule 37 (comandouse -> USE ID PYC .)
-    $end            reduce using rule 37 (comandouse -> USE ID PYC .)
+    FROM            shift and go to state 44
 
 
 state 27
 
-    (9) comandocreate -> CREATE TABLE ID PARABRE . datostable PARCIERRA PYC
-    (10) datostable -> . datostable datotable
-    (11) datostable -> . datotable
-    (12) datotable -> . columnas
-    (13) columnas -> . columnas COMA columna
-    (14) columnas -> . columna
-    (15) columna -> . ID tipo tamanios
-    (16) columna -> . ID tipo restriccion
-    (17) columna -> . ID tipo
-    (18) columna -> . ID tipo tamanios restriccion
+    (43) valoresselected -> datosselect .
+    (44) datosselect -> datosselect . COMA datoselect
+    (45) datosselect -> datosselect . COMA expresion
 
-    ID              shift and go to state 33
+    FROM            reduce using rule 43 (valoresselected -> datosselect .)
+    COMA            shift and go to state 45
 
-    datostable                     shift and go to state 34
-    datotable                      shift and go to state 35
-    columnas                       shift and go to state 36
-    columna                        shift and go to state 37
 
 state 28
 
-    (32) comandoalter -> ALTER TABLE ID ADD . COLUMN ID tipo PYC
+    (42) valoresselected -> MULTI .
 
-    COLUMN          shift and go to state 38
+    FROM            reduce using rule 42 (valoresselected -> MULTI .)
 
 
 state 29
 
-    (33) comandoalter -> ALTER TABLE ID comandodrop .
+    (46) datosselect -> datoselect .
 
-    CREATE          reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
-    ALTER           reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
-    TRUNCATE        reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
-    DROP            reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
-    USE             reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
-    $end            reduce using rule 33 (comandoalter -> ALTER TABLE ID comandodrop .)
+    COMA            reduce using rule 46 (datosselect -> datoselect .)
+    FROM            reduce using rule 46 (datosselect -> datoselect .)
+    PYC             reduce using rule 46 (datosselect -> datoselect .)
+    WHERE           reduce using rule 46 (datosselect -> datoselect .)
 
 
 state 30
 
-    (34) comandotruncate -> TRUNCATE TABLE ID PYC .
+    (47) datosselect -> expresion .
+    (61) expresion -> expresion . SUMA termino
+    (62) expresion -> expresion . RESTA termino
+    (70) factor -> expresion . MAYORQ expresion
 
-    CREATE          reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
-    ALTER           reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
-    TRUNCATE        reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
-    DROP            reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
-    USE             reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
-    $end            reduce using rule 34 (comandotruncate -> TRUNCATE TABLE ID PYC .)
+    COMA            reduce using rule 47 (datosselect -> expresion .)
+    FROM            reduce using rule 47 (datosselect -> expresion .)
+    PYC             reduce using rule 47 (datosselect -> expresion .)
+    WHERE           reduce using rule 47 (datosselect -> expresion .)
+    SUMA            shift and go to state 46
+    RESTA           shift and go to state 47
+    MAYORQ          shift and go to state 48
 
 
 state 31
 
-    (35) comandodrop -> DROP COLUMN ID PYC .
+    (48) datoselect -> exprecionides .
+    (84) exprecionides -> exprecionides . PUNTO ID
+    (67) factor -> exprecionides .
 
-    CREATE          reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
-    ALTER           reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
-    TRUNCATE        reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
-    DROP            reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
-    USE             reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
-    $end            reduce using rule 35 (comandodrop -> DROP COLUMN ID PYC .)
+  ! reduce/reduce conflict for COMA resolved using rule 48 (datoselect -> exprecionides .)
+  ! reduce/reduce conflict for FROM resolved using rule 48 (datoselect -> exprecionides .)
+  ! reduce/reduce conflict for PYC resolved using rule 48 (datoselect -> exprecionides .)
+  ! reduce/reduce conflict for WHERE resolved using rule 48 (datoselect -> exprecionides .)
+    COMA            reduce using rule 48 (datoselect -> exprecionides .)
+    FROM            reduce using rule 48 (datoselect -> exprecionides .)
+    PYC             reduce using rule 48 (datoselect -> exprecionides .)
+    WHERE           reduce using rule 48 (datoselect -> exprecionides .)
+    PUNTO           shift and go to state 43
+    MULTI           reduce using rule 67 (factor -> exprecionides .)
+    DIV             reduce using rule 67 (factor -> exprecionides .)
+    SUMA            reduce using rule 67 (factor -> exprecionides .)
+    RESTA           reduce using rule 67 (factor -> exprecionides .)
+    MAYORQ          reduce using rule 67 (factor -> exprecionides .)
+
+  ! COMA            [ reduce using rule 67 (factor -> exprecionides .) ]
+  ! FROM            [ reduce using rule 67 (factor -> exprecionides .) ]
+  ! PYC             [ reduce using rule 67 (factor -> exprecionides .) ]
+  ! WHERE           [ reduce using rule 67 (factor -> exprecionides .) ]
 
 
 state 32
 
-    (36) comandodrop -> DROP TABLE ID PYC .
+    (63) expresion -> termino .
+    (64) termino -> termino . MULTI factor
+    (65) termino -> termino . DIV factor
 
-    CREATE          reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
-    ALTER           reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
-    TRUNCATE        reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
-    DROP            reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
-    USE             reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
-    $end            reduce using rule 36 (comandodrop -> DROP TABLE ID PYC .)
+  ! shift/reduce conflict for MULTI resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+    SUMA            reduce using rule 63 (expresion -> termino .)
+    RESTA           reduce using rule 63 (expresion -> termino .)
+    MAYORQ          reduce using rule 63 (expresion -> termino .)
+    COMA            reduce using rule 63 (expresion -> termino .)
+    FROM            reduce using rule 63 (expresion -> termino .)
+    PARCIERRA       reduce using rule 63 (expresion -> termino .)
+    PYC             reduce using rule 63 (expresion -> termino .)
+    WHERE           reduce using rule 63 (expresion -> termino .)
+    ID              reduce using rule 63 (expresion -> termino .)
+    CADENA          reduce using rule 63 (expresion -> termino .)
+    AND             reduce using rule 63 (expresion -> termino .)
+    OR              reduce using rule 63 (expresion -> termino .)
+    MULTI           shift and go to state 49
+    DIV             shift and go to state 50
+
+  ! MULTI           [ reduce using rule 63 (expresion -> termino .) ]
+  ! DIV             [ reduce using rule 63 (expresion -> termino .) ]
 
 
 state 33
 
-    (15) columna -> ID . tipo tamanios
-    (16) columna -> ID . tipo restriccion
-    (17) columna -> ID . tipo
-    (18) columna -> ID . tipo tamanios restriccion
-    (26) tipo -> . INT
-    (27) tipo -> . TEXT
-    (28) tipo -> . nvarchar
-    (29) tipo -> . DATE
-    (30) tipo -> . DECIMAL
-    (31) nvarchar -> . NVARCHAR PARABRE NUMEROS PARCIERRA
+    (66) termino -> factor .
 
-    INT             shift and go to state 40
-    TEXT            shift and go to state 41
-    DATE            shift and go to state 43
-    DECIMAL         shift and go to state 44
-    NVARCHAR        shift and go to state 45
+    MULTI           reduce using rule 66 (termino -> factor .)
+    DIV             reduce using rule 66 (termino -> factor .)
+    SUMA            reduce using rule 66 (termino -> factor .)
+    RESTA           reduce using rule 66 (termino -> factor .)
+    MAYORQ          reduce using rule 66 (termino -> factor .)
+    COMA            reduce using rule 66 (termino -> factor .)
+    FROM            reduce using rule 66 (termino -> factor .)
+    PARCIERRA       reduce using rule 66 (termino -> factor .)
+    PYC             reduce using rule 66 (termino -> factor .)
+    WHERE           reduce using rule 66 (termino -> factor .)
+    ID              reduce using rule 66 (termino -> factor .)
+    CADENA          reduce using rule 66 (termino -> factor .)
+    AND             reduce using rule 66 (termino -> factor .)
+    OR              reduce using rule 66 (termino -> factor .)
 
-    tipo                           shift and go to state 39
-    nvarchar                       shift and go to state 42
 
 state 34
 
-    (9) comandocreate -> CREATE TABLE ID PARABRE datostable . PARCIERRA PYC
-    (10) datostable -> datostable . datotable
-    (12) datotable -> . columnas
-    (13) columnas -> . columnas COMA columna
-    (14) columnas -> . columna
-    (15) columna -> . ID tipo tamanios
-    (16) columna -> . ID tipo restriccion
-    (17) columna -> . ID tipo
-    (18) columna -> . ID tipo tamanios restriccion
+    (68) factor -> NUMEROS .
 
-    PARCIERRA       shift and go to state 46
-    ID              shift and go to state 33
+    MULTI           reduce using rule 68 (factor -> NUMEROS .)
+    DIV             reduce using rule 68 (factor -> NUMEROS .)
+    SUMA            reduce using rule 68 (factor -> NUMEROS .)
+    RESTA           reduce using rule 68 (factor -> NUMEROS .)
+    MAYORQ          reduce using rule 68 (factor -> NUMEROS .)
+    COMA            reduce using rule 68 (factor -> NUMEROS .)
+    FROM            reduce using rule 68 (factor -> NUMEROS .)
+    PARCIERRA       reduce using rule 68 (factor -> NUMEROS .)
+    PYC             reduce using rule 68 (factor -> NUMEROS .)
+    WHERE           reduce using rule 68 (factor -> NUMEROS .)
+    ID              reduce using rule 68 (factor -> NUMEROS .)
+    CADENA          reduce using rule 68 (factor -> NUMEROS .)
+    AND             reduce using rule 68 (factor -> NUMEROS .)
+    OR              reduce using rule 68 (factor -> NUMEROS .)
 
-    datotable                      shift and go to state 47
-    columnas                       shift and go to state 36
-    columna                        shift and go to state 37
 
 state 35
 
-    (11) datostable -> datotable .
+    (69) factor -> PARABRE . expresion PARCIERRA
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
 
-    PARCIERRA       reduce using rule 11 (datostable -> datotable .)
-    ID              reduce using rule 11 (datostable -> datotable .)
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
+    ID              shift and go to state 25
 
+    expresion                      shift and go to state 51
+    termino                        shift and go to state 32
+    factor                         shift and go to state 33
+    exprecionides                  shift and go to state 52
 
 state 36
 
-    (12) datotable -> columnas .
-    (13) columnas -> columnas . COMA columna
+    (77) comandoupdate -> UPDATE exprecionides . SET listaupdate PYC
+    (84) exprecionides -> exprecionides . PUNTO ID
 
-    PARCIERRA       reduce using rule 12 (datotable -> columnas .)
-    ID              reduce using rule 12 (datotable -> columnas .)
-    COMA            shift and go to state 48
+    SET             shift and go to state 53
+    PUNTO           shift and go to state 43
 
 
 state 37
 
-    (14) columnas -> columna .
+    (11) comandocreate -> CREATE TABLE exprecionides . PARABRE datostable PARCIERRA PYC
+    (84) exprecionides -> exprecionides . PUNTO ID
 
-    COMA            reduce using rule 14 (columnas -> columna .)
-    PARCIERRA       reduce using rule 14 (columnas -> columna .)
-    ID              reduce using rule 14 (columnas -> columna .)
+    PARABRE         shift and go to state 54
+    PUNTO           shift and go to state 43
 
 
 state 38
 
-    (32) comandoalter -> ALTER TABLE ID ADD COLUMN . ID tipo PYC
+    (34) comandoalter -> ALTER TABLE exprecionides . ADD COLUMN exprecionides tipo PYC
+    (35) comandoalter -> ALTER TABLE exprecionides . comandodrop
+    (84) exprecionides -> exprecionides . PUNTO ID
+    (37) comandodrop -> . DROP COLUMN exprecionides PYC
+    (38) comandodrop -> . DROP TABLE exprecionides PYC
 
-    ID              shift and go to state 49
+    ADD             shift and go to state 55
+    PUNTO           shift and go to state 43
+    DROP            shift and go to state 14
 
+    comandodrop                    shift and go to state 56
 
 state 39
 
-    (15) columna -> ID tipo . tamanios
-    (16) columna -> ID tipo . restriccion
-    (17) columna -> ID tipo .
-    (18) columna -> ID tipo . tamanios restriccion
-    (19) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
-    (20) tamanios -> . PARABRE tamanio PARCIERRA
-    (22) restriccion -> . PRIMARY KEY
-    (23) restriccion -> . NOT NULL
-    (24) restriccion -> . reference
-    (25) reference -> . REFERENCE ID PARABRE ID PARCIERRA
+    (36) comandotruncate -> TRUNCATE TABLE exprecionides . PYC
+    (84) exprecionides -> exprecionides . PUNTO ID
 
-    COMA            reduce using rule 17 (columna -> ID tipo .)
-    PARCIERRA       reduce using rule 17 (columna -> ID tipo .)
-    ID              reduce using rule 17 (columna -> ID tipo .)
-    PARABRE         shift and go to state 52
-    PRIMARY         shift and go to state 53
-    NOT             shift and go to state 54
-    REFERENCE       shift and go to state 56
+    PYC             shift and go to state 57
+    PUNTO           shift and go to state 43
 
-    tamanios                       shift and go to state 50
-    restriccion                    shift and go to state 51
-    reference                      shift and go to state 55
 
 state 40
 
-    (26) tipo -> INT .
+    (37) comandodrop -> DROP COLUMN exprecionides . PYC
+    (84) exprecionides -> exprecionides . PUNTO ID
 
-    PARABRE         reduce using rule 26 (tipo -> INT .)
-    PRIMARY         reduce using rule 26 (tipo -> INT .)
-    NOT             reduce using rule 26 (tipo -> INT .)
-    REFERENCE       reduce using rule 26 (tipo -> INT .)
-    COMA            reduce using rule 26 (tipo -> INT .)
-    PARCIERRA       reduce using rule 26 (tipo -> INT .)
-    ID              reduce using rule 26 (tipo -> INT .)
-    PYC             reduce using rule 26 (tipo -> INT .)
+    PYC             shift and go to state 58
+    PUNTO           shift and go to state 43
 
 
 state 41
 
-    (27) tipo -> TEXT .
+    (38) comandodrop -> DROP TABLE exprecionides . PYC
+    (84) exprecionides -> exprecionides . PUNTO ID
 
-    PARABRE         reduce using rule 27 (tipo -> TEXT .)
-    PRIMARY         reduce using rule 27 (tipo -> TEXT .)
-    NOT             reduce using rule 27 (tipo -> TEXT .)
-    REFERENCE       reduce using rule 27 (tipo -> TEXT .)
-    COMA            reduce using rule 27 (tipo -> TEXT .)
-    PARCIERRA       reduce using rule 27 (tipo -> TEXT .)
-    ID              reduce using rule 27 (tipo -> TEXT .)
-    PYC             reduce using rule 27 (tipo -> TEXT .)
+    PYC             shift and go to state 59
+    PUNTO           shift and go to state 43
 
 
 state 42
 
-    (28) tipo -> nvarchar .
+    (39) comandouse -> USE exprecionides PYC .
 
-    PARABRE         reduce using rule 28 (tipo -> nvarchar .)
-    PRIMARY         reduce using rule 28 (tipo -> nvarchar .)
-    NOT             reduce using rule 28 (tipo -> nvarchar .)
-    REFERENCE       reduce using rule 28 (tipo -> nvarchar .)
-    COMA            reduce using rule 28 (tipo -> nvarchar .)
-    PARCIERRA       reduce using rule 28 (tipo -> nvarchar .)
-    ID              reduce using rule 28 (tipo -> nvarchar .)
-    PYC             reduce using rule 28 (tipo -> nvarchar .)
+    CREATE          reduce using rule 39 (comandouse -> USE exprecionides PYC .)
+    ALTER           reduce using rule 39 (comandouse -> USE exprecionides PYC .)
+    TRUNCATE        reduce using rule 39 (comandouse -> USE exprecionides PYC .)
+    DROP            reduce using rule 39 (comandouse -> USE exprecionides PYC .)
+    USE             reduce using rule 39 (comandouse -> USE exprecionides PYC .)
+    SELECT          reduce using rule 39 (comandouse -> USE exprecionides PYC .)
+    UPDATE          reduce using rule 39 (comandouse -> USE exprecionides PYC .)
+    $end            reduce using rule 39 (comandouse -> USE exprecionides PYC .)
 
 
 state 43
 
-    (29) tipo -> DATE .
+    (84) exprecionides -> exprecionides PUNTO . ID
 
-    PARABRE         reduce using rule 29 (tipo -> DATE .)
-    PRIMARY         reduce using rule 29 (tipo -> DATE .)
-    NOT             reduce using rule 29 (tipo -> DATE .)
-    REFERENCE       reduce using rule 29 (tipo -> DATE .)
-    COMA            reduce using rule 29 (tipo -> DATE .)
-    PARCIERRA       reduce using rule 29 (tipo -> DATE .)
-    ID              reduce using rule 29 (tipo -> DATE .)
-    PYC             reduce using rule 29 (tipo -> DATE .)
+    ID              shift and go to state 60
 
 
 state 44
 
-    (30) tipo -> DECIMAL .
+    (40) comandoselect -> SELECT valoresselected FROM . datosselect PYC
+    (41) comandoselect -> SELECT valoresselected FROM . datosselect datoswhere PYC
+    (44) datosselect -> . datosselect COMA datoselect
+    (45) datosselect -> . datosselect COMA expresion
+    (46) datosselect -> . datoselect
+    (47) datosselect -> . expresion
+    (48) datoselect -> . exprecionides
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
 
-    PARABRE         reduce using rule 30 (tipo -> DECIMAL .)
-    PRIMARY         reduce using rule 30 (tipo -> DECIMAL .)
-    NOT             reduce using rule 30 (tipo -> DECIMAL .)
-    REFERENCE       reduce using rule 30 (tipo -> DECIMAL .)
-    COMA            reduce using rule 30 (tipo -> DECIMAL .)
-    PARCIERRA       reduce using rule 30 (tipo -> DECIMAL .)
-    ID              reduce using rule 30 (tipo -> DECIMAL .)
-    PYC             reduce using rule 30 (tipo -> DECIMAL .)
+    ID              shift and go to state 25
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
 
+    datosselect                    shift and go to state 61
+    datoselect                     shift and go to state 29
+    expresion                      shift and go to state 30
+    exprecionides                  shift and go to state 31
+    termino                        shift and go to state 32
+    factor                         shift and go to state 33
 
 state 45
 
-    (31) nvarchar -> NVARCHAR . PARABRE NUMEROS PARCIERRA
+    (44) datosselect -> datosselect COMA . datoselect
+    (45) datosselect -> datosselect COMA . expresion
+    (48) datoselect -> . exprecionides
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
 
-    PARABRE         shift and go to state 57
+    ID              shift and go to state 25
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
 
+    datoselect                     shift and go to state 62
+    expresion                      shift and go to state 63
+    exprecionides                  shift and go to state 31
+    termino                        shift and go to state 32
+    factor                         shift and go to state 33
 
 state 46
 
-    (9) comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA . PYC
+    (61) expresion -> expresion SUMA . termino
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
 
-    PYC             shift and go to state 58
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
+    ID              shift and go to state 25
 
+    expresion                      shift and go to state 64
+    termino                        shift and go to state 65
+    factor                         shift and go to state 33
+    exprecionides                  shift and go to state 52
 
 state 47
 
-    (10) datostable -> datostable datotable .
+    (62) expresion -> expresion RESTA . termino
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
 
-    PARCIERRA       reduce using rule 10 (datostable -> datostable datotable .)
-    ID              reduce using rule 10 (datostable -> datostable datotable .)
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
+    ID              shift and go to state 25
 
+    expresion                      shift and go to state 64
+    termino                        shift and go to state 66
+    factor                         shift and go to state 33
+    exprecionides                  shift and go to state 52
 
 state 48
 
-    (13) columnas -> columnas COMA . columna
-    (15) columna -> . ID tipo tamanios
-    (16) columna -> . ID tipo restriccion
-    (17) columna -> . ID tipo
-    (18) columna -> . ID tipo tamanios restriccion
+    (70) factor -> expresion MAYORQ . expresion
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
 
-    ID              shift and go to state 33
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
+    ID              shift and go to state 25
 
-    columna                        shift and go to state 59
+    expresion                      shift and go to state 67
+    termino                        shift and go to state 32
+    factor                         shift and go to state 33
+    exprecionides                  shift and go to state 52
 
 state 49
 
-    (32) comandoalter -> ALTER TABLE ID ADD COLUMN ID . tipo PYC
-    (26) tipo -> . INT
-    (27) tipo -> . TEXT
-    (28) tipo -> . nvarchar
-    (29) tipo -> . DATE
-    (30) tipo -> . DECIMAL
-    (31) nvarchar -> . NVARCHAR PARABRE NUMEROS PARCIERRA
+    (64) termino -> termino MULTI . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
 
-    INT             shift and go to state 40
-    TEXT            shift and go to state 41
-    DATE            shift and go to state 43
-    DECIMAL         shift and go to state 44
-    NVARCHAR        shift and go to state 45
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
+    ID              shift and go to state 25
 
-    tipo                           shift and go to state 60
-    nvarchar                       shift and go to state 42
+    termino                        shift and go to state 32
+    factor                         shift and go to state 68
+    exprecionides                  shift and go to state 52
+    expresion                      shift and go to state 64
 
 state 50
 
-    (15) columna -> ID tipo tamanios .
-    (18) columna -> ID tipo tamanios . restriccion
-    (22) restriccion -> . PRIMARY KEY
-    (23) restriccion -> . NOT NULL
-    (24) restriccion -> . reference
-    (25) reference -> . REFERENCE ID PARABRE ID PARCIERRA
+    (65) termino -> termino DIV . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
 
-    COMA            reduce using rule 15 (columna -> ID tipo tamanios .)
-    PARCIERRA       reduce using rule 15 (columna -> ID tipo tamanios .)
-    ID              reduce using rule 15 (columna -> ID tipo tamanios .)
-    PRIMARY         shift and go to state 53
-    NOT             shift and go to state 54
-    REFERENCE       shift and go to state 56
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
+    ID              shift and go to state 25
 
-    restriccion                    shift and go to state 61
-    reference                      shift and go to state 55
+    termino                        shift and go to state 32
+    factor                         shift and go to state 69
+    exprecionides                  shift and go to state 52
+    expresion                      shift and go to state 64
 
 state 51
 
-    (16) columna -> ID tipo restriccion .
+    (69) factor -> PARABRE expresion . PARCIERRA
+    (61) expresion -> expresion . SUMA termino
+    (62) expresion -> expresion . RESTA termino
+    (70) factor -> expresion . MAYORQ expresion
 
-    COMA            reduce using rule 16 (columna -> ID tipo restriccion .)
-    PARCIERRA       reduce using rule 16 (columna -> ID tipo restriccion .)
-    ID              reduce using rule 16 (columna -> ID tipo restriccion .)
+    PARCIERRA       shift and go to state 70
+    SUMA            shift and go to state 46
+    RESTA           shift and go to state 47
+    MAYORQ          shift and go to state 48
 
 
 state 52
 
-    (19) tamanios -> PARABRE . tamanios COMA tamanio PARCIERRA
-    (20) tamanios -> PARABRE . tamanio PARCIERRA
-    (19) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
-    (20) tamanios -> . PARABRE tamanio PARCIERRA
-    (21) tamanio -> . NUMEROS
+    (67) factor -> exprecionides .
+    (84) exprecionides -> exprecionides . PUNTO ID
 
-    PARABRE         shift and go to state 52
-    NUMEROS         shift and go to state 64
+    MULTI           reduce using rule 67 (factor -> exprecionides .)
+    DIV             reduce using rule 67 (factor -> exprecionides .)
+    PARCIERRA       reduce using rule 67 (factor -> exprecionides .)
+    SUMA            reduce using rule 67 (factor -> exprecionides .)
+    RESTA           reduce using rule 67 (factor -> exprecionides .)
+    MAYORQ          reduce using rule 67 (factor -> exprecionides .)
+    COMA            reduce using rule 67 (factor -> exprecionides .)
+    FROM            reduce using rule 67 (factor -> exprecionides .)
+    PYC             reduce using rule 67 (factor -> exprecionides .)
+    WHERE           reduce using rule 67 (factor -> exprecionides .)
+    ID              reduce using rule 67 (factor -> exprecionides .)
+    CADENA          reduce using rule 67 (factor -> exprecionides .)
+    AND             reduce using rule 67 (factor -> exprecionides .)
+    OR              reduce using rule 67 (factor -> exprecionides .)
+    PUNTO           shift and go to state 43
 
-    tamanios                       shift and go to state 62
-    tamanio                        shift and go to state 63
 
 state 53
 
-    (22) restriccion -> PRIMARY . KEY
+    (77) comandoupdate -> UPDATE exprecionides SET . listaupdate PYC
+    (78) listaupdate -> . listaupdate COMA valorupdate
+    (79) listaupdate -> . valorupdate
+    (80) valorupdate -> . exprecionides IGUAL CADENA
+    (81) valorupdate -> . exprecionides IGUAL valordeoperacion
+    (82) valorupdate -> . exprecionides IGUAL expresion
+    (83) valorupdate -> . exprecionides IGUAL valordeoperacion datoswhere
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
 
-    KEY             shift and go to state 65
+    ID              shift and go to state 25
 
+    exprecionides                  shift and go to state 71
+    listaupdate                    shift and go to state 72
+    valorupdate                    shift and go to state 73
 
 state 54
 
-    (23) restriccion -> NOT . NULL
+    (11) comandocreate -> CREATE TABLE exprecionides PARABRE . datostable PARCIERRA PYC
+    (12) datostable -> . datostable datotable
+    (13) datostable -> . datotable
+    (14) datotable -> . columnas
+    (15) columnas -> . columnas COMA columna
+    (16) columnas -> . columna
+    (17) columna -> . exprecionides tipo tamanios
+    (18) columna -> . exprecionides tipo restriccion
+    (19) columna -> . exprecionides tipo
+    (20) columna -> . exprecionides tipo tamanios restriccion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
 
-    NULL            shift and go to state 66
+    ID              shift and go to state 25
 
+    exprecionides                  shift and go to state 74
+    datostable                     shift and go to state 75
+    datotable                      shift and go to state 76
+    columnas                       shift and go to state 77
+    columna                        shift and go to state 78
 
 state 55
 
-    (24) restriccion -> reference .
+    (34) comandoalter -> ALTER TABLE exprecionides ADD . COLUMN exprecionides tipo PYC
 
-    COMA            reduce using rule 24 (restriccion -> reference .)
-    PARCIERRA       reduce using rule 24 (restriccion -> reference .)
-    ID              reduce using rule 24 (restriccion -> reference .)
+    COLUMN          shift and go to state 79
 
 
 state 56
 
-    (25) reference -> REFERENCE . ID PARABRE ID PARCIERRA
+    (35) comandoalter -> ALTER TABLE exprecionides comandodrop .
 
-    ID              shift and go to state 67
+    CREATE          reduce using rule 35 (comandoalter -> ALTER TABLE exprecionides comandodrop .)
+    ALTER           reduce using rule 35 (comandoalter -> ALTER TABLE exprecionides comandodrop .)
+    TRUNCATE        reduce using rule 35 (comandoalter -> ALTER TABLE exprecionides comandodrop .)
+    DROP            reduce using rule 35 (comandoalter -> ALTER TABLE exprecionides comandodrop .)
+    USE             reduce using rule 35 (comandoalter -> ALTER TABLE exprecionides comandodrop .)
+    SELECT          reduce using rule 35 (comandoalter -> ALTER TABLE exprecionides comandodrop .)
+    UPDATE          reduce using rule 35 (comandoalter -> ALTER TABLE exprecionides comandodrop .)
+    $end            reduce using rule 35 (comandoalter -> ALTER TABLE exprecionides comandodrop .)
 
 
 state 57
 
-    (31) nvarchar -> NVARCHAR PARABRE . NUMEROS PARCIERRA
+    (36) comandotruncate -> TRUNCATE TABLE exprecionides PYC .
 
-    NUMEROS         shift and go to state 68
+    CREATE          reduce using rule 36 (comandotruncate -> TRUNCATE TABLE exprecionides PYC .)
+    ALTER           reduce using rule 36 (comandotruncate -> TRUNCATE TABLE exprecionides PYC .)
+    TRUNCATE        reduce using rule 36 (comandotruncate -> TRUNCATE TABLE exprecionides PYC .)
+    DROP            reduce using rule 36 (comandotruncate -> TRUNCATE TABLE exprecionides PYC .)
+    USE             reduce using rule 36 (comandotruncate -> TRUNCATE TABLE exprecionides PYC .)
+    SELECT          reduce using rule 36 (comandotruncate -> TRUNCATE TABLE exprecionides PYC .)
+    UPDATE          reduce using rule 36 (comandotruncate -> TRUNCATE TABLE exprecionides PYC .)
+    $end            reduce using rule 36 (comandotruncate -> TRUNCATE TABLE exprecionides PYC .)
 
 
 state 58
 
-    (9) comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .
+    (37) comandodrop -> DROP COLUMN exprecionides PYC .
 
-    CREATE          reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
-    ALTER           reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
-    TRUNCATE        reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
-    DROP            reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
-    USE             reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
-    $end            reduce using rule 9 (comandocreate -> CREATE TABLE ID PARABRE datostable PARCIERRA PYC .)
+    CREATE          reduce using rule 37 (comandodrop -> DROP COLUMN exprecionides PYC .)
+    ALTER           reduce using rule 37 (comandodrop -> DROP COLUMN exprecionides PYC .)
+    TRUNCATE        reduce using rule 37 (comandodrop -> DROP COLUMN exprecionides PYC .)
+    DROP            reduce using rule 37 (comandodrop -> DROP COLUMN exprecionides PYC .)
+    USE             reduce using rule 37 (comandodrop -> DROP COLUMN exprecionides PYC .)
+    SELECT          reduce using rule 37 (comandodrop -> DROP COLUMN exprecionides PYC .)
+    UPDATE          reduce using rule 37 (comandodrop -> DROP COLUMN exprecionides PYC .)
+    $end            reduce using rule 37 (comandodrop -> DROP COLUMN exprecionides PYC .)
 
 
 state 59
 
-    (13) columnas -> columnas COMA columna .
+    (38) comandodrop -> DROP TABLE exprecionides PYC .
 
-    COMA            reduce using rule 13 (columnas -> columnas COMA columna .)
-    PARCIERRA       reduce using rule 13 (columnas -> columnas COMA columna .)
-    ID              reduce using rule 13 (columnas -> columnas COMA columna .)
+    CREATE          reduce using rule 38 (comandodrop -> DROP TABLE exprecionides PYC .)
+    ALTER           reduce using rule 38 (comandodrop -> DROP TABLE exprecionides PYC .)
+    TRUNCATE        reduce using rule 38 (comandodrop -> DROP TABLE exprecionides PYC .)
+    DROP            reduce using rule 38 (comandodrop -> DROP TABLE exprecionides PYC .)
+    USE             reduce using rule 38 (comandodrop -> DROP TABLE exprecionides PYC .)
+    SELECT          reduce using rule 38 (comandodrop -> DROP TABLE exprecionides PYC .)
+    UPDATE          reduce using rule 38 (comandodrop -> DROP TABLE exprecionides PYC .)
+    $end            reduce using rule 38 (comandodrop -> DROP TABLE exprecionides PYC .)
 
 
 state 60
 
-    (32) comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo . PYC
+    (84) exprecionides -> exprecionides PUNTO ID .
 
-    PYC             shift and go to state 69
+    PYC             reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    PUNTO           reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    COMA            reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    FROM            reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    MULTI           reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    DIV             reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    SUMA            reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    RESTA           reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    MAYORQ          reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    SET             reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    PARABRE         reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    ADD             reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    DROP            reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    PARCIERRA       reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    WHERE           reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    ID              reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    CADENA          reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    AND             reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    OR              reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    IGUAL           reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    INT             reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    TEXT            reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    DATE            reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    DECIMAL         reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    NVARCHAR        reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
+    BETWEEN         reduce using rule 84 (exprecionides -> exprecionides PUNTO ID .)
 
 
 state 61
 
-    (18) columna -> ID tipo tamanios restriccion .
+    (40) comandoselect -> SELECT valoresselected FROM datosselect . PYC
+    (41) comandoselect -> SELECT valoresselected FROM datosselect . datoswhere PYC
+    (44) datosselect -> datosselect . COMA datoselect
+    (45) datosselect -> datosselect . COMA expresion
+    (49) datoswhere -> . WHERE exprecionides
+    (50) datoswhere -> . WHERE expresion
+    (51) datoswhere -> . WHERE expresion exprecionides
+    (52) datoswhere -> . WHERE exprecionides BETWEEN listasbitween
+    (53) datoswhere -> . WHERE exprecionides IGUAL expresion
 
-    COMA            reduce using rule 18 (columna -> ID tipo tamanios restriccion .)
-    PARCIERRA       reduce using rule 18 (columna -> ID tipo tamanios restriccion .)
-    ID              reduce using rule 18 (columna -> ID tipo tamanios restriccion .)
+    PYC             shift and go to state 80
+    COMA            shift and go to state 45
+    WHERE           shift and go to state 82
 
+    datoswhere                     shift and go to state 81
 
 state 62
 
-    (19) tamanios -> PARABRE tamanios . COMA tamanio PARCIERRA
+    (44) datosselect -> datosselect COMA datoselect .
 
-    COMA            shift and go to state 70
+    COMA            reduce using rule 44 (datosselect -> datosselect COMA datoselect .)
+    FROM            reduce using rule 44 (datosselect -> datosselect COMA datoselect .)
+    PYC             reduce using rule 44 (datosselect -> datosselect COMA datoselect .)
+    WHERE           reduce using rule 44 (datosselect -> datosselect COMA datoselect .)
 
 
 state 63
 
-    (20) tamanios -> PARABRE tamanio . PARCIERRA
+    (45) datosselect -> datosselect COMA expresion .
+    (61) expresion -> expresion . SUMA termino
+    (62) expresion -> expresion . RESTA termino
+    (70) factor -> expresion . MAYORQ expresion
 
-    PARCIERRA       shift and go to state 71
+    COMA            reduce using rule 45 (datosselect -> datosselect COMA expresion .)
+    FROM            reduce using rule 45 (datosselect -> datosselect COMA expresion .)
+    PYC             reduce using rule 45 (datosselect -> datosselect COMA expresion .)
+    WHERE           reduce using rule 45 (datosselect -> datosselect COMA expresion .)
+    SUMA            shift and go to state 46
+    RESTA           shift and go to state 47
+    MAYORQ          shift and go to state 48
 
 
 state 64
 
-    (21) tamanio -> NUMEROS .
+    (70) factor -> expresion . MAYORQ expresion
+    (61) expresion -> expresion . SUMA termino
+    (62) expresion -> expresion . RESTA termino
 
-    PARCIERRA       reduce using rule 21 (tamanio -> NUMEROS .)
+    MAYORQ          shift and go to state 48
+    SUMA            shift and go to state 46
+    RESTA           shift and go to state 47
 
 
 state 65
 
-    (22) restriccion -> PRIMARY KEY .
+    (61) expresion -> expresion SUMA termino .
+    (64) termino -> termino . MULTI factor
+    (65) termino -> termino . DIV factor
+    (63) expresion -> termino .
 
-    COMA            reduce using rule 22 (restriccion -> PRIMARY KEY .)
-    PARCIERRA       reduce using rule 22 (restriccion -> PRIMARY KEY .)
-    ID              reduce using rule 22 (restriccion -> PRIMARY KEY .)
+  ! reduce/reduce conflict for MAYORQ resolved using rule 61 (expresion -> expresion SUMA termino .)
+  ! reduce/reduce conflict for SUMA resolved using rule 61 (expresion -> expresion SUMA termino .)
+  ! reduce/reduce conflict for RESTA resolved using rule 61 (expresion -> expresion SUMA termino .)
+    SUMA            reduce using rule 61 (expresion -> expresion SUMA termino .)
+    RESTA           reduce using rule 61 (expresion -> expresion SUMA termino .)
+    MAYORQ          reduce using rule 61 (expresion -> expresion SUMA termino .)
+    COMA            reduce using rule 61 (expresion -> expresion SUMA termino .)
+    FROM            reduce using rule 61 (expresion -> expresion SUMA termino .)
+    PARCIERRA       reduce using rule 61 (expresion -> expresion SUMA termino .)
+    PYC             reduce using rule 61 (expresion -> expresion SUMA termino .)
+    WHERE           reduce using rule 61 (expresion -> expresion SUMA termino .)
+    ID              reduce using rule 61 (expresion -> expresion SUMA termino .)
+    CADENA          reduce using rule 61 (expresion -> expresion SUMA termino .)
+    AND             reduce using rule 61 (expresion -> expresion SUMA termino .)
+    OR              reduce using rule 61 (expresion -> expresion SUMA termino .)
+    MULTI           shift and go to state 49
+    DIV             shift and go to state 50
+
+  ! MULTI           [ reduce using rule 61 (expresion -> expresion SUMA termino .) ]
+  ! DIV             [ reduce using rule 61 (expresion -> expresion SUMA termino .) ]
+  ! MAYORQ          [ reduce using rule 63 (expresion -> termino .) ]
+  ! SUMA            [ reduce using rule 63 (expresion -> termino .) ]
+  ! RESTA           [ reduce using rule 63 (expresion -> termino .) ]
 
 
 state 66
 
-    (23) restriccion -> NOT NULL .
+    (62) expresion -> expresion RESTA termino .
+    (64) termino -> termino . MULTI factor
+    (65) termino -> termino . DIV factor
+    (63) expresion -> termino .
 
-    COMA            reduce using rule 23 (restriccion -> NOT NULL .)
-    PARCIERRA       reduce using rule 23 (restriccion -> NOT NULL .)
-    ID              reduce using rule 23 (restriccion -> NOT NULL .)
+  ! reduce/reduce conflict for MAYORQ resolved using rule 62 (expresion -> expresion RESTA termino .)
+  ! reduce/reduce conflict for SUMA resolved using rule 62 (expresion -> expresion RESTA termino .)
+  ! reduce/reduce conflict for RESTA resolved using rule 62 (expresion -> expresion RESTA termino .)
+    SUMA            reduce using rule 62 (expresion -> expresion RESTA termino .)
+    RESTA           reduce using rule 62 (expresion -> expresion RESTA termino .)
+    MAYORQ          reduce using rule 62 (expresion -> expresion RESTA termino .)
+    COMA            reduce using rule 62 (expresion -> expresion RESTA termino .)
+    FROM            reduce using rule 62 (expresion -> expresion RESTA termino .)
+    PARCIERRA       reduce using rule 62 (expresion -> expresion RESTA termino .)
+    PYC             reduce using rule 62 (expresion -> expresion RESTA termino .)
+    WHERE           reduce using rule 62 (expresion -> expresion RESTA termino .)
+    ID              reduce using rule 62 (expresion -> expresion RESTA termino .)
+    CADENA          reduce using rule 62 (expresion -> expresion RESTA termino .)
+    AND             reduce using rule 62 (expresion -> expresion RESTA termino .)
+    OR              reduce using rule 62 (expresion -> expresion RESTA termino .)
+    MULTI           shift and go to state 49
+    DIV             shift and go to state 50
+
+  ! MULTI           [ reduce using rule 62 (expresion -> expresion RESTA termino .) ]
+  ! DIV             [ reduce using rule 62 (expresion -> expresion RESTA termino .) ]
+  ! MAYORQ          [ reduce using rule 63 (expresion -> termino .) ]
+  ! SUMA            [ reduce using rule 63 (expresion -> termino .) ]
+  ! RESTA           [ reduce using rule 63 (expresion -> termino .) ]
 
 
 state 67
 
-    (25) reference -> REFERENCE ID . PARABRE ID PARCIERRA
+    (70) factor -> expresion MAYORQ expresion .
+    (61) expresion -> expresion . SUMA termino
+    (62) expresion -> expresion . RESTA termino
+    (70) factor -> expresion . MAYORQ expresion
 
-    PARABRE         shift and go to state 72
+    MULTI           reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    DIV             reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    SUMA            reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    RESTA           reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    MAYORQ          reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    COMA            reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    FROM            reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    PARCIERRA       reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    PYC             reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    WHERE           reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    ID              reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    CADENA          reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    AND             reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+    OR              reduce using rule 70 (factor -> expresion MAYORQ expresion .)
+
+  ! SUMA            [ shift and go to state 46 ]
+  ! RESTA           [ shift and go to state 47 ]
+  ! MAYORQ          [ shift and go to state 48 ]
 
 
 state 68
 
-    (31) nvarchar -> NVARCHAR PARABRE NUMEROS . PARCIERRA
+    (64) termino -> termino MULTI factor .
+    (66) termino -> factor .
 
-    PARCIERRA       shift and go to state 73
+  ! reduce/reduce conflict for MULTI resolved using rule 64 (termino -> termino MULTI factor .)
+  ! reduce/reduce conflict for DIV resolved using rule 64 (termino -> termino MULTI factor .)
+  ! reduce/reduce conflict for MAYORQ resolved using rule 64 (termino -> termino MULTI factor .)
+  ! reduce/reduce conflict for SUMA resolved using rule 64 (termino -> termino MULTI factor .)
+  ! reduce/reduce conflict for RESTA resolved using rule 64 (termino -> termino MULTI factor .)
+    MULTI           reduce using rule 64 (termino -> termino MULTI factor .)
+    DIV             reduce using rule 64 (termino -> termino MULTI factor .)
+    SUMA            reduce using rule 64 (termino -> termino MULTI factor .)
+    RESTA           reduce using rule 64 (termino -> termino MULTI factor .)
+    MAYORQ          reduce using rule 64 (termino -> termino MULTI factor .)
+    COMA            reduce using rule 64 (termino -> termino MULTI factor .)
+    FROM            reduce using rule 64 (termino -> termino MULTI factor .)
+    PARCIERRA       reduce using rule 64 (termino -> termino MULTI factor .)
+    PYC             reduce using rule 64 (termino -> termino MULTI factor .)
+    WHERE           reduce using rule 64 (termino -> termino MULTI factor .)
+    ID              reduce using rule 64 (termino -> termino MULTI factor .)
+    CADENA          reduce using rule 64 (termino -> termino MULTI factor .)
+    AND             reduce using rule 64 (termino -> termino MULTI factor .)
+    OR              reduce using rule 64 (termino -> termino MULTI factor .)
+
+  ! MULTI           [ reduce using rule 66 (termino -> factor .) ]
+  ! DIV             [ reduce using rule 66 (termino -> factor .) ]
+  ! MAYORQ          [ reduce using rule 66 (termino -> factor .) ]
+  ! SUMA            [ reduce using rule 66 (termino -> factor .) ]
+  ! RESTA           [ reduce using rule 66 (termino -> factor .) ]
 
 
 state 69
 
-    (32) comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .
+    (65) termino -> termino DIV factor .
+    (66) termino -> factor .
 
-    CREATE          reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
-    ALTER           reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
-    TRUNCATE        reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
-    DROP            reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
-    USE             reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
-    $end            reduce using rule 32 (comandoalter -> ALTER TABLE ID ADD COLUMN ID tipo PYC .)
+  ! reduce/reduce conflict for MULTI resolved using rule 65 (termino -> termino DIV factor .)
+  ! reduce/reduce conflict for DIV resolved using rule 65 (termino -> termino DIV factor .)
+  ! reduce/reduce conflict for MAYORQ resolved using rule 65 (termino -> termino DIV factor .)
+  ! reduce/reduce conflict for SUMA resolved using rule 65 (termino -> termino DIV factor .)
+  ! reduce/reduce conflict for RESTA resolved using rule 65 (termino -> termino DIV factor .)
+    MULTI           reduce using rule 65 (termino -> termino DIV factor .)
+    DIV             reduce using rule 65 (termino -> termino DIV factor .)
+    SUMA            reduce using rule 65 (termino -> termino DIV factor .)
+    RESTA           reduce using rule 65 (termino -> termino DIV factor .)
+    MAYORQ          reduce using rule 65 (termino -> termino DIV factor .)
+    COMA            reduce using rule 65 (termino -> termino DIV factor .)
+    FROM            reduce using rule 65 (termino -> termino DIV factor .)
+    PARCIERRA       reduce using rule 65 (termino -> termino DIV factor .)
+    PYC             reduce using rule 65 (termino -> termino DIV factor .)
+    WHERE           reduce using rule 65 (termino -> termino DIV factor .)
+    ID              reduce using rule 65 (termino -> termino DIV factor .)
+    CADENA          reduce using rule 65 (termino -> termino DIV factor .)
+    AND             reduce using rule 65 (termino -> termino DIV factor .)
+    OR              reduce using rule 65 (termino -> termino DIV factor .)
+
+  ! MULTI           [ reduce using rule 66 (termino -> factor .) ]
+  ! DIV             [ reduce using rule 66 (termino -> factor .) ]
+  ! MAYORQ          [ reduce using rule 66 (termino -> factor .) ]
+  ! SUMA            [ reduce using rule 66 (termino -> factor .) ]
+  ! RESTA           [ reduce using rule 66 (termino -> factor .) ]
 
 
 state 70
 
-    (19) tamanios -> PARABRE tamanios COMA . tamanio PARCIERRA
-    (21) tamanio -> . NUMEROS
+    (69) factor -> PARABRE expresion PARCIERRA .
 
-    NUMEROS         shift and go to state 64
+    MULTI           reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    DIV             reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    SUMA            reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    RESTA           reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    MAYORQ          reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    COMA            reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    FROM            reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    PARCIERRA       reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    PYC             reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    WHERE           reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    ID              reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    CADENA          reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    AND             reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
+    OR              reduce using rule 69 (factor -> PARABRE expresion PARCIERRA .)
 
-    tamanio                        shift and go to state 74
 
 state 71
 
-    (20) tamanios -> PARABRE tamanio PARCIERRA .
+    (80) valorupdate -> exprecionides . IGUAL CADENA
+    (81) valorupdate -> exprecionides . IGUAL valordeoperacion
+    (82) valorupdate -> exprecionides . IGUAL expresion
+    (83) valorupdate -> exprecionides . IGUAL valordeoperacion datoswhere
+    (84) exprecionides -> exprecionides . PUNTO ID
 
-    PRIMARY         reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
-    NOT             reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
-    REFERENCE       reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
-    COMA            reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
-    PARCIERRA       reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
-    ID              reduce using rule 20 (tamanios -> PARABRE tamanio PARCIERRA .)
+    IGUAL           shift and go to state 83
+    PUNTO           shift and go to state 43
 
 
 state 72
 
-    (25) reference -> REFERENCE ID PARABRE . ID PARCIERRA
+    (77) comandoupdate -> UPDATE exprecionides SET listaupdate . PYC
+    (78) listaupdate -> listaupdate . COMA valorupdate
 
-    ID              shift and go to state 75
+    PYC             shift and go to state 84
+    COMA            shift and go to state 85
 
 
 state 73
 
-    (31) nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .
+    (79) listaupdate -> valorupdate .
 
-    PARABRE         reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    PRIMARY         reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    NOT             reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    REFERENCE       reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    COMA            reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    PARCIERRA       reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    ID              reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
-    PYC             reduce using rule 31 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    PYC             reduce using rule 79 (listaupdate -> valorupdate .)
+    COMA            reduce using rule 79 (listaupdate -> valorupdate .)
 
 
 state 74
 
-    (19) tamanios -> PARABRE tamanios COMA tamanio . PARCIERRA
+    (17) columna -> exprecionides . tipo tamanios
+    (18) columna -> exprecionides . tipo restriccion
+    (19) columna -> exprecionides . tipo
+    (20) columna -> exprecionides . tipo tamanios restriccion
+    (84) exprecionides -> exprecionides . PUNTO ID
+    (28) tipo -> . INT
+    (29) tipo -> . TEXT
+    (30) tipo -> . nvarchar
+    (31) tipo -> . DATE
+    (32) tipo -> . DECIMAL
+    (33) nvarchar -> . NVARCHAR PARABRE NUMEROS PARCIERRA
 
-    PARCIERRA       shift and go to state 76
+    PUNTO           shift and go to state 43
+    INT             shift and go to state 87
+    TEXT            shift and go to state 88
+    DATE            shift and go to state 90
+    DECIMAL         shift and go to state 91
+    NVARCHAR        shift and go to state 92
 
+    tipo                           shift and go to state 86
+    nvarchar                       shift and go to state 89
 
 state 75
 
-    (25) reference -> REFERENCE ID PARABRE ID . PARCIERRA
+    (11) comandocreate -> CREATE TABLE exprecionides PARABRE datostable . PARCIERRA PYC
+    (12) datostable -> datostable . datotable
+    (14) datotable -> . columnas
+    (15) columnas -> . columnas COMA columna
+    (16) columnas -> . columna
+    (17) columna -> . exprecionides tipo tamanios
+    (18) columna -> . exprecionides tipo restriccion
+    (19) columna -> . exprecionides tipo
+    (20) columna -> . exprecionides tipo tamanios restriccion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
 
-    PARCIERRA       shift and go to state 77
+    PARCIERRA       shift and go to state 93
+    ID              shift and go to state 25
 
+    exprecionides                  shift and go to state 74
+    datotable                      shift and go to state 94
+    columnas                       shift and go to state 77
+    columna                        shift and go to state 78
 
 state 76
 
-    (19) tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .
+    (13) datostable -> datotable .
 
-    PRIMARY         reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    NOT             reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    REFERENCE       reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    COMA            reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    PARCIERRA       reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
-    ID              reduce using rule 19 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    PARCIERRA       reduce using rule 13 (datostable -> datotable .)
+    ID              reduce using rule 13 (datostable -> datotable .)
 
 
 state 77
 
-    (25) reference -> REFERENCE ID PARABRE ID PARCIERRA .
+    (14) datotable -> columnas .
+    (15) columnas -> columnas . COMA columna
 
-    COMA            reduce using rule 25 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
-    PARCIERRA       reduce using rule 25 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
-    ID              reduce using rule 25 (reference -> REFERENCE ID PARABRE ID PARCIERRA .)
+    PARCIERRA       reduce using rule 14 (datotable -> columnas .)
+    ID              reduce using rule 14 (datotable -> columnas .)
+    COMA            shift and go to state 95
 
+
+state 78
+
+    (16) columnas -> columna .
+
+    COMA            reduce using rule 16 (columnas -> columna .)
+    PARCIERRA       reduce using rule 16 (columnas -> columna .)
+    ID              reduce using rule 16 (columnas -> columna .)
+
+
+state 79
+
+    (34) comandoalter -> ALTER TABLE exprecionides ADD COLUMN . exprecionides tipo PYC
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    ID              shift and go to state 25
+
+    exprecionides                  shift and go to state 96
+
+state 80
+
+    (40) comandoselect -> SELECT valoresselected FROM datosselect PYC .
+
+    CREATE          reduce using rule 40 (comandoselect -> SELECT valoresselected FROM datosselect PYC .)
+    ALTER           reduce using rule 40 (comandoselect -> SELECT valoresselected FROM datosselect PYC .)
+    TRUNCATE        reduce using rule 40 (comandoselect -> SELECT valoresselected FROM datosselect PYC .)
+    DROP            reduce using rule 40 (comandoselect -> SELECT valoresselected FROM datosselect PYC .)
+    USE             reduce using rule 40 (comandoselect -> SELECT valoresselected FROM datosselect PYC .)
+    SELECT          reduce using rule 40 (comandoselect -> SELECT valoresselected FROM datosselect PYC .)
+    UPDATE          reduce using rule 40 (comandoselect -> SELECT valoresselected FROM datosselect PYC .)
+    $end            reduce using rule 40 (comandoselect -> SELECT valoresselected FROM datosselect PYC .)
+
+
+state 81
+
+    (41) comandoselect -> SELECT valoresselected FROM datosselect datoswhere . PYC
+
+    PYC             shift and go to state 97
+
+
+state 82
+
+    (49) datoswhere -> WHERE . exprecionides
+    (50) datoswhere -> WHERE . expresion
+    (51) datoswhere -> WHERE . expresion exprecionides
+    (52) datoswhere -> WHERE . exprecionides BETWEEN listasbitween
+    (53) datoswhere -> WHERE . exprecionides IGUAL expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+
+    ID              shift and go to state 25
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
+
+    exprecionides                  shift and go to state 98
+    expresion                      shift and go to state 99
+    termino                        shift and go to state 32
+    factor                         shift and go to state 33
+
+state 83
+
+    (80) valorupdate -> exprecionides IGUAL . CADENA
+    (81) valorupdate -> exprecionides IGUAL . valordeoperacion
+    (82) valorupdate -> exprecionides IGUAL . expresion
+    (83) valorupdate -> exprecionides IGUAL . valordeoperacion datoswhere
+    (75) valordeoperacion -> . exprecionides
+    (76) valordeoperacion -> . NUMEROS
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+
+    CADENA          shift and go to state 101
+    NUMEROS         shift and go to state 104
+    ID              shift and go to state 25
+    PARABRE         shift and go to state 35
+
+    exprecionides                  shift and go to state 100
+    valordeoperacion               shift and go to state 102
+    expresion                      shift and go to state 103
+    termino                        shift and go to state 32
+    factor                         shift and go to state 33
+
+state 84
+
+    (77) comandoupdate -> UPDATE exprecionides SET listaupdate PYC .
+
+    CREATE          reduce using rule 77 (comandoupdate -> UPDATE exprecionides SET listaupdate PYC .)
+    ALTER           reduce using rule 77 (comandoupdate -> UPDATE exprecionides SET listaupdate PYC .)
+    TRUNCATE        reduce using rule 77 (comandoupdate -> UPDATE exprecionides SET listaupdate PYC .)
+    DROP            reduce using rule 77 (comandoupdate -> UPDATE exprecionides SET listaupdate PYC .)
+    USE             reduce using rule 77 (comandoupdate -> UPDATE exprecionides SET listaupdate PYC .)
+    SELECT          reduce using rule 77 (comandoupdate -> UPDATE exprecionides SET listaupdate PYC .)
+    UPDATE          reduce using rule 77 (comandoupdate -> UPDATE exprecionides SET listaupdate PYC .)
+    $end            reduce using rule 77 (comandoupdate -> UPDATE exprecionides SET listaupdate PYC .)
+
+
+state 85
+
+    (78) listaupdate -> listaupdate COMA . valorupdate
+    (80) valorupdate -> . exprecionides IGUAL CADENA
+    (81) valorupdate -> . exprecionides IGUAL valordeoperacion
+    (82) valorupdate -> . exprecionides IGUAL expresion
+    (83) valorupdate -> . exprecionides IGUAL valordeoperacion datoswhere
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    ID              shift and go to state 25
+
+    valorupdate                    shift and go to state 105
+    exprecionides                  shift and go to state 71
+
+state 86
+
+    (17) columna -> exprecionides tipo . tamanios
+    (18) columna -> exprecionides tipo . restriccion
+    (19) columna -> exprecionides tipo .
+    (20) columna -> exprecionides tipo . tamanios restriccion
+    (21) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
+    (22) tamanios -> . PARABRE tamanio PARCIERRA
+    (24) restriccion -> . PRIMARY KEY
+    (25) restriccion -> . NOT NULL
+    (26) restriccion -> . reference
+    (27) reference -> . REFERENCE exprecionides PARABRE exprecionides PARCIERRA
+
+    COMA            reduce using rule 19 (columna -> exprecionides tipo .)
+    PARCIERRA       reduce using rule 19 (columna -> exprecionides tipo .)
+    ID              reduce using rule 19 (columna -> exprecionides tipo .)
+    PARABRE         shift and go to state 108
+    PRIMARY         shift and go to state 109
+    NOT             shift and go to state 110
+    REFERENCE       shift and go to state 112
+
+    tamanios                       shift and go to state 106
+    restriccion                    shift and go to state 107
+    reference                      shift and go to state 111
+
+state 87
+
+    (28) tipo -> INT .
+
+    PARABRE         reduce using rule 28 (tipo -> INT .)
+    PRIMARY         reduce using rule 28 (tipo -> INT .)
+    NOT             reduce using rule 28 (tipo -> INT .)
+    REFERENCE       reduce using rule 28 (tipo -> INT .)
+    COMA            reduce using rule 28 (tipo -> INT .)
+    PARCIERRA       reduce using rule 28 (tipo -> INT .)
+    ID              reduce using rule 28 (tipo -> INT .)
+    PYC             reduce using rule 28 (tipo -> INT .)
+
+
+state 88
+
+    (29) tipo -> TEXT .
+
+    PARABRE         reduce using rule 29 (tipo -> TEXT .)
+    PRIMARY         reduce using rule 29 (tipo -> TEXT .)
+    NOT             reduce using rule 29 (tipo -> TEXT .)
+    REFERENCE       reduce using rule 29 (tipo -> TEXT .)
+    COMA            reduce using rule 29 (tipo -> TEXT .)
+    PARCIERRA       reduce using rule 29 (tipo -> TEXT .)
+    ID              reduce using rule 29 (tipo -> TEXT .)
+    PYC             reduce using rule 29 (tipo -> TEXT .)
+
+
+state 89
+
+    (30) tipo -> nvarchar .
+
+    PARABRE         reduce using rule 30 (tipo -> nvarchar .)
+    PRIMARY         reduce using rule 30 (tipo -> nvarchar .)
+    NOT             reduce using rule 30 (tipo -> nvarchar .)
+    REFERENCE       reduce using rule 30 (tipo -> nvarchar .)
+    COMA            reduce using rule 30 (tipo -> nvarchar .)
+    PARCIERRA       reduce using rule 30 (tipo -> nvarchar .)
+    ID              reduce using rule 30 (tipo -> nvarchar .)
+    PYC             reduce using rule 30 (tipo -> nvarchar .)
+
+
+state 90
+
+    (31) tipo -> DATE .
+
+    PARABRE         reduce using rule 31 (tipo -> DATE .)
+    PRIMARY         reduce using rule 31 (tipo -> DATE .)
+    NOT             reduce using rule 31 (tipo -> DATE .)
+    REFERENCE       reduce using rule 31 (tipo -> DATE .)
+    COMA            reduce using rule 31 (tipo -> DATE .)
+    PARCIERRA       reduce using rule 31 (tipo -> DATE .)
+    ID              reduce using rule 31 (tipo -> DATE .)
+    PYC             reduce using rule 31 (tipo -> DATE .)
+
+
+state 91
+
+    (32) tipo -> DECIMAL .
+
+    PARABRE         reduce using rule 32 (tipo -> DECIMAL .)
+    PRIMARY         reduce using rule 32 (tipo -> DECIMAL .)
+    NOT             reduce using rule 32 (tipo -> DECIMAL .)
+    REFERENCE       reduce using rule 32 (tipo -> DECIMAL .)
+    COMA            reduce using rule 32 (tipo -> DECIMAL .)
+    PARCIERRA       reduce using rule 32 (tipo -> DECIMAL .)
+    ID              reduce using rule 32 (tipo -> DECIMAL .)
+    PYC             reduce using rule 32 (tipo -> DECIMAL .)
+
+
+state 92
+
+    (33) nvarchar -> NVARCHAR . PARABRE NUMEROS PARCIERRA
+
+    PARABRE         shift and go to state 113
+
+
+state 93
+
+    (11) comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA . PYC
+
+    PYC             shift and go to state 114
+
+
+state 94
+
+    (12) datostable -> datostable datotable .
+
+    PARCIERRA       reduce using rule 12 (datostable -> datostable datotable .)
+    ID              reduce using rule 12 (datostable -> datostable datotable .)
+
+
+state 95
+
+    (15) columnas -> columnas COMA . columna
+    (17) columna -> . exprecionides tipo tamanios
+    (18) columna -> . exprecionides tipo restriccion
+    (19) columna -> . exprecionides tipo
+    (20) columna -> . exprecionides tipo tamanios restriccion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    ID              shift and go to state 25
+
+    columna                        shift and go to state 115
+    exprecionides                  shift and go to state 74
+
+state 96
+
+    (34) comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides . tipo PYC
+    (84) exprecionides -> exprecionides . PUNTO ID
+    (28) tipo -> . INT
+    (29) tipo -> . TEXT
+    (30) tipo -> . nvarchar
+    (31) tipo -> . DATE
+    (32) tipo -> . DECIMAL
+    (33) nvarchar -> . NVARCHAR PARABRE NUMEROS PARCIERRA
+
+    PUNTO           shift and go to state 43
+    INT             shift and go to state 87
+    TEXT            shift and go to state 88
+    DATE            shift and go to state 90
+    DECIMAL         shift and go to state 91
+    NVARCHAR        shift and go to state 92
+
+    tipo                           shift and go to state 116
+    nvarchar                       shift and go to state 89
+
+state 97
+
+    (41) comandoselect -> SELECT valoresselected FROM datosselect datoswhere PYC .
+
+    CREATE          reduce using rule 41 (comandoselect -> SELECT valoresselected FROM datosselect datoswhere PYC .)
+    ALTER           reduce using rule 41 (comandoselect -> SELECT valoresselected FROM datosselect datoswhere PYC .)
+    TRUNCATE        reduce using rule 41 (comandoselect -> SELECT valoresselected FROM datosselect datoswhere PYC .)
+    DROP            reduce using rule 41 (comandoselect -> SELECT valoresselected FROM datosselect datoswhere PYC .)
+    USE             reduce using rule 41 (comandoselect -> SELECT valoresselected FROM datosselect datoswhere PYC .)
+    SELECT          reduce using rule 41 (comandoselect -> SELECT valoresselected FROM datosselect datoswhere PYC .)
+    UPDATE          reduce using rule 41 (comandoselect -> SELECT valoresselected FROM datosselect datoswhere PYC .)
+    $end            reduce using rule 41 (comandoselect -> SELECT valoresselected FROM datosselect datoswhere PYC .)
+
+
+state 98
+
+    (49) datoswhere -> WHERE exprecionides .
+    (52) datoswhere -> WHERE exprecionides . BETWEEN listasbitween
+    (53) datoswhere -> WHERE exprecionides . IGUAL expresion
+    (84) exprecionides -> exprecionides . PUNTO ID
+    (67) factor -> exprecionides .
+
+  ! reduce/reduce conflict for PYC resolved using rule 49 (datoswhere -> WHERE exprecionides .)
+  ! reduce/reduce conflict for COMA resolved using rule 49 (datoswhere -> WHERE exprecionides .)
+    PYC             reduce using rule 49 (datoswhere -> WHERE exprecionides .)
+    COMA            reduce using rule 49 (datoswhere -> WHERE exprecionides .)
+    BETWEEN         shift and go to state 117
+    IGUAL           shift and go to state 118
+    PUNTO           shift and go to state 43
+    MULTI           reduce using rule 67 (factor -> exprecionides .)
+    DIV             reduce using rule 67 (factor -> exprecionides .)
+    SUMA            reduce using rule 67 (factor -> exprecionides .)
+    RESTA           reduce using rule 67 (factor -> exprecionides .)
+    MAYORQ          reduce using rule 67 (factor -> exprecionides .)
+    ID              reduce using rule 67 (factor -> exprecionides .)
+
+  ! PYC             [ reduce using rule 67 (factor -> exprecionides .) ]
+  ! COMA            [ reduce using rule 67 (factor -> exprecionides .) ]
+
+
+state 99
+
+    (50) datoswhere -> WHERE expresion .
+    (51) datoswhere -> WHERE expresion . exprecionides
+    (61) expresion -> expresion . SUMA termino
+    (62) expresion -> expresion . RESTA termino
+    (70) factor -> expresion . MAYORQ expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    PYC             reduce using rule 50 (datoswhere -> WHERE expresion .)
+    COMA            reduce using rule 50 (datoswhere -> WHERE expresion .)
+    SUMA            shift and go to state 46
+    RESTA           shift and go to state 47
+    MAYORQ          shift and go to state 48
+    ID              shift and go to state 25
+
+    exprecionides                  shift and go to state 119
+
+state 100
+
+    (75) valordeoperacion -> exprecionides .
+    (84) exprecionides -> exprecionides . PUNTO ID
+    (67) factor -> exprecionides .
+
+  ! reduce/reduce conflict for PYC resolved using rule 67 (factor -> exprecionides .)
+  ! reduce/reduce conflict for COMA resolved using rule 67 (factor -> exprecionides .)
+    WHERE           reduce using rule 75 (valordeoperacion -> exprecionides .)
+    PUNTO           shift and go to state 43
+    MULTI           reduce using rule 67 (factor -> exprecionides .)
+    DIV             reduce using rule 67 (factor -> exprecionides .)
+    SUMA            reduce using rule 67 (factor -> exprecionides .)
+    RESTA           reduce using rule 67 (factor -> exprecionides .)
+    MAYORQ          reduce using rule 67 (factor -> exprecionides .)
+    PYC             reduce using rule 67 (factor -> exprecionides .)
+    COMA            reduce using rule 67 (factor -> exprecionides .)
+
+  ! PYC             [ reduce using rule 75 (valordeoperacion -> exprecionides .) ]
+  ! COMA            [ reduce using rule 75 (valordeoperacion -> exprecionides .) ]
+
+
+state 101
+
+    (80) valorupdate -> exprecionides IGUAL CADENA .
+
+    PYC             reduce using rule 80 (valorupdate -> exprecionides IGUAL CADENA .)
+    COMA            reduce using rule 80 (valorupdate -> exprecionides IGUAL CADENA .)
+
+
+state 102
+
+    (81) valorupdate -> exprecionides IGUAL valordeoperacion .
+    (83) valorupdate -> exprecionides IGUAL valordeoperacion . datoswhere
+    (49) datoswhere -> . WHERE exprecionides
+    (50) datoswhere -> . WHERE expresion
+    (51) datoswhere -> . WHERE expresion exprecionides
+    (52) datoswhere -> . WHERE exprecionides BETWEEN listasbitween
+    (53) datoswhere -> . WHERE exprecionides IGUAL expresion
+
+    PYC             reduce using rule 81 (valorupdate -> exprecionides IGUAL valordeoperacion .)
+    COMA            reduce using rule 81 (valorupdate -> exprecionides IGUAL valordeoperacion .)
+    WHERE           shift and go to state 82
+
+    datoswhere                     shift and go to state 120
+
+state 103
+
+    (82) valorupdate -> exprecionides IGUAL expresion .
+    (61) expresion -> expresion . SUMA termino
+    (62) expresion -> expresion . RESTA termino
+    (70) factor -> expresion . MAYORQ expresion
+
+    PYC             reduce using rule 82 (valorupdate -> exprecionides IGUAL expresion .)
+    COMA            reduce using rule 82 (valorupdate -> exprecionides IGUAL expresion .)
+    SUMA            shift and go to state 46
+    RESTA           shift and go to state 47
+    MAYORQ          shift and go to state 48
+
+
+state 104
+
+    (76) valordeoperacion -> NUMEROS .
+    (68) factor -> NUMEROS .
+
+  ! reduce/reduce conflict for PYC resolved using rule 68 (factor -> NUMEROS .)
+  ! reduce/reduce conflict for COMA resolved using rule 68 (factor -> NUMEROS .)
+    WHERE           reduce using rule 76 (valordeoperacion -> NUMEROS .)
+    MULTI           reduce using rule 68 (factor -> NUMEROS .)
+    DIV             reduce using rule 68 (factor -> NUMEROS .)
+    SUMA            reduce using rule 68 (factor -> NUMEROS .)
+    RESTA           reduce using rule 68 (factor -> NUMEROS .)
+    MAYORQ          reduce using rule 68 (factor -> NUMEROS .)
+    PYC             reduce using rule 68 (factor -> NUMEROS .)
+    COMA            reduce using rule 68 (factor -> NUMEROS .)
+
+  ! PYC             [ reduce using rule 76 (valordeoperacion -> NUMEROS .) ]
+  ! COMA            [ reduce using rule 76 (valordeoperacion -> NUMEROS .) ]
+
+
+state 105
+
+    (78) listaupdate -> listaupdate COMA valorupdate .
+
+    PYC             reduce using rule 78 (listaupdate -> listaupdate COMA valorupdate .)
+    COMA            reduce using rule 78 (listaupdate -> listaupdate COMA valorupdate .)
+
+
+state 106
+
+    (17) columna -> exprecionides tipo tamanios .
+    (20) columna -> exprecionides tipo tamanios . restriccion
+    (24) restriccion -> . PRIMARY KEY
+    (25) restriccion -> . NOT NULL
+    (26) restriccion -> . reference
+    (27) reference -> . REFERENCE exprecionides PARABRE exprecionides PARCIERRA
+
+    COMA            reduce using rule 17 (columna -> exprecionides tipo tamanios .)
+    PARCIERRA       reduce using rule 17 (columna -> exprecionides tipo tamanios .)
+    ID              reduce using rule 17 (columna -> exprecionides tipo tamanios .)
+    PRIMARY         shift and go to state 109
+    NOT             shift and go to state 110
+    REFERENCE       shift and go to state 112
+
+    restriccion                    shift and go to state 121
+    reference                      shift and go to state 111
+
+state 107
+
+    (18) columna -> exprecionides tipo restriccion .
+
+    COMA            reduce using rule 18 (columna -> exprecionides tipo restriccion .)
+    PARCIERRA       reduce using rule 18 (columna -> exprecionides tipo restriccion .)
+    ID              reduce using rule 18 (columna -> exprecionides tipo restriccion .)
+
+
+state 108
+
+    (21) tamanios -> PARABRE . tamanios COMA tamanio PARCIERRA
+    (22) tamanios -> PARABRE . tamanio PARCIERRA
+    (21) tamanios -> . PARABRE tamanios COMA tamanio PARCIERRA
+    (22) tamanios -> . PARABRE tamanio PARCIERRA
+    (23) tamanio -> . NUMEROS
+
+    PARABRE         shift and go to state 108
+    NUMEROS         shift and go to state 124
+
+    tamanios                       shift and go to state 122
+    tamanio                        shift and go to state 123
+
+state 109
+
+    (24) restriccion -> PRIMARY . KEY
+
+    KEY             shift and go to state 125
+
+
+state 110
+
+    (25) restriccion -> NOT . NULL
+
+    NULL            shift and go to state 126
+
+
+state 111
+
+    (26) restriccion -> reference .
+
+    COMA            reduce using rule 26 (restriccion -> reference .)
+    PARCIERRA       reduce using rule 26 (restriccion -> reference .)
+    ID              reduce using rule 26 (restriccion -> reference .)
+
+
+state 112
+
+    (27) reference -> REFERENCE . exprecionides PARABRE exprecionides PARCIERRA
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    ID              shift and go to state 25
+
+    exprecionides                  shift and go to state 127
+
+state 113
+
+    (33) nvarchar -> NVARCHAR PARABRE . NUMEROS PARCIERRA
+
+    NUMEROS         shift and go to state 128
+
+
+state 114
+
+    (11) comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC .
+
+    CREATE          reduce using rule 11 (comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC .)
+    ALTER           reduce using rule 11 (comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC .)
+    TRUNCATE        reduce using rule 11 (comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC .)
+    DROP            reduce using rule 11 (comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC .)
+    USE             reduce using rule 11 (comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC .)
+    SELECT          reduce using rule 11 (comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC .)
+    UPDATE          reduce using rule 11 (comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC .)
+    $end            reduce using rule 11 (comandocreate -> CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC .)
+
+
+state 115
+
+    (15) columnas -> columnas COMA columna .
+
+    COMA            reduce using rule 15 (columnas -> columnas COMA columna .)
+    PARCIERRA       reduce using rule 15 (columnas -> columnas COMA columna .)
+    ID              reduce using rule 15 (columnas -> columnas COMA columna .)
+
+
+state 116
+
+    (34) comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo . PYC
+
+    PYC             shift and go to state 129
+
+
+state 117
+
+    (52) datoswhere -> WHERE exprecionides BETWEEN . listasbitween
+    (54) listasbitween -> . listasbitween listabitween
+    (55) listasbitween -> . listabitween
+    (56) listabitween -> . CADENA
+    (57) listabitween -> . AND
+    (58) listabitween -> . OR
+    (59) listabitween -> . exprecionides PARABRE PARCIERRA
+    (60) listabitween -> . exprecionides IGUAL expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    CADENA          shift and go to state 133
+    AND             shift and go to state 134
+    OR              shift and go to state 135
+    ID              shift and go to state 25
+
+    exprecionides                  shift and go to state 130
+    listasbitween                  shift and go to state 131
+    listabitween                   shift and go to state 132
+
+state 118
+
+    (53) datoswhere -> WHERE exprecionides IGUAL . expresion
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
+    ID              shift and go to state 25
+
+    exprecionides                  shift and go to state 52
+    expresion                      shift and go to state 136
+    termino                        shift and go to state 32
+    factor                         shift and go to state 33
+
+state 119
+
+    (51) datoswhere -> WHERE expresion exprecionides .
+    (84) exprecionides -> exprecionides . PUNTO ID
+
+    PYC             reduce using rule 51 (datoswhere -> WHERE expresion exprecionides .)
+    COMA            reduce using rule 51 (datoswhere -> WHERE expresion exprecionides .)
+    PUNTO           shift and go to state 43
+
+
+state 120
+
+    (83) valorupdate -> exprecionides IGUAL valordeoperacion datoswhere .
+
+    PYC             reduce using rule 83 (valorupdate -> exprecionides IGUAL valordeoperacion datoswhere .)
+    COMA            reduce using rule 83 (valorupdate -> exprecionides IGUAL valordeoperacion datoswhere .)
+
+
+state 121
+
+    (20) columna -> exprecionides tipo tamanios restriccion .
+
+    COMA            reduce using rule 20 (columna -> exprecionides tipo tamanios restriccion .)
+    PARCIERRA       reduce using rule 20 (columna -> exprecionides tipo tamanios restriccion .)
+    ID              reduce using rule 20 (columna -> exprecionides tipo tamanios restriccion .)
+
+
+state 122
+
+    (21) tamanios -> PARABRE tamanios . COMA tamanio PARCIERRA
+
+    COMA            shift and go to state 137
+
+
+state 123
+
+    (22) tamanios -> PARABRE tamanio . PARCIERRA
+
+    PARCIERRA       shift and go to state 138
+
+
+state 124
+
+    (23) tamanio -> NUMEROS .
+
+    PARCIERRA       reduce using rule 23 (tamanio -> NUMEROS .)
+
+
+state 125
+
+    (24) restriccion -> PRIMARY KEY .
+
+    COMA            reduce using rule 24 (restriccion -> PRIMARY KEY .)
+    PARCIERRA       reduce using rule 24 (restriccion -> PRIMARY KEY .)
+    ID              reduce using rule 24 (restriccion -> PRIMARY KEY .)
+
+
+state 126
+
+    (25) restriccion -> NOT NULL .
+
+    COMA            reduce using rule 25 (restriccion -> NOT NULL .)
+    PARCIERRA       reduce using rule 25 (restriccion -> NOT NULL .)
+    ID              reduce using rule 25 (restriccion -> NOT NULL .)
+
+
+state 127
+
+    (27) reference -> REFERENCE exprecionides . PARABRE exprecionides PARCIERRA
+    (84) exprecionides -> exprecionides . PUNTO ID
+
+    PARABRE         shift and go to state 139
+    PUNTO           shift and go to state 43
+
+
+state 128
+
+    (33) nvarchar -> NVARCHAR PARABRE NUMEROS . PARCIERRA
+
+    PARCIERRA       shift and go to state 140
+
+
+state 129
+
+    (34) comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC .
+
+    CREATE          reduce using rule 34 (comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC .)
+    ALTER           reduce using rule 34 (comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC .)
+    TRUNCATE        reduce using rule 34 (comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC .)
+    DROP            reduce using rule 34 (comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC .)
+    USE             reduce using rule 34 (comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC .)
+    SELECT          reduce using rule 34 (comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC .)
+    UPDATE          reduce using rule 34 (comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC .)
+    $end            reduce using rule 34 (comandoalter -> ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC .)
+
+
+state 130
+
+    (59) listabitween -> exprecionides . PARABRE PARCIERRA
+    (60) listabitween -> exprecionides . IGUAL expresion
+    (84) exprecionides -> exprecionides . PUNTO ID
+
+    PARABRE         shift and go to state 141
+    IGUAL           shift and go to state 142
+    PUNTO           shift and go to state 43
+
+
+state 131
+
+    (52) datoswhere -> WHERE exprecionides BETWEEN listasbitween .
+    (54) listasbitween -> listasbitween . listabitween
+    (56) listabitween -> . CADENA
+    (57) listabitween -> . AND
+    (58) listabitween -> . OR
+    (59) listabitween -> . exprecionides PARABRE PARCIERRA
+    (60) listabitween -> . exprecionides IGUAL expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    PYC             reduce using rule 52 (datoswhere -> WHERE exprecionides BETWEEN listasbitween .)
+    COMA            reduce using rule 52 (datoswhere -> WHERE exprecionides BETWEEN listasbitween .)
+    CADENA          shift and go to state 133
+    AND             shift and go to state 134
+    OR              shift and go to state 135
+    ID              shift and go to state 25
+
+    exprecionides                  shift and go to state 130
+    listabitween                   shift and go to state 143
+
+state 132
+
+    (55) listasbitween -> listabitween .
+
+    CADENA          reduce using rule 55 (listasbitween -> listabitween .)
+    AND             reduce using rule 55 (listasbitween -> listabitween .)
+    OR              reduce using rule 55 (listasbitween -> listabitween .)
+    ID              reduce using rule 55 (listasbitween -> listabitween .)
+    PYC             reduce using rule 55 (listasbitween -> listabitween .)
+    COMA            reduce using rule 55 (listasbitween -> listabitween .)
+
+
+state 133
+
+    (56) listabitween -> CADENA .
+
+    CADENA          reduce using rule 56 (listabitween -> CADENA .)
+    AND             reduce using rule 56 (listabitween -> CADENA .)
+    OR              reduce using rule 56 (listabitween -> CADENA .)
+    ID              reduce using rule 56 (listabitween -> CADENA .)
+    PYC             reduce using rule 56 (listabitween -> CADENA .)
+    COMA            reduce using rule 56 (listabitween -> CADENA .)
+
+
+state 134
+
+    (57) listabitween -> AND .
+
+    CADENA          reduce using rule 57 (listabitween -> AND .)
+    AND             reduce using rule 57 (listabitween -> AND .)
+    OR              reduce using rule 57 (listabitween -> AND .)
+    ID              reduce using rule 57 (listabitween -> AND .)
+    PYC             reduce using rule 57 (listabitween -> AND .)
+    COMA            reduce using rule 57 (listabitween -> AND .)
+
+
+state 135
+
+    (58) listabitween -> OR .
+
+    CADENA          reduce using rule 58 (listabitween -> OR .)
+    AND             reduce using rule 58 (listabitween -> OR .)
+    OR              reduce using rule 58 (listabitween -> OR .)
+    ID              reduce using rule 58 (listabitween -> OR .)
+    PYC             reduce using rule 58 (listabitween -> OR .)
+    COMA            reduce using rule 58 (listabitween -> OR .)
+
+
+state 136
+
+    (53) datoswhere -> WHERE exprecionides IGUAL expresion .
+    (61) expresion -> expresion . SUMA termino
+    (62) expresion -> expresion . RESTA termino
+    (70) factor -> expresion . MAYORQ expresion
+
+    PYC             reduce using rule 53 (datoswhere -> WHERE exprecionides IGUAL expresion .)
+    COMA            reduce using rule 53 (datoswhere -> WHERE exprecionides IGUAL expresion .)
+    SUMA            shift and go to state 46
+    RESTA           shift and go to state 47
+    MAYORQ          shift and go to state 48
+
+
+state 137
+
+    (21) tamanios -> PARABRE tamanios COMA . tamanio PARCIERRA
+    (23) tamanio -> . NUMEROS
+
+    NUMEROS         shift and go to state 124
+
+    tamanio                        shift and go to state 144
+
+state 138
+
+    (22) tamanios -> PARABRE tamanio PARCIERRA .
+
+    PRIMARY         reduce using rule 22 (tamanios -> PARABRE tamanio PARCIERRA .)
+    NOT             reduce using rule 22 (tamanios -> PARABRE tamanio PARCIERRA .)
+    REFERENCE       reduce using rule 22 (tamanios -> PARABRE tamanio PARCIERRA .)
+    COMA            reduce using rule 22 (tamanios -> PARABRE tamanio PARCIERRA .)
+    PARCIERRA       reduce using rule 22 (tamanios -> PARABRE tamanio PARCIERRA .)
+    ID              reduce using rule 22 (tamanios -> PARABRE tamanio PARCIERRA .)
+
+
+state 139
+
+    (27) reference -> REFERENCE exprecionides PARABRE . exprecionides PARCIERRA
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    ID              shift and go to state 25
+
+    exprecionides                  shift and go to state 145
+
+state 140
+
+    (33) nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .
+
+    PARABRE         reduce using rule 33 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    PRIMARY         reduce using rule 33 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    NOT             reduce using rule 33 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    REFERENCE       reduce using rule 33 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    COMA            reduce using rule 33 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    PARCIERRA       reduce using rule 33 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    ID              reduce using rule 33 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+    PYC             reduce using rule 33 (nvarchar -> NVARCHAR PARABRE NUMEROS PARCIERRA .)
+
+
+state 141
+
+    (59) listabitween -> exprecionides PARABRE . PARCIERRA
+
+    PARCIERRA       shift and go to state 146
+
+
+state 142
+
+    (60) listabitween -> exprecionides IGUAL . expresion
+    (61) expresion -> . expresion SUMA termino
+    (62) expresion -> . expresion RESTA termino
+    (63) expresion -> . termino
+    (64) termino -> . termino MULTI factor
+    (65) termino -> . termino DIV factor
+    (66) termino -> . factor
+    (67) factor -> . exprecionides
+    (68) factor -> . NUMEROS
+    (69) factor -> . PARABRE expresion PARCIERRA
+    (70) factor -> . expresion MAYORQ expresion
+    (84) exprecionides -> . exprecionides PUNTO ID
+    (85) exprecionides -> . ID
+
+    NUMEROS         shift and go to state 34
+    PARABRE         shift and go to state 35
+    ID              shift and go to state 25
+
+    exprecionides                  shift and go to state 52
+    expresion                      shift and go to state 147
+    termino                        shift and go to state 32
+    factor                         shift and go to state 33
+
+state 143
+
+    (54) listasbitween -> listasbitween listabitween .
+
+    CADENA          reduce using rule 54 (listasbitween -> listasbitween listabitween .)
+    AND             reduce using rule 54 (listasbitween -> listasbitween listabitween .)
+    OR              reduce using rule 54 (listasbitween -> listasbitween listabitween .)
+    ID              reduce using rule 54 (listasbitween -> listasbitween listabitween .)
+    PYC             reduce using rule 54 (listasbitween -> listasbitween listabitween .)
+    COMA            reduce using rule 54 (listasbitween -> listasbitween listabitween .)
+
+
+state 144
+
+    (21) tamanios -> PARABRE tamanios COMA tamanio . PARCIERRA
+
+    PARCIERRA       shift and go to state 148
+
+
+state 145
+
+    (27) reference -> REFERENCE exprecionides PARABRE exprecionides . PARCIERRA
+    (84) exprecionides -> exprecionides . PUNTO ID
+
+    PARCIERRA       shift and go to state 149
+    PUNTO           shift and go to state 43
+
+
+state 146
+
+    (59) listabitween -> exprecionides PARABRE PARCIERRA .
+
+    CADENA          reduce using rule 59 (listabitween -> exprecionides PARABRE PARCIERRA .)
+    AND             reduce using rule 59 (listabitween -> exprecionides PARABRE PARCIERRA .)
+    OR              reduce using rule 59 (listabitween -> exprecionides PARABRE PARCIERRA .)
+    ID              reduce using rule 59 (listabitween -> exprecionides PARABRE PARCIERRA .)
+    PYC             reduce using rule 59 (listabitween -> exprecionides PARABRE PARCIERRA .)
+    COMA            reduce using rule 59 (listabitween -> exprecionides PARABRE PARCIERRA .)
+
+
+state 147
+
+    (60) listabitween -> exprecionides IGUAL expresion .
+    (61) expresion -> expresion . SUMA termino
+    (62) expresion -> expresion . RESTA termino
+    (70) factor -> expresion . MAYORQ expresion
+
+    CADENA          reduce using rule 60 (listabitween -> exprecionides IGUAL expresion .)
+    AND             reduce using rule 60 (listabitween -> exprecionides IGUAL expresion .)
+    OR              reduce using rule 60 (listabitween -> exprecionides IGUAL expresion .)
+    ID              reduce using rule 60 (listabitween -> exprecionides IGUAL expresion .)
+    PYC             reduce using rule 60 (listabitween -> exprecionides IGUAL expresion .)
+    COMA            reduce using rule 60 (listabitween -> exprecionides IGUAL expresion .)
+    SUMA            shift and go to state 46
+    RESTA           shift and go to state 47
+    MAYORQ          shift and go to state 48
+
+
+state 148
+
+    (21) tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .
+
+    PRIMARY         reduce using rule 21 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    NOT             reduce using rule 21 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    REFERENCE       reduce using rule 21 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    COMA            reduce using rule 21 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    PARCIERRA       reduce using rule 21 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+    ID              reduce using rule 21 (tamanios -> PARABRE tamanios COMA tamanio PARCIERRA .)
+
+
+state 149
+
+    (27) reference -> REFERENCE exprecionides PARABRE exprecionides PARCIERRA .
+
+    COMA            reduce using rule 27 (reference -> REFERENCE exprecionides PARABRE exprecionides PARCIERRA .)
+    PARCIERRA       reduce using rule 27 (reference -> REFERENCE exprecionides PARABRE exprecionides PARCIERRA .)
+    ID              reduce using rule 27 (reference -> REFERENCE exprecionides PARABRE exprecionides PARCIERRA .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for MULTI in state 32 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 32 resolved as shift
+WARNING: reduce/reduce conflict in state 31 resolved using rule (datoselect -> exprecionides)
+WARNING: rejected rule (factor -> exprecionides) in state 31
+WARNING: reduce/reduce conflict in state 65 resolved using rule (expresion -> expresion SUMA termino)
+WARNING: rejected rule (expresion -> termino) in state 65
+WARNING: reduce/reduce conflict in state 66 resolved using rule (expresion -> expresion RESTA termino)
+WARNING: rejected rule (expresion -> termino) in state 66
+WARNING: reduce/reduce conflict in state 68 resolved using rule (termino -> termino MULTI factor)
+WARNING: rejected rule (termino -> factor) in state 68
+WARNING: reduce/reduce conflict in state 69 resolved using rule (termino -> termino DIV factor)
+WARNING: rejected rule (termino -> factor) in state 69
+WARNING: reduce/reduce conflict in state 98 resolved using rule (datoswhere -> WHERE exprecionides)
+WARNING: rejected rule (factor -> exprecionides) in state 98
+WARNING: reduce/reduce conflict in state 100 resolved using rule (factor -> exprecionides)
+WARNING: rejected rule (valordeoperacion -> exprecionides) in state 100
+WARNING: reduce/reduce conflict in state 104 resolved using rule (factor -> NUMEROS)
+WARNING: rejected rule (valordeoperacion -> NUMEROS) in state 104
