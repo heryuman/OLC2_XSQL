@@ -179,9 +179,10 @@ def p_comandouse(p):
 def p_comandoselect(p):
     '''comandoselect : SELECT valoresselected FROM datosselect PYC
                      | SELECT valoresselected FROM datosselect datoswhere PYC
-                     | SELECT comandoif'''
+                     | SELECT comandoif
+                     | SELECT comandocase'''
     print("valoresselected " , p[2])
-    print("datosselect " , p[4])
+    #print("datosselect " , p[4])
     p[0]=""
     
 def p_valoresselected(p):
@@ -233,8 +234,7 @@ def p_listasbitweenlistabitween(p):
 
 def p_listabitween(p):
     '''listabitween : CADENA
-                    | AND
-                    | OR
+                    | andor
                     | exprecionides PARABRE PARCIERRA
                     | exprecionides IGUAL expresion'''
     if len(p) == 4:
@@ -243,6 +243,12 @@ def p_listabitween(p):
         elif p[2] =="=":
             print(p[1])
     print(p[1])
+    
+def p_andor(p):
+    '''andor : AND
+             | OR'''
+    p[0] = p[1]
+    
     
 def p_oparitmeticas(p): #falta ver las producciones de las operaciones aritmeticas
     '''expresion : expresion SUMA termino 
@@ -271,10 +277,9 @@ def p_termino(p):
         p[0] = p[1]
 
 def p_factor(p):
-    '''factor : exprecionides
-              | NUMEROS
+    '''factor : valordeoperacion
               | PARABRE expresion PARCIERRA
-              | expresion MAYORQ expresion'''
+              | expresion signoscomparacion expresion'''
     if len(p) ==4:
         if p[2] == ">":
             p[0] =str(p[1]) > str(p[2])
@@ -379,6 +384,25 @@ def p_listacentencia(p):
     '''listacentencia : valordeoperacion
                       | expresion'''
     print(p[1])
+    
+    
+def p_comandocase(p):
+    '''comandocase : produccionescase
+                   | exprecionides COMA comandocase
+                   | exprecionides'''
+
+def p_produccionescase(p):
+    '''produccionescase : CASE listacases FROM exprecionides PYC'''
+    
+def p_listacases(p):
+    '''listacases : listacases listacase
+                 | listacase'''
+                 
+def p_listacase(p):
+    '''listacase : WHEN expresion andor expresion THEN valordeoperacion
+                 | ELSE THEN valordeoperacion
+                 | END expresion'''
+
 def p_error(p):
     if p:
         print(f"Error de sintaxis en '{p.value}'")   

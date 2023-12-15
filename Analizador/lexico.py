@@ -39,7 +39,13 @@ reservadas={
         'delete' : 'DELETE',
         
         'if' : 'IF',
-        'as' : 'AS'
+        'as' : 'AS',
+        
+        'case' : 'CASE',
+        'when' : 'WHEN',
+        'then' : 'THEN',
+        'else' : 'ELSE',
+        'end' : 'END'
 }
 
 
