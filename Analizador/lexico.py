@@ -45,7 +45,11 @@ reservadas={
         'when' : 'WHEN',
         'then' : 'THEN',
         'else' : 'ELSE',
-        'end' : 'END'
+        'end' : 'END',
+        
+        'procedure' : 'PROCEDURE',
+        'begin' : 'BEGIN',
+        'declare' : 'DECLARE',
 }
 
 
@@ -66,9 +70,10 @@ tokens=[
         'MAYORIGUAL',
         'MENORIGUAL',
         'PUNTO',
-        'COMILLASIMPRE',
-        'COMILLADOBLE',
+        'VALAND',
+        'VALOR',
         'IGUAL',
+        'ARROBA',
         'CADENA'
 ]+list(reservadas.values())
 
@@ -87,10 +92,19 @@ t_MENORQ = r'\<'
 t_MAYORIGUAL = r'\>='
 t_MENORIGUAL = r'\<='
 t_PUNTO = r'\.'
-t_COMILLASIMPRE = r'\''
-t_COMILLADOBLE = r'\"'
 t_IGUAL = r'='
+t_ARROBA = r'\@'
+t_VALAND = r'&&'
+t_VALOR = r'\|\|'
 
+def t_NUMEROSDECIMALES(t):
+    r'\d+\.\d+'
+    try:
+        t.value = float(t.value)
+    except ValueError:
+        print("Valor flotante demasiado grande: %s" % t.value)
+        t.value = 0
+    return t
 
 def t_NUMEROS(t):
     r'\d+'
@@ -101,14 +115,7 @@ def t_NUMEROS(t):
         t.value = 0
     return t
 #esto es para la parte de los decimales
-def t_NUMEROSDECIMALES(t):
-    r'\d+\.\d+'
-    try:
-        t.value = float(t.value)
-    except ValueError:
-        print("Valor flotante demasiado grande: %s" % t.value)
-        t.value = 0
-    return t
+
 
 def t_ID(t):
     r'[a-zA-Z_0-9][a-zA-Z_0-9]*'
