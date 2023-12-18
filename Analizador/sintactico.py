@@ -19,11 +19,16 @@ def  p_inicio(p):
 
 def p_instrucciones(p):
     ''' instrucciones : instrucciones instruccion'''
-
+    if p[2] != "":
+        p[1].append(p[2])
+    p[0] = p[1]
 
 def p_instrucciones_instruccion(p):
     '''instrucciones : instruccion'''
-
+    if p[1] == "":
+        p[0] = []
+    else:
+        p[0] = [p[1]]
 
 def p_instruccion(p):
     '''instruccion : comandocreate
@@ -38,7 +43,7 @@ def p_instruccion(p):
                    | comandoif
                    | comandoset
                    | comandocase'''
-    p[0] = (p[1])
+    p[0] = p[1]
     
 
 def p_comandocreate(p):
@@ -49,27 +54,58 @@ def p_comandocreate(p):
     
 def p_datostable(p):
     '''datostable : datostable datotable'''
-
+    if p[2] != "":
+        p[1].append(p[2])
+    p[0] = p[1]
 
 def p_datostable_datotable(p):
     '''datostable : datotable'''
-
+    if p[1] == "":
+        p[0] = []
+    else:
+        p[0] = [p[1]]
 
 def p_datotable(p):
     '''datotable : columnas'''
-
+    p[0] = p[1]
     
 def p_columnas(p):
     '''columnas : columnas COMA columna
                 | columna'''
-
+    if len(p) == 4:
+        p[0]=p[3]
+    else:
+        p[0] = p[1]
     
 def p_columna(p):
     '''columna : exprecionides tipo tamanios
               | exprecionides tipo restriccion
               | exprecionides tipo 
               | exprecionides tipo tamanios restriccion'''
-
+    columna=None
+    listColum=[]
+    if len(p) == 4:
+        #se crearia el xml con la estructura de una restriccion
+        if isinstance(p[3],TAMANIO):
+            columna = COLUMNA(p[1],p[2],False,False,"",p[3].tamanio,p[3].presicion,None,None) #no es llave primaria, no es not nul y es tamanio       
+            listColum.append(columna)
+        elif isinstance(p[3],str):
+            if p[3].lower()=="primary key":
+                columna = COLUMNA(p[1],p[2],True,False,"",getTamxTipo(p[2]),0, None,None) #cuando es una llave primaria
+                listColum.append(columna)
+            elif p[3].lower() == "not null":
+                columna = COLUMNA(p[1],p[2],False,True,"",getTamxTipo(p[2]),0,None,None) #no es llave primaria y lleva not null
+                listColum.append(columna)
+        else:
+            columna = COLUMNA(p[1],p[2],False,False,"",getTamxTipo(p[2]),0,p[3].colreference,p[3].tablareference) #no es llave primaria, no lleva not null y si es reference
+            listColum.append(columna)
+    elif len(p) == 3:
+        columna = COLUMNA(p[1],p[2],False,False,"", getTamxTipo(p[2]),0,None,None) #no es llave primaria, no es llave foranea y no llena not null
+        listColum.append(columna)
+    elif len(p)==5:
+        columna = COLUMNA(p[1],p[2],False,False,"",p[3].tamanio,p[3].presicion,p[4].colreference, p[4].tablareference)
+        listColum.append(columna)
+    p[0]=listColum
 
 def getTamxTipo(tipo):
     if tipo == "int":
@@ -86,17 +122,23 @@ def getTamxTipo(tipo):
 def p_tamanios(p):
     '''tamanios : PARABRE tamanios COMA tamanio PARCIERRA
                 | PARABRE tamanio PARCIERRA'''
-
+    if len(p) == 6:
+        p[0] = TAMANIO(p[2],p[4])
+    elif len(p) == 4:
+        p[0] = TAMANIO(p[2],0)
     
 def p_tamanio(p):
     '''tamanio : NUMEROS'''
-
+    p[0] = p[1]
     
 def p_restriccion(p):
     '''restriccion : PRIMARY KEY
                    | NOT NULL
                    | reference'''
-
+    if len(p)==3:
+        p[0] = p[1] + " " + p[2]
+    else:
+        p[0] = p[1]
 
 def p_reference(p):
     '''reference : REFERENCE exprecionides PARABRE exprecionides PARCIERRA'''
@@ -108,7 +150,7 @@ def p_tipo(p):
             | nvarchar
             | DATE
             | DECIMAL'''
-
+    p[0] = p[1]
     
 def p_nvarchar(p):
     '''nvarchar : NVARCHAR PARABRE NUMEROS PARCIERRA'''
@@ -146,7 +188,8 @@ def p_comandoselect(p):
 def p_valoresselected(p):
     '''valoresselected : MULTI
                        | datosselect'''
-
+    p[0] = p[1]
+    
 def p_datosselect(p):
     '''datosselect : datosselect COMA datosselect_item
                    | datosselect_item'''
@@ -173,25 +216,30 @@ def p_datoswhere(p): #oparitmeticas -> expresion
     
 def p_listasbitween(p):
     '''listasbitween : listasbitween listabitween'''
-
+    if p[2] != "":
+        p[1].append(p[2])
+    p[0] = p[1]
 
 def p_listasbitweenlistabitween(p):
     '''listasbitween : listabitween'''
-
+    if p[1] == "":
+        p[0] = []
+    else:
+        p[0] = [p[1]]
 
 def p_listabitween(p):
     '''listabitween : CADENA
                     | andor
                     | exprecionides PARABRE PARCIERRA
                     | exprecionides IGUAL expresion'''
-
+    p[0] = p[1]
     
 def p_andor(p):
     '''andor : AND
              | OR
              | VALAND
              | VALOR'''
-
+    p[0] = p[1]
     
     
 def p_oparitmeticas(p): #falta ver las producciones de las operaciones aritmeticas
@@ -219,14 +267,14 @@ def p_signoscomparacion(p):
                          | MENORQ
                          | MAYORIGUAL
                          | MENORIGUAL'''
-
+    p[0] = p[1]
 
 def p_valordeoperacion(p):
     '''valordeoperacion : exprecionides
                         | NUMEROSDECIMALES
                         | NUMEROS
                         | CADENA'''
-
+    p[0] = p[1]
     
 
 def p_comandoupdate(p):
@@ -297,7 +345,8 @@ def p_empty(p):
 def p_comandothen (p):
     '''comandothen : THEN instrucciones
                    | THEN valordeoperacion'''
-
+    p[0] = p[2]
+    
 def p_listacentencias(p):
     '''listacentencias : listacentencias COMA listacentencia
                        | listacentencia'''
@@ -305,7 +354,7 @@ def p_listacentencias(p):
 def p_listacentencia(p):
     '''listacentencia : valordeoperacion
                       | expresion'''
-
+    p[0] = p[1]
     
     
 def p_comandocase(p):
@@ -317,9 +366,18 @@ def p_produccionescase(p):
     '''produccionescase : CASE listacases FROM exprecionides PYC'''
     
 def p_listacases(p):
-    '''listacases : listacases listacase
-                 | listacase'''
-                 
+    '''listacases : listacases listacase'''
+    if p[2] != "":
+        p[1].append(p[2])
+    p[0] = p[1]
+    
+def p_listacaseslistacase(p):
+    '''listacases : listacase'''
+    if p[1] == "":
+        p[0] = []
+    else:
+        p[0] = [p[1]]
+        
 def p_listacase(p):
     '''listacase : WHEN expresion andor expresion comandothen
                  | comandoelse
