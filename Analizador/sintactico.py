@@ -48,7 +48,8 @@ def p_instruccion(p):
 
 def p_comandocreate(p):
     '''comandocreate : CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC
-                     | CREATE comandoproduce'''
+                     | CREATE comandoproduce
+                     | CREATE DATA BASE exprecionides PYC'''
 
 
     
@@ -82,30 +83,7 @@ def p_columna(p):
               | exprecionides tipo restriccion
               | exprecionides tipo 
               | exprecionides tipo tamanios restriccion'''
-    columna=None
-    listColum=[]
-    if len(p) == 4:
-        #se crearia el xml con la estructura de una restriccion
-        if isinstance(p[3],TAMANIO):
-            columna = COLUMNA(p[1],p[2],False,False,"",p[3].tamanio,p[3].presicion,None,None) #no es llave primaria, no es not nul y es tamanio       
-            listColum.append(columna)
-        elif isinstance(p[3],str):
-            if p[3].lower()=="primary key":
-                columna = COLUMNA(p[1],p[2],True,False,"",getTamxTipo(p[2]),0, None,None) #cuando es una llave primaria
-                listColum.append(columna)
-            elif p[3].lower() == "not null":
-                columna = COLUMNA(p[1],p[2],False,True,"",getTamxTipo(p[2]),0,None,None) #no es llave primaria y lleva not null
-                listColum.append(columna)
-        else:
-            columna = COLUMNA(p[1],p[2],False,False,"",getTamxTipo(p[2]),0,p[3].colreference,p[3].tablareference) #no es llave primaria, no lleva not null y si es reference
-            listColum.append(columna)
-    elif len(p) == 3:
-        columna = COLUMNA(p[1],p[2],False,False,"", getTamxTipo(p[2]),0,None,None) #no es llave primaria, no es llave foranea y no llena not null
-        listColum.append(columna)
-    elif len(p)==5:
-        columna = COLUMNA(p[1],p[2],False,False,"",p[3].tamanio,p[3].presicion,p[4].colreference, p[4].tablareference)
-        listColum.append(columna)
-    p[0]=listColum
+
 
 def getTamxTipo(tipo):
     if tipo == "int":
@@ -122,39 +100,43 @@ def getTamxTipo(tipo):
 def p_tamanios(p):
     '''tamanios : PARABRE tamanios COMA tamanio PARCIERRA
                 | PARABRE tamanio PARCIERRA'''
-    if len(p) == 6:
-        p[0] = TAMANIO(p[2],p[4])
-    elif len(p) == 4:
-        p[0] = TAMANIO(p[2],0)
+
     
 def p_tamanio(p):
     '''tamanio : NUMEROS'''
     p[0] = p[1]
     
 def p_restriccion(p):
-    '''restriccion : PRIMARY KEY
+    '''restriccion : PRIMARY KEY reference
+                   | NOT NULL reference
+                   | FOREING KEY reference
+                   | PRIMARY KEY
                    | NOT NULL
+                   | FOREING KEY
                    | reference'''
     if len(p)==3:
         p[0] = p[1] + " " + p[2]
+    elif len(p)==4:
+        p[0] = p[1] + " " + p[2]
     else:
         p[0] = p[1]
-
+        
 def p_reference(p):
     '''reference : REFERENCE exprecionides PARABRE exprecionides PARCIERRA'''
     p[0] = REFERENCE(p[2],p[4])
-
+    
 def p_tipo(p):
     '''tipo : INT
             | TEXT
             | nvarchar
             | DATE
+            | DATETIME
             | DECIMAL'''
     p[0] = p[1]
     
 def p_nvarchar(p):
     '''nvarchar : NVARCHAR PARABRE NUMEROS PARCIERRA'''
-
+    p[0] = p[3]
 
 
 def p_comandoalter(p):
@@ -165,24 +147,42 @@ def p_comandoalter(p):
 
 def p_comandotruncate(p):
     '''comandotruncate : TRUNCATE TABLE exprecionides PYC'''
-
+    p[0] = p[3] #aca es donde se pone la logica del comando truncate
 
 
 def p_comandodrop(p):
     '''comandodrop : DROP COLUMN exprecionides PYC
                    | DROP TABLE exprecionides PYC'''
-
+    p[0] = p[3]
 
 def p_comandouse(p):
     '''comandouse : USE exprecionides PYC'''
-
+    p[0] = p[2]
 
 
 def p_comandoselect(p):
     '''comandoselect : SELECT valoresselected FROM datosselect PYC
                      | SELECT valoresselected FROM datosselect  WHERE datoswhere PYC
                      | SELECT comandoif
-                     | SELECT comandocase'''
+                     | SELECT comandocase
+                     | SELECT funcconcatenar
+                     | SELECT SUBSTRAER funcsubstraer
+                     | SELECT HOY PARABRE PARCIERRA PYC'''
+
+def p_funcconcatenar(p):
+    '''funcconcatenar : CONCATENA PARABRE expresiones_concatenar PARCIERRA PYC'''
+
+def p_expresiones_concatenar(p):
+    '''expresiones_concatenar : expresion_concatenar
+                             | expresiones_concatenar COMA expresion_concatenar'''
+
+def p_expresion_concatenar(p):
+    '''expresion_concatenar : CADENA
+                          | CONCATENA PARABRE expresiones_concatenar PARCIERRA'''
+
+def p_funcsubstraer(p):
+    '''funcsubstraer : PARABRE CADENA COMA NUMEROS COMA NUMEROS PARCIERRA PYC'''
+
 
     
 def p_valoresselected(p):
@@ -200,7 +200,6 @@ def p_datosselect_item(p):
                        | exprecionides
                        | expresion AS exprecionides
                        | exprecionides AS exprecionides'''
-
 
 
 def p_datoswhere(p): #oparitmeticas -> expresion
@@ -243,7 +242,7 @@ def p_andor(p):
     
     
 def p_oparitmeticas(p): #falta ver las producciones de las operaciones aritmeticas
-    '''expresion : expresion SUMA termino 
+    '''expresion : expresion PLUS termino 
                  | expresion RESTA termino 
                  | termino'''
     #por el momento esta de esta forma, es de enviar los datos y manipularlos desde la otra clase
@@ -295,8 +294,8 @@ def p_valorupdate(p):
 
 def p_listaIDES(p):
     '''exprecionides : exprecionides PUNTO ID
-                     | ID
-                     | ARROBA ID'''
+                     | ARROBA ID
+                     | ID'''
 
 
 def p_comandoinsert(p):
@@ -304,12 +303,12 @@ def p_comandoinsert(p):
 
 
 def p_listacolumna(p):
-    '''listacolumna : exprecionides COMA exprecionides
+    '''listacolumna : listacolumna COMA exprecionides
                     | exprecionides'''
 
 
 def p_listavalores(p):
-    '''listavalores : valordeoperacion COMA valordeoperacion
+    '''listavalores : listavalores COMA valordeoperacion
                     | valordeoperacion'''
 
   
@@ -414,8 +413,17 @@ def p_comandoset(p):
     
 def p_error(p):
     if p:
-        print(f"Error de sintaxis en '{p.value}'")   
+        error_message = f"Error de sintaxis en línea {p.lineno}, posición {p.lexpos}: '{p.value}'"
+        print(error_message)
 
+        # Imprimir la línea completa con un indicador de la posición del error
+        line_with_error = obtener_linea_con_error(p.lexer.lexdata, p.lineno, p.lexpos)
+        print(line_with_error)
+
+def obtener_linea_con_error(lexdata, lineno, lexpos):
+    lines = lexdata.split("\n")
+    error_line = lines[lineno - 1]
+    return f"{error_line}\n{' ' * (lexpos - 1)}^"
 
 import ply.yacc as yacc
 parser=yacc.yacc()
