@@ -5,8 +5,11 @@ reservadas={
         'use' : 'USE',
         'primary': 'PRIMARY',
         'key' : 'KEY',
+        'foreing':'FOREING',
+        'datetime':'DATETIME',
         'nvarchar' : 'NVARCHAR',
         'date': 'DATE',
+        'database':'DATABASE',
         'null':'NULL',
         'not':'NOT',
         'reference' : 'REFERENCE',
@@ -26,8 +29,8 @@ reservadas={
         'from' : 'FROM',
         'where' : 'WHERE',
         'between':'BETWEEN',
-        'and' : 'AND',
-        'or' : 'OR',
+        'and' : 'AND_TK',
+        'or' : 'OR_TK',
         
         'update' : 'UPDATE',
         'set' : 'SET',
@@ -46,10 +49,23 @@ reservadas={
         'then' : 'THEN',
         'else' : 'ELSE',
         'end' : 'END',
-        
         'procedure' : 'PROCEDURE',
         'begin' : 'BEGIN',
         'declare' : 'DECLARE',
+        'return' : 'RETURNS',
+        'concatena' : 'CONCATENA',
+        'concat' : 'CONCATENA',
+        'concatenar' : 'CONCATENA',
+        'substraer' : 'SUBSTRAER',
+        'hoy' : 'HOY',
+        'contar' : 'CONTAR',
+        'sumar' : 'SUMAR',
+        'suma' : 'SUMAR',
+        'cas' : 'CAS',
+        'cast': 'CAS',
+        'function': 'FUNCTION',
+        'returns': 'RETURNS',
+        'while':'WHILE'
 }
 
 
@@ -57,46 +73,49 @@ tokens=[
         'ID',
         'NUMEROS',
         'NUMEROSDECIMALES',
-        'PARABRE',
-        'PARCIERRA',
+        'PARA',
+        'PARC',
         'PYC',
         'COMA',
-        'SUMA',
-        'RESTA',
-        'MULTI',
+        'MAS',
+        'MENOS',
+        'POR',
         'DIV',
-        'MAYORQ',
+        'MAYQ',
         'MENORQ',
         'MAYORIGUAL',
         'MENORIGUAL',
         'PUNTO',
-        'VALAND',
-        'VALOR',
+        'ANDPERSON',
+        'ORPIPE',
         'IGUAL',
         'ARROBA',
-        'CADENA'
+        'CADENA',
+        'DIFERENTE',
+        'NOT_TK'
 ]+list(reservadas.values())
 
 t_ignore=' \t \n \r'
 
-t_PARABRE = r'\('
-t_PARCIERRA = r'\)'
+t_PARA = r'\('
+t_PARC = r'\)'
 t_PYC = r'\;'
 t_COMA = r'\,'
-t_SUMA = r'\+'
-t_RESTA = r'-'
-t_MULTI = r'\*'
+t_MAS = r'\+'
+t_MENOS = r'-'
+t_POR = r'\*'
 t_DIV = r'/'
-t_MAYORQ = r'\>'
+t_MAYQ = r'\>'
 t_MENORQ = r'\<'
 t_MAYORIGUAL = r'\>='
 t_MENORIGUAL = r'\<='
 t_PUNTO = r'\.'
 t_IGUAL = r'='
 t_ARROBA = r'\@'
-t_VALAND = r'&&'
-t_VALOR = r'\|\|'
-
+t_ANDPERSON = r'&&'
+t_ORPIPE = r'\|\|'
+t_NOT_TK= r'\!'
+t_DIFERENTE=r'\!\='
 def t_NUMEROSDECIMALES(t):
     r'\d+\.\d+'
     try:
