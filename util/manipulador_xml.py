@@ -91,6 +91,7 @@ class CREATE_XML:
         root=tree.getroot()
         n_db=root.find(".//DATABASE[@name_db='"+db_name+"']")
         if n_db is not None:
+              
             n_create=n_db.find("./TABLAS/CREATE")
             n_tb= ET.SubElement(n_create,"TABLA")
             n_tb.attrib["tab_name"]=tb_name

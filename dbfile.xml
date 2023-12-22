@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<BASE_DE_DATOS>
+  
+  
+  
+  
+  
+  
+  <BASES>
+    
+    
+    
+    
+    
+    
+    <DATABASE name_db="BasePrueba">
+      
+      
+      
+      
+      
+      
+      <TABLAS>
+        
+        
+        
+        
+        
+        
+        <CREATE>
+          
+          
+           
+          
+          
+          <TABLA tab_name="Mytabla1">
+            
+            
+            
+            
+            <COLUMNAS/>
+            
+            
+          
+          
+          </TABLA>
+          
+          
+        
+          
+          <TABLA tab_name="Mytabla2">
+            
+            
+            <COLUMNAS>
+              
+              
+              <COLUMNA nombrecol="col1" tipo="varchar" col_size="15"/>
+              
+              
+              <COLUMNA nombrecol="col2" tipo="varchar" col_size="15"/>
+              
+            
+            </COLUMNAS>
+            
+          
+          </TABLA>
+          
+        
+          <TABLA tab_name="CONTACTS">
+            <COLUMNAS>
+              <COLUMNA nombrecol="colEjem" tipo="NVARCHAR" col_size="None"/>
+            </COLUMNAS>
+          </TABLA>
+        </CREATE>
+        
+        
+        
+        
+        
+        
+        <INSERT> </INSERT>
+        
+        
+        
+      
+      
+      
+      </TABLAS>
+      
+      
+      
+    
+    
+    
+    </DATABASE>
+    
+    
+    
+  
+  
+  
+  </BASES>
+  
+  
+  
+
+
+
+</BASE_DE_DATOS>

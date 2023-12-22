@@ -1,420 +1,397 @@
 from Analizador.lexico import tokens
+from Analizador.lexico import find_column
 from object.columna import COLUMNA
 from object.reference import REFERENCE
 from object.tamanio import TAMANIO
+from Instrucciones.CreateTable import CreateTable
+from Instrucciones.CreateDB import CreateDB
+from Instrucciones.Column import column
 #diccionario de nombres
 lista=[]
 listaErrores=[]
+useDB:str = None
 
 precedence = (
-    ('left', 'SUMA', 'RESTA'),
-    ('left', 'MULTI', 'DIV'),
-    ('nonassoc', 'MAYORQ', 'MENORQ', 'MAYORIGUAL', 'MENORIGUAL', 'IGUAL')
+    ('left', 'MAS', 'MENOS'),
+    ('left', 'POR', 'DIV'),
+    ('left','ANDPERSON','AND_TK','ORPIPE','OR_TK'),
+    ('nonassoc', 'MAYQ', 'MENORQ', 'MAYORIGUAL', 'MENORIGUAL', 'IGUAL')
 )
 
 def  p_inicio(p):
-    '''inicio : instrucciones'''
+    '''inicio : instrucciones '''
     p[0] = p[1]
-    
+    return p[0]
 
 def p_instrucciones(p):
-    ''' instrucciones : instrucciones instruccion'''
-    if p[2] != "":
+    '''instrucciones : instrucciones instruccion
+                     | instruccion
+    '''
+    if len(p) ==2:
+        p[0] = [p[1]]
+    else:
         p[1].append(p[2])
-    p[0] = p[1]
+        p[0] = p[1]
+        
 
 def p_instrucciones_instruccion(p):
-    '''instrucciones : instruccion'''
-    if p[1] == "":
-        p[0] = []
-    else:
-        p[0] = [p[1]]
+    '''instruccion : cmduse
+                     | ddl
+                     | dml
+                     | declaracion
+                     | asignacion_local
+                     | asignacion_global
+                     | sentencia_if
+                     | sentencia_while
+                     | sent_return
+                     | sentencia_case 
+    '''
+    p[0]=p[1]
 
-def p_instruccion(p):
-    '''instruccion : comandocreate
-                   | comandoalter
-                   | comandotruncate
-                   | comandodrop
-                   | comandouse
-                   | comandoselect
-                   | comandoupdate
-                   | comandoinsert
-                   | comandodelete
-                   | comandoif
-                   | comandoset
-                   | comandocase'''
-    p[0] = p[1]
-    
+def p_cmduse(p):
+    '''cmduse : USE ID PYC
+    '''
+    useDB = p[2]
+    #validar dentro del xml, si la base existe#
 
-def p_comandocreate(p):
-    '''comandocreate : CREATE TABLE exprecionides PARABRE datostable PARCIERRA PYC
-                     | CREATE comandoproduce'''
-
-
-    
-def p_datostable(p):
-    '''datostable : datostable datotable'''
-    if p[2] != "":
+def p_ddl(p):
+    '''ddl : ddl createdb 
+           | ddl createtbl
+           | ddl createpc
+           | ddl createfn
+           | createdb
+           | createtbl
+           | createpc
+           | createfn
+    '''
+    if len(p) ==3:
         p[1].append(p[2])
-    p[0] = p[1]
-
-def p_datostable_datotable(p):
-    '''datostable : datotable'''
-    if p[1] == "":
-        p[0] = []
+        p[0] = p[1]
     else:
+        p[0] = p[1]
+
+        print("**********Estamos imprimiendo el id de tbl*************",p[1].id)
+
+    
+#comando create
+def p_createdb(p):
+    '''createdb : CREATE DATABASE ID PYC 
+    '''
+    p[0] = CreateDB(p[3],p.lineno(2),1)
+    
+def p_createtbl(p):
+    '''createtbl : CREATE TABLE ID PARA lcolumnas PARC PYC
+                 | CREATE TABLE ID PUNTO ID PARA lcolumnas PARC PYC
+    '''
+    if len(p)==8:
+        p[0] = CreateTable(p[3],useDB,p[5],p.lineno(2),1,False)
+    else:
+        p[0] = CreateTable(p[5],p[3],p[7],p.lineno(2),1,False)
+
+    
+
+def p_lcolumnas(p):
+    '''lcolumnas : lcolumnas COMA columna atributos_col
+                 | lcolumnas COMA columna
+                 | columna atributos_col
+                 | columna
+    '''
+    if len(p) == 2:
         p[0] = [p[1]]
-
-def p_datotable(p):
-    '''datotable : columnas'''
-    p[0] = p[1]
-    
-def p_columnas(p):
-    '''columnas : columnas COMA columna
-                | columna'''
-    if len(p) == 4:
-        p[0]=p[3]
-    else:
-        p[0] = p[1]
-    
-def p_columna(p):
-    '''columna : exprecionides tipo tamanios
-              | exprecionides tipo restriccion
-              | exprecionides tipo 
-              | exprecionides tipo tamanios restriccion'''
-    columna=None
-    listColum=[]
-    if len(p) == 4:
-        #se crearia el xml con la estructura de una restriccion
-        if isinstance(p[3],TAMANIO):
-            columna = COLUMNA(p[1],p[2],False,False,"",p[3].tamanio,p[3].presicion,None,None) #no es llave primaria, no es not nul y es tamanio       
-            listColum.append(columna)
-        elif isinstance(p[3],str):
-            if p[3].lower()=="primary key":
-                columna = COLUMNA(p[1],p[2],True,False,"",getTamxTipo(p[2]),0, None,None) #cuando es una llave primaria
-                listColum.append(columna)
-            elif p[3].lower() == "not null":
-                columna = COLUMNA(p[1],p[2],False,True,"",getTamxTipo(p[2]),0,None,None) #no es llave primaria y lleva not null
-                listColum.append(columna)
-        else:
-            columna = COLUMNA(p[1],p[2],False,False,"",getTamxTipo(p[2]),0,p[3].colreference,p[3].tablareference) #no es llave primaria, no lleva not null y si es reference
-            listColum.append(columna)
+        #p[0].append(p[1])
     elif len(p) == 3:
-        columna = COLUMNA(p[1],p[2],False,False,"", getTamxTipo(p[2]),0,None,None) #no es llave primaria, no es llave foranea y no llena not null
-        listColum.append(columna)
-    elif len(p)==5:
-        columna = COLUMNA(p[1],p[2],False,False,"",p[3].tamanio,p[3].presicion,p[4].colreference, p[4].tablareference)
-        listColum.append(columna)
-    p[0]=listColum
-
-def getTamxTipo(tipo):
-    if tipo == "int":
-        return 11
-    elif tipo == "text":
-        return 20
-    elif tipo == "date":
-        return 11
-    elif tipo == "decimal":
-        return 5
-    elif tipo == "nvarchar":
-        return 15
-
-def p_tamanios(p):
-    '''tamanios : PARABRE tamanios COMA tamanio PARCIERRA
-                | PARABRE tamanio PARCIERRA'''
-    if len(p) == 6:
-        p[0] = TAMANIO(p[2],p[4])
-    elif len(p) == 4:
-        p[0] = TAMANIO(p[2],0)
-    
-def p_tamanio(p):
-    '''tamanio : NUMEROS'''
-    p[0] = p[1]
-    
-def p_restriccion(p):
-    '''restriccion : PRIMARY KEY
-                   | NOT NULL
-                   | reference'''
-    if len(p)==3:
-        p[0] = p[1] + " " + p[2]
+        #col.setAtri(p[2])
+        p[1].restriccion =p[2] 
+        p[0] = [p[1]]
+    elif len(p)==4:
+        p[1].append(p[3])
+        p[0] = p[1]
     else:
+        p[3].restriccion = p[4]
+        p[1].append(p[3])
         p[0] = p[1]
 
-def p_reference(p):
-    '''reference : REFERENCE exprecionides PARABRE exprecionides PARCIERRA'''
-    p[0] = REFERENCE(p[2],p[4])
+
+
+
+def p_columna(p):
+    '''columna : ID tipo
+               | ID tipo PARA expresion PARC
+               | ID tipo PARA expresion COMA expresion PARC
+    '''
+    if len(p) ==3:
+        p[0]= column(p[1],p[2],None,None,None,p.lineno(2),3)
+    elif len(p) == 6:
+        p[0]= column(p[1],p[2],p[4],None,None,p.lineno(2),1)
+    else:
+        p[0]= column(p[1],p[2],p[4],p[6],None,p.lineno(2),1)
+
 
 def p_tipo(p):
     '''tipo : INT
             | TEXT
-            | nvarchar
-            | DATE
-            | DECIMAL'''
-    p[0] = p[1]
-    
-def p_nvarchar(p):
-    '''nvarchar : NVARCHAR PARABRE NUMEROS PARCIERRA'''
+            | NVARCHAR
+            | NVARCHAR tamanios
+            | DATE 
+            | DATETIME
+            | DECIMAL
+    '''
+    if len(p)==2:
+        p[0] = p[1]
 
-
-
-def p_comandoalter(p):
-    '''comandoalter : ALTER TABLE exprecionides ADD COLUMN exprecionides tipo PYC
-                    | ALTER TABLE exprecionides comandodrop'''
-
-
-
-def p_comandotruncate(p):
-    '''comandotruncate : TRUNCATE TABLE exprecionides PYC'''
-
-
-
-def p_comandodrop(p):
-    '''comandodrop : DROP COLUMN exprecionides PYC
-                   | DROP TABLE exprecionides PYC'''
-
-
-def p_comandouse(p):
-    '''comandouse : USE exprecionides PYC'''
-
-
-
-def p_comandoselect(p):
-    '''comandoselect : SELECT valoresselected FROM datosselect PYC
-                     | SELECT valoresselected FROM datosselect  WHERE datoswhere PYC
-                     | SELECT comandoif
-                     | SELECT comandocase'''
-
-    
-def p_valoresselected(p):
-    '''valoresselected : MULTI
-                       | datosselect'''
-    p[0] = p[1]
-    
-def p_datosselect(p):
-    '''datosselect : datosselect COMA datosselect_item
-                   | datosselect_item'''
-
-
-def p_datosselect_item(p):
-    '''datosselect_item : expresion
-                       | exprecionides
-                       | expresion AS exprecionides
-                       | exprecionides AS exprecionides'''
-
-
-
-def p_datoswhere(p): #oparitmeticas -> expresion
-    '''datoswhere : expresion
-                  | exprecionides
-                  | exprecionides BETWEEN listasbitween
-                  | exprecionides IGUAL expresion
-                  | exprecionides IGUAL valordeoperacion
-                  | exprecionides IGUAL exprecionides
-                  | expresion andor datoswhere
-                  | expresion datoswhere datoswhere '''
-
-    
-def p_listasbitween(p):
-    '''listasbitween : listasbitween listabitween'''
-    if p[2] != "":
+def p_atributos_col(p):
+    '''atributos_col : atributos_col restriccion
+                     | restriccion
+                     | reference
+    '''
+    if len(p)==3:
         p[1].append(p[2])
-    p[0] = p[1]
-
-def p_listasbitweenlistabitween(p):
-    '''listasbitween : listabitween'''
-    if p[1] == "":
-        p[0] = []
+        p[0] = p[1]
     else:
         p[0] = [p[1]]
 
-def p_listabitween(p):
-    '''listabitween : CADENA
-                    | andor
-                    | exprecionides PARABRE PARCIERRA
-                    | exprecionides IGUAL expresion'''
-    p[0] = p[1]
-    
-def p_andor(p):
-    '''andor : AND
-             | OR
-             | VALAND
-             | VALOR'''
-    p[0] = p[1]
-    
-    
-def p_oparitmeticas(p): #falta ver las producciones de las operaciones aritmeticas
-    '''expresion : expresion SUMA termino 
-                 | expresion RESTA termino 
-                 | termino'''
-    #por el momento esta de esta forma, es de enviar los datos y manipularlos desde la otra clase
-
-
-
-def p_termino(p):
-    '''termino : termino MULTI factor
-               | termino DIV factor
-               | factor'''
-
-
-def p_factor(p):
-    '''factor : valordeoperacion
-              | PARABRE expresion PARCIERRA
-              | expresion signoscomparacion expresion'''
-
-
-def p_signoscomparacion(p):
-    '''signoscomparacion : MAYORQ
-                         | MENORQ
-                         | MAYORIGUAL
-                         | MENORIGUAL'''
-    p[0] = p[1]
-
-def p_valordeoperacion(p):
-    '''valordeoperacion : exprecionides
-                        | NUMEROSDECIMALES
-                        | NUMEROS
-                        | CADENA'''
-    p[0] = p[1]
-    
-
-def p_comandoupdate(p):
-    '''comandoupdate : UPDATE exprecionides SET listaupdate PYC'''
-
-
-def p_listaupdate(p):
-    '''listaupdate : listaupdate COMA valorupdate
-                   | valorupdate'''
-
-
-def p_valorupdate(p):
-    '''valorupdate : exprecionides IGUAL valordeoperacion
-                   | exprecionides IGUAL expresion
-                   | exprecionides IGUAL valordeoperacion WHERE datoswhere'''
-
-
-
-def p_listaIDES(p):
-    '''exprecionides : exprecionides PUNTO ID
-                     | ID
-                     | ARROBA ID'''
-
-
-def p_comandoinsert(p):
-    '''comandoinsert : INSERT INTO exprecionides PARABRE listacolumna PARCIERRA VALUES PARABRE listavalores PARCIERRA PYC'''
-
-
-def p_listacolumna(p):
-    '''listacolumna : exprecionides COMA exprecionides
-                    | exprecionides'''
-
-
-def p_listavalores(p):
-    '''listavalores : valordeoperacion COMA valordeoperacion
-                    | valordeoperacion'''
-
-  
-
-def p_comandodelete(p):
-    '''comandodelete : DELETE FROM exprecionides WHERE datoswhere PYC'''
-
-  
-
-def p_comandoif(p):
-    '''comandoif : produccionesif comandoelse
-                 | exprecionides COMA comandoif
-                 | produccionesif
-                 | exprecionides'''
-
-def p_produccionesif(p):
-    '''produccionesif : IF PARABRE listacentencias PARCIERRA PYC END IF PYC
-                      | IF PARABRE listacentencias PARCIERRA AS valordeoperacion FROM exprecionides PYC END IF PYC
-                      | IF listacentencia comandothen comandoelse END IF PYC
-                      | IF PARABRE listacentencias PARCIERRA PYC 
-                      | IF PARABRE listacentencias PARCIERRA AS valordeoperacion FROM exprecionides PYC 
-                      | IF listacentencia comandothen'''
-                      
-def p_comandoelse(p):
-    '''comandoelse : ELSE comandothen
-                   | ELSE instrucciones
-                   | empty'''
-
-def p_empty(p):
-    'empty :'
-    pass
-                   
-def p_comandothen (p):
-    '''comandothen : THEN instrucciones
-                   | THEN valordeoperacion'''
-    p[0] = p[2]
-    
-def p_listacentencias(p):
-    '''listacentencias : listacentencias COMA listacentencia
-                       | listacentencia'''
-
-def p_listacentencia(p):
-    '''listacentencia : valordeoperacion
-                      | expresion'''
-    p[0] = p[1]
+def p_restriccion(p):
+    '''restriccion : PRIMARY KEY 
+                   | FOREING KEY
+                   | NOT NULL
+                   | NULL
+    '''
+    if p[1].lower() == "primary":
+        p[0] = "PRIMARY KEY"
+    if p[1].lower() == "foreing":
+        p[0] = "FOREING KEY"
+    if p[1].lower() == "NOT":
+        p[0] = "NOT NULL"
+    if p[1].lower() == "null":
+        p[0] = "NULL"
     
     
-def p_comandocase(p):
-    '''comandocase : produccionescase
-                   | exprecionides COMA comandocase
-                   | exprecionides'''
 
-def p_produccionescase(p):
-    '''produccionescase : CASE listacases FROM exprecionides PYC'''
-    
-def p_listacases(p):
-    '''listacases : listacases listacase'''
-    if p[2] != "":
-        p[1].append(p[2])
-    p[0] = p[1]
-    
-def p_listacaseslistacase(p):
-    '''listacases : listacase'''
-    if p[1] == "":
-        p[0] = []
-    else:
-        p[0] = [p[1]]
-        
-def p_listacase(p):
-    '''listacase : WHEN expresion andor expresion comandothen
-                 | comandoelse
-                 | END expresion'''
+def p_reference(p):
+    '''reference : REFERENCE ID PARA ID PARC
+    '''
+
+#declarar una variable 
+def p_variable(p):
+    '''variable :  ARROBA ID
+    '''
+def p_declaravar(p):
+   ''' declaracion : DECLARE variable tipo PYC
+                    | DECLARE ID tipo PYC 
+                    | DECLARE variable tipo 
+                    | DECLARE ID tipo
+                    | DECLARE variable AS tipo 
+                    | DECLARE ID AS tipo    
+                    | DECLARE variable AS tipo PYC
+                    | DECLARE ID AS tipo PYC 
+                    
+                          
+    '''
+#asignacion variable 
+def p_asigna_local(p):
+    '''asignacion_local :  SET variable IGUAL expresion PYC
+    '''
+def p_asigna_global(p):
+    '''asignacion_global : SET expresion PYC
+    '''
 
 
-def p_comandoproduce(p):
-    '''comandoproduce : PROCEDURE parametrosprocedure PARABRE parametrosprocedure PARCIERRA comandoasbegin
-                      | PROCEDURE parametrosprocedure comandoasbegin'''
+def p_cmdcreatepc(p):    
+    '''
+    createpc : CREATE PROCEDURE ID PARA lparams_pc_fn PARC AS BEGIN instrucciones END
+             | CREATE PROCEDURE ID PARA lparams_pc_fn PARC AS BEGIN instrucciones END PYC
+    '''
 
-def p_comandoasbegin(p):
-    '''comandoasbegin : AS BEGIN listabegin END PYC'''
+def p_cmdcreatefn(p):
+    ''' createfn : CREATE FUNCTION  ID PARA lparams_pc_fn PARC RETURNS tipo tamanios AS BEGIN instrucciones END PYC
+                 | CREATE FUNCTION  ID PARA lparams_pc_fn PARC RETURNS tipo AS BEGIN instrucciones END PYC
+                 | CREATE FUNCTION  ID PARA lparams_pc_fn PARC RETURNS tipo tamanios AS BEGIN instrucciones END
+                 | CREATE FUNCTION  ID PARA lparams_pc_fn PARC RETURNS tipo AS BEGIN instrucciones END 
+    '''
+def p_params_fn_pc(p):
+    '''
+    lparams_pc_fn : lparams_pc_fn COMA variable tipo
+              | lparams_pc_fn COMA variable 
+              | lparams_pc_fn COMA variable AS tipo
+              | variable AS tipo
+              | variable tipo
+              | variable
+    '''
 
-def p_parametrosprocedure(p):
-    '''parametrosprocedure : parametrosprocedure COMA parametroproduce
-                           | parametroproduce'''
-                           
-def p_parametroproduce(p):
-    '''parametroproduce : exprecionides AS tipo
-                        | exprecionides tipo
-                        | exprecionides'''
+def p_tamanio(p):
+    ''' tamanios : PARA NUMEROS COMA NUMEROS PARC
+                 | PARA NUMEROS PARC
+    '''
+#COMANDOS DML
 
-def p_listabegin(p):
-    '''listabegin : listabegin DECLARE parametroproduce PYC
-                  | listabegin comandoset
-                  | listabegin instrucciones
-                  | DECLARE parametroproduce PYC
-                  | comandoset
-                  | instrucciones'''
+def p_dml(p):
+    '''
+     dml : dml insert
+         | dml select
+         | dml update
+         | insert
+         | select
+         | update
+    '''
 
-def p_comandoset(p):
-    '''comandoset : SET listaupdate PYC'''
-    
-    
+def p_insert(p):
+    '''
+    insert : INSERT INTO ID  PARA linsert PARC VALUES PARA linsert PARC PYC
+    '''
+def p_linsert(p):
+    '''
+      linsert : linsert COMA expresion
+              | expresion
+        '''
+
+def p_select(p):
+    '''
+    select : SELECT POR FROM lselect PYC
+        | SELECT POR FROM lselect condicion PYC
+        | SELECT lselect FROM lselect PYC
+        | SELECT lselect FROM lselect condicion PYC
+        | SELECT nativas PYC
+        | SELECT nativas
+        | SELECT expresion 
+        | SELECT expresion PYC
+    '''
+def p_lids(p):
+    '''
+    lselect : lselect COMA ID
+        | ID
+        | lselect COMA ID PUNTO ID
+        | ID PUNTO ID
+        | lselect variable
+        | variable
+        | lselect COMA  variable IGUAL expresion
+        | variable IGUAL expresion
+    '''
+def p_update(p):
+    '''update : UPDATE ID SET lupdate condicion PYC
+
+    '''
+
+def p_lupdate(p):
+    '''lupdate : lupdate  COMA expresion  
+               | expresion 
+    '''
+
+def p_condicion(p):
+    '''condicion : WHERE lexpresion
+    '''
+def p_lexpresion(p):
+    '''lexpresion : lexpresion expresion
+                  | lexpresion COMA expresion
+                  | expresion
+                 
+                  
+    '''
+def p_sentencia_if(p):
+    '''
+    sentencia_if : IF PARA expresion PARC BEGIN instrucciones END PYC
+                 | IF PARA expresion PARC BEGIN instrucciones END
+                 | IF PARA expresion PARC BEGIN instrucciones END ELSE BEGIN instrucciones END
+                 | IF PARA expresion PARC BEGIN instrucciones END PYC ELSE BEGIN instrucciones END PYC
+    '''
+def p_sentencia_while(p):
+    '''
+        sentencia_while : WHILE PARA expresion PARC BEGIN instrucciones END PYC
+                        | WHILE  expresion BEGIN instrucciones END PYC
+                        | WHILE PARA expresion PARC BEGIN instrucciones END 
+                        | WHILE  expresion  BEGIN instrucciones END
+    '''
+
+def p_sentencia_case(p):
+    '''
+        sentencia_case : CASE lwhen END PYC
+                        | CASE lwhen END
+    '''
+
+def p_lwhen(p):
+    '''
+        lwhen : lwhen WHEN expresion BEGIN instrucciones 
+               | lwhen WHEN PARA expresion PARC BEGIN instrucciones 
+               | WHEN expresion BEGIN instrucciones 
+               | WHEN PARA expresion PARC BEGIN instrucciones 
+    '''
+
+def p_expresion(p):
+    '''
+    expresion : PARA expresion PARC
+              | expresion POR expresion
+              | expresion MAS expresion
+              | expresion MENOS expresion
+              | expresion DIV expresion
+              | expresion MENORQ expresion
+              | expresion MAYQ expresion
+              | expresion MENORIGUAL expresion
+              | expresion MAYORIGUAL expresion
+              | expresion IGUAL IGUAL expresion
+              | expresion AND_TK expresion
+              | expresion ANDPERSON expresion
+              | expresion OR_TK expresion
+              | expresion ORPIPE expresion
+              | expresion DIFERENTE expresion
+              | NOT_TK expresion
+              | ID
+              | NUMEROSDECIMALES
+              | NUMEROS
+              | CADENA
+              | expresion IGUAL expresion
+              | expresion IGUAL ARROBA expresion
+              | operadoressql
+              | nativas
+              | ARROBA ID
+              | ID PUNTO ID 
+    '''
+def p_operadoressql(p):
+    '''operadoressql : between
+    '''
+
+def p_between(p):
+    '''between : BETWEEN expresion 
+        '''
+
+def p_nativas(p):
+    ''' nativas : sumar
+                | concatenar
+                | substraer
+                | today
+                | count
+                | cas
+    '''
+
+def p_sumar(p):
+    ''' sumar : SUMAR PARA expresion PARC
+    '''
+def p_concatenar(p):
+    ''' concatenar : CONCATENA PARA lexpresion PARC
+    '''
+def p_sustraer(p):
+    ''' substraer : SUBSTRAER PARA CADENA COMA NUMEROS COMA NUMEROS PARC
+    '''
+def p_contar(p):
+    ''' count : CONTAR PARA POR PARC
+              | CONTAR PARA NUMEROS PARC
+    '''
+
+def p_hoy(p):
+    '''
+       today : HOY PARA PARC
+    '''
+def p_cas (p):
+    '''cas : CAS PARA ARROBA ID AS tipo PARC
+    '''
+
+def p_return (p):
+    '''
+        sent_return : RETURNS expresion PYC
+                    | RETURNS expresion 
+    '''
+
 def p_error(p):
     if p:
-        print(f"Error de sintaxis en '{p.value}'")   
+        print(f"Error de sintaxis en '{p.value}'")   
 
 
 import ply.yacc as yacc

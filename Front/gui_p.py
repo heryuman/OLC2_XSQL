@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 from util.generic import GENERIC
 from Analizador.sintactico import parser
+from Analizador.sintactico import useDB
+from Arbol.AST import AST
+
 class GUI_P:
     def __init__(self) :
         self.notebook=None
@@ -82,7 +85,15 @@ class GUI_P:
         #print("index: ", index, "- size mat_text: ", len(self.mat_text), entrada)
         
         # Suponiendo que 'parser' es una instancia de LRParser
-        parser.parse(entrada)
+        instruccion = parser.parse(entrada)
+        ast = AST(instruccion)
+
+        try:
+            for inst in ast.getInstrucciones():
+                inst.compilar(ast,None)
+        
+        except Exception as e:
+            print(f"Error al ejecutar las instrucciones: {e} ")
 
     def run_sql(self):
         index=self.notebook.index("current")

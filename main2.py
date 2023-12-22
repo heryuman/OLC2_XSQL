@@ -1,6 +1,11 @@
 from FuncionesDeSistema.Fun_Suma import Fun_Suma
 from Arbol.Arbol import Arbol
 from Arbol.Nodo import Nodo
+from util.manipulador_xml import CREATE_XML
+from util.table import TBL
+from util.column import COLUM
+
+
 
 def trySuma():
     funcion = Fun_Suma()
@@ -30,7 +35,17 @@ def validarArbol():
 def main():
     #print("Hola mundo2")
     #trySuma()
-    validarArbol()
+    ##validarArbol()
+    creator = CREATE_XML()
+
+    table = TBL("BasePrueba","Mytabla2")
+    column1 = COLUM("col1","varchar","no","n/a","15","false")
+    column2 = COLUM("col2","varchar","no","n/a","15",False)
+    
+    table.insert_column(column1)
+    table.insert_column(column2)
+    
+    creator.insert_table(table)
 
 
 
