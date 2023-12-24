@@ -17,20 +17,13 @@ class GUI_P:
         #self.ventana.resizable(width=0, height=0)
         utl.centrar_ventana(self.ventana,800,500)
         #frame treeview
-        frame_treeview= tk.Frame(self.ventana,bd=0,width=15,relief=tk.SOLID,padx=10,pady=10,bg='#3a7fff')
-        frame_treeview.pack(side='left',fill=tk.BOTH)
-        tree= ttk.Treeview(frame_treeview,height=100)
-        root=tree.insert("","end",text="BASES DE DATOS")
-        resultado = CREATE_XML.xml_gui('dbfile.xml')
-        for database_name, tabla_names in resultado:
-            print(database_name)
-            h2=tree.insert(root,"end",text=database_name)
-            if tabla_names:
-                rs=tree.insert(h2,"end",text="TABLAS")
-                for tabla_name in tabla_names:
-                    print(tabla_name)
-                    tree.insert(rs,"end",text=tabla_name)
-
+        frame_treeview= tk.Frame(self.ventana, bd=0, width=15, relief=tk.SOLID, padx=10, pady=10, bg='#3a7fff')
+        frame_treeview.pack(side='left', fill=tk.BOTH)
+        self.tree = ttk.Treeview(frame_treeview, height=100)
+        #self.tree.pack(side="left")
+        
+        
+        self.ventana.after(2000, self.reload_data)
         """
         for database_name, tabla_names, funciones, procedimientos in resultado:
             print(database_name)
@@ -54,7 +47,7 @@ class GUI_P:
         
         
        # tree.place(x=0,y=0,relwidth=1,relheight=1)
-        tree.pack(side="left")
+        self.tree.pack(side="left")
 
         #frame_menus
         frame_menus = tk.Frame(self.ventana, bd=0, relief=tk.SOLID, bg='#3a7fff',padx=10,pady=10)
@@ -133,3 +126,21 @@ class GUI_P:
         linea_actual=self.mat_text[index].get(f"{fila}.0", f"{fila}.end-1c")
         print("Texto en la línea actual:", linea_actual)
         parser.parse(linea_actual)
+
+    def reload_data(self):
+        resultados = CREATE_XML.xml_gui('dbfile.xml')
+        self.update_gui(resultados)
+        self.ventana.after(2000, self.reload_data)
+
+    def update_gui(self, resultados):
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+
+        # Agregar los nuevos datos al Treeview
+        root = self.tree.insert("", "end", text="BASES DE DATOS")
+        for database_name, tabla_names in resultados:
+            h2 = self.tree.insert(root, "end", text=database_name)
+            if tabla_names:
+                rs = self.tree.insert(h2, "end", text="TABLAS")
+                for tabla_name in tabla_names:
+                    self.tree.insert(rs, "end", text=tabla_name)
