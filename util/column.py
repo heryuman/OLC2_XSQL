@@ -1,5 +1,5 @@
 class COLUM:
-    def __init__(self,cname,tipo,pk,col_ref,col_size,isNull):
+    def __init__(self,cname,tipo,pk:bool,col_ref,col_size,isNull):
         self._column_name=cname
         self._type=tipo
         self._pk=pk
