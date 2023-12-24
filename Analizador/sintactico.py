@@ -1,10 +1,15 @@
 from Analizador.lexico import tokens
+from Analizador.lexico import find_column
 from object.columna import COLUMNA
 from object.reference import REFERENCE
 from object.tamanio import TAMANIO
+from Instrucciones.CreateTable import CreateTable
+from Instrucciones.CreateDB import CreateDB
+from Instrucciones.Column import column
 #diccionario de nombres
 lista=[]
 listaErrores=[]
+useDB:str = None
 
 precedence = (
     ('left', 'MAS', 'MENOS'),
@@ -15,11 +20,19 @@ precedence = (
 
 def  p_inicio(p):
     '''inicio : instrucciones '''
+    p[0] = p[1]
+    return p[0]
 
 def p_instrucciones(p):
     '''instrucciones : instrucciones instruccion
                      | instruccion
     '''
+    if len(p) ==2:
+        p[0] = [p[1]]
+    else:
+        p[1].append(p[2])
+        p[0] = p[1]
+        
 
 def p_instrucciones_instruccion(p):
     '''instruccion : cmduse
@@ -31,17 +44,16 @@ def p_instrucciones_instruccion(p):
                      | sentencia_if
                      | sentencia_while
                      | sent_return
-                     | sentencia_case
+                     | sentencia_case 
                      | comandoexec
     '''
-    if p[1] == "":
-        p[0] = []
-    else:
-        p[0] = [p[1]]
+    p[0]=p[1]
 
 def p_cmduse(p):
     '''cmduse : USE ID PYC
     '''
+    useDB = p[2]
+    #validar dentro del xml, si la base existe#
 
 def p_ddl(p):
     '''ddl : ddl createdb 
@@ -58,16 +70,37 @@ def p_ddl(p):
            | alterdb
            | truncatedb
            | doptable
+           
     '''
+    if len(p) ==3:
+        p[1]=[p[2]]
+        p[0] = p[1]
+    else:
+        p[0] = p[1]
+
+        print("**********Estamos imprimiendo el id de tbl*************",p[1])
+
+    
 #comando create
 def p_createdb(p):
     '''createdb : CREATE DATABASE ID PYC
                 | CREATE DATA BASE ID PYC
     '''
+    if len(p)== 6:
+        p[0]= CreateDB(p[4],p.lineno(2),1)
+    else:
+        p[0] = CreateDB(p[3],p.lineno(2),1)
+    
 def p_createtbl(p):
     '''createtbl : CREATE TABLE ID PARA lcolumnas PARC PYC
                  | CREATE TABLE ID PUNTO ID PARA lcolumnas PARC PYC
     '''
+    if len(p)==8:
+        p[0] = CreateTable(p[3],useDB,p[5],p.lineno(2),1,False)
+    else:
+        p[0] = CreateTable(p[5],p[3],p[7],p.lineno(2),1,False)
+
+    
 
 def p_lcolumnas(p):
     '''lcolumnas : lcolumnas COMA columna atributos_col
@@ -75,11 +108,36 @@ def p_lcolumnas(p):
                  | columna atributos_col
                  | columna
     '''
+    if len(p) == 2:
+        p[0] = [p[1]]
+        #p[0].append(p[1])
+    elif len(p) == 3:
+        #col.setAtri(p[2])
+        p[1].restriccion =p[2] 
+        p[0] = [p[1]]
+    elif len(p)==4:
+        p[1].append(p[3])
+        p[0] = p[1]
+    else:
+        p[3].restriccion = p[4]
+        p[1].append(p[3])
+        p[0] = p[1]
+
+
+
+
 def p_columna(p):
     '''columna : ID tipo
                | ID tipo PARA expresion PARC
                | ID tipo PARA expresion COMA expresion PARC
     '''
+    if len(p) ==3:
+        p[0]= column(p[1],p[2],None,None,None,p.lineno(2),3)
+    elif len(p) == 6:
+        p[0]= column(p[1],p[2],p[4],None,None,p.lineno(2),1)
+    else:
+        p[0]= column(p[1],p[2],p[4],p[6],None,p.lineno(2),1)
+
 
 def p_tipo(p):
     '''tipo : INT
@@ -90,6 +148,8 @@ def p_tipo(p):
             | DATETIME
             | DECIMAL
     '''
+    if len(p)==2:
+        p[0] = p[1]
 
 def p_atributos_col(p):
     '''atributos_col : atributos_col restriccion
@@ -97,6 +157,11 @@ def p_atributos_col(p):
                      | restriccion
                      | reference
     '''
+    if len(p)==3:
+       # p[1].append(p[2])
+        p[0] = p[1]
+    else:
+        p[0] = [p[1]]
 
 def p_restriccion(p):
     '''restriccion : PRIMARY KEY 
@@ -104,6 +169,16 @@ def p_restriccion(p):
                    | NOT NULL
                    | NULL
     '''
+    if p[1].lower() == "primary":
+        p[0] = "PRIMARY KEY"
+    if p[1].lower() == "foreing":
+        p[0] = "FOREING KEY"
+    if p[1].lower() == "NOT":
+        p[0] = "NOT NULL"
+    if p[1].lower() == "null":
+        p[0] = "NULL"
+    
+    
 
 def p_reference(p):
     '''reference : REFERENCE ID PARA ID PARC
@@ -193,11 +268,10 @@ def p_select(p):
         | SELECT lselect 
         | SELECT lselect PYC
     '''
-    
 def p_funciones_procedure(p):
     '''
         funciones_procedure : ID PARA lexpresion PARC
-    '''    
+    '''
 
 def p_lids(p):
     '''
@@ -215,6 +289,7 @@ def p_lids(p):
     #agregamos estas produccioens lselect COMA expresion
     #    | expresion para esta cadena de entrada
     # SELECT tbcliente.codigocliente,CONCATENA(tbcliente.primer_nombre,tbcliente.primer_apellido)
+
 def p_update(p):
     '''update : UPDATE ID SET lupdate condicion PYC
 
@@ -242,7 +317,6 @@ def p_sentencia_if(p):
                  | IF PARA expresion PARC BEGIN instrucciones END ELSE BEGIN instrucciones END
                  | IF PARA expresion PARC BEGIN instrucciones END PYC ELSE BEGIN instrucciones END PYC
     '''
-    #verificar si es BEGIN o THEN
 def p_sentencia_while(p):
     '''
         sentencia_while : WHILE PARA expresion PARC BEGIN instrucciones END PYC
@@ -258,20 +332,18 @@ def p_sentencia_case(p):
                         | CASE lwhen ELSE THEN instrucciones END PYC
                         | CASE lwhen ELSE THEN instrucciones END
     '''
-    
 
 def p_lwhen(p):
     '''
         lwhen : lwhen WHEN expresion THEN instrucciones 
                | lwhen WHEN PARA expresion PARC THEN instrucciones 
                | WHEN expresion THEN instrucciones 
-               | WHEN PARA expresion PARC THEN instrucciones 
+               | WHEN PARA expresion PARC THEN instrucciones  
     '''
-    #verificar si es BEGIN o THEN
 
 def p_expresion(p):
     '''
-    expresion : PARA expresion PARC
+     expresion : PARA expresion PARC
               | expresion POR expresion
               | expresion MAS expresion
               | expresion MENOS expresion
@@ -344,7 +416,6 @@ def p_return (p):
         sent_return : RETURNS expresion PYC
                     | RETURNS expresion 
     '''
-    
 def p_exec(p):
     '''
         comandoexec : EXEC ID lexpresion

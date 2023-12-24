@@ -39,10 +39,8 @@ reservadas={
         
         'insert' : 'INSERT',
         'into' : 'INTO',
-        'values' : 'VALUES',
-        
-        'delete' : 'DELETE',
-        
+        'values' : 'VALUES',  
+        'delete' : 'DELETE', 
         'if' : 'IF',
         'as' : 'AS',
         
@@ -160,6 +158,9 @@ def t_error(t):
     print(f"Error Lexico {t.value!r}")
     t.lexer.skip(1)
 
+def find_column(inp, tk):
+    line_start = inp.rfind('\n', 0, tk.lexpos) + 1
+    return (tk.lexpos - line_start) + 1
 
 import ply.lex as lex
 lexer = lex.lex()

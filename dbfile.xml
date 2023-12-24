@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<BASE_DE_DATOS>
+  <BASES>
+    <DATABASE name_db="tbbanco">
+      <TABLAS>
+        <CREATE> </CREATE>
+        <INSERT> </INSERT>
+      </TABLAS>
+    </DATABASE>
+  </BASES>
+</BASE_DE_DATOS>
