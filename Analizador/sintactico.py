@@ -9,7 +9,7 @@ from Instrucciones.Column import column
 #diccionario de nombres
 lista=[]
 listaErrores=[]
-useDB:str = None
+useDB=[]
 
 precedence = (
     ('left', 'MAS', 'MENOS'),
@@ -21,6 +21,9 @@ precedence = (
 def  p_inicio(p):
     '''inicio : instrucciones '''
     p[0] = p[1]
+    #for instruccion in p[0]:
+     #   if isinstance(instruccion,CreateTable):
+           #print("desde inicio create table--->",instruccion.id)
     return p[0]
 
 def p_instrucciones(p):
@@ -47,23 +50,18 @@ def p_instrucciones_instruccion(p):
                      | sentencia_case 
                      | comandoexec
     '''
+    
     p[0]=p[1]
 
 def p_cmduse(p):
     '''cmduse : USE ID PYC
     '''
-    useDB = p[2]
+    useDB.append(p[2])
+    print("la base ",useDB[0])
     #validar dentro del xml, si la base existe#
 
 def p_ddl(p):
-    '''ddl : ddl createdb 
-           | ddl createtbl
-           | ddl createpc
-           | ddl createfn
-           | ddl alterdb
-           | ddl truncatedb
-           | ddl doptable
-           | createdb
+    '''ddl : createdb
            | createtbl
            | createpc
            | createfn
@@ -72,13 +70,10 @@ def p_ddl(p):
            | doptable
            
     '''
-    if len(p) ==3:
-        p[1]=[p[2]]
-        p[0] = p[1]
-    else:
-        p[0] = p[1]
+    
+    p[0] = p[1]
 
-        print("**********Estamos imprimiendo el id de tbl*************",p[1])
+        #print("**********Estamos imprimiendo el id de tbl*************",p[1])
 
     
 #comando create
@@ -96,7 +91,12 @@ def p_createtbl(p):
                  | CREATE TABLE ID PUNTO ID PARA lcolumnas PARC PYC
     '''
     if len(p)==8:
-        p[0] = CreateTable(p[3],useDB,p[5],p.lineno(2),1,False)
+        p[0] = CreateTable(p[3],"",p[5],p.lineno(2),1,False)
+        #print("se crea tabla->",p[3])
+        #print("con ",len(p[5]),"columnas")
+        #for columnas in p[5]:
+            #print("colname->",columnas.id," restricciones->",columnas.restriccion)
+            
     else:
         p[0] = CreateTable(p[5],p[3],p[7],p.lineno(2),1,False)
 
@@ -122,6 +122,7 @@ def p_lcolumnas(p):
         p[3].restriccion = p[4]
         p[1].append(p[3])
         p[0] = p[1]
+        ##print("columna ",p[3].id,"restriciones ",p[4])
 
 
 
@@ -239,11 +240,7 @@ def p_tamanio(p):
 
 def p_dml(p):
     '''
-     dml : dml insert
-         | dml select
-         | dml update
-         | dml delete
-         | insert
+     dml : insert
          | select
          | update
          | delete
