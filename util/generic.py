@@ -16,4 +16,18 @@ class INSERT:
         self._lvalues=lvalues  #Lista de valores a insertar
         self._linto=l_into     # Lista de columnas de la tabla 
                               # INSERT INTO (col1,col2,col3)VALUES(val1,val2,val3)
+
+#SelectAll es el parametro que indica si viene un SELECT * FROM TABLA, el parametro 
+#deberá ser un True en caso sea el tipo de query, y la ListaColumnas debera ser vacío []
+#ListaColumnas si no fuera el caso anterior, selectAll debera ser False
+#l_tb_name la lista de en caso vengan mas de una tabla a consultar
+#db_name, nombre de la BD a donde se va a consultar
+#l_condiciones, lista de condiciones de la consulta
+class SELECT:
+    def __init__(self,selectAll,listaColumnas,l_tb_name,db_name,l_condiciones):
+        self._SelectAll=selectAll
+        self._lcolumns=listaColumnas
+        self._l_tbname=l_tb_name
+        self._db_name=db_name
+        self._lcondiciones=l_condiciones
     

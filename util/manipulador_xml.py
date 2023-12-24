@@ -212,6 +212,10 @@ class CREATE_XML:
                                  print("ERROR!!,tipo de datos Incorrecto")
                 else:
                      print("Error!!,no coinciden la lista de parametros de la tabla")
+            else:
+                 print("ERROR!!,La tabla ",tb_name," no existe")
+        else:
+            print("ERROR!!,La Base ",db_name," no existe")
                 
     def compare_type(self,valor,tipo):
          if type(valor)==int:
@@ -234,11 +238,9 @@ class CREATE_XML:
               else:
                    False
          else:
-              False
+              False    
                
 #Area Cutzal
-                   
-
 
 
 
