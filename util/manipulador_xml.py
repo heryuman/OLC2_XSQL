@@ -57,6 +57,7 @@ class CREATE_XML:
         except Exception as e:
             print(e)   
 
+
     def insert_db(self,db_name):
         
         if  os.path.isfile("dbfile.xml"):
@@ -99,17 +100,48 @@ class CREATE_XML:
             for col in table._columns:
                 nc=col._column_name
                 nt=col._type
-                cz=col._col_size
+                #cz=col._col_size
                 n_col=ET.SubElement(colums,"COLUMNA")
                 n_col.attrib["nombrecol"]=nc
                 n_col.attrib["tipo"]=nt
-                n_col.attrib["col_size"]=str(cz)
+                #n_col.attrib["col_size"]=str(cz)
             cadena_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
             xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
-
+            # Guardar el XML en un archivo
+            with open("dbfile.xml", "w", encoding="utf-8") as archivo:
+                    archivo.write(xml_con_formato)
+        else:
+            print("no existe la BD"+ db_name)
                 # Guardar el XML en un archivo
             with open("dbfile.xml", "w", encoding="utf-8") as archivo:
                 archivo.write(xml_con_formato)
+#METODOS QUE VALIDAN SI EXISTE LA TABLA O LA BD
+    def exist_table(self,db_name,tb_name):
+        with open("dbfile.xml","r") as f:        
+                tree=ET.parse(f)
+        root=tree.getroot()
+        db=root.find(".//DATABASE[@name_db='"+db_name+"']")
+        
+        if db is not None:
+            print("existe la BD",db.get("name_db"))
+            tb=root.find(".//DATABASE//TABLAS//CREATE//TABLA[@tab_name='"+tb_name+"']")
+            if tb is not None:
+                 print("Existe la tb ",tb.get("tab_name"))
+                 return True
+            return False
+        return False
+    
+    def exist_db(self,db_name):
+         with open("dbfile.xml","r") as f:        
+                tree=ET.parse(f)
+         root=tree.getroot()
+         db=root.find(".//DATABASE[@name_db='"+db_name+"']")
+        
+         if db is not None:
+            print("existe la BD",db.get("name_db"))
+            return True
+         return False
+#FINALIZAN METODOS QUE VALIDAN SI EXISTE LA TABLA O LA BD
 
                     
 

@@ -3,6 +3,7 @@ from tkinter import ttk
 from util.generic import GENERIC
 from Analizador.sintactico import parser
 from Analizador.sintactico import useDB
+from Abstract.Instruccion import Instruccion
 from Arbol.AST import AST
 
 class GUI_P:
@@ -90,7 +91,9 @@ class GUI_P:
 
         try:
             for inst in ast.getInstrucciones():
-                inst.compilar(ast,None)
+                print("el objeto es de tipo ",type(inst))
+                if isinstance(inst,Instruccion):
+                    inst.compilar(ast,None)
         
         except Exception as e:
             print(f"Error al ejecutar las instrucciones: {e} ")
