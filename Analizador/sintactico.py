@@ -73,12 +73,12 @@ def p_ddl(p):
            
     '''
     if len(p) ==3:
-        p[1].append(p[2])
+        p[1]=[p[2]]
         p[0] = p[1]
     else:
         p[0] = p[1]
 
-        print("**********Estamos imprimiendo el id de tbl*************",p[1].id)
+        print("**********Estamos imprimiendo el id de tbl*************",p[1])
 
     
 #comando create
@@ -86,7 +86,10 @@ def p_createdb(p):
     '''createdb : CREATE DATABASE ID PYC
                 | CREATE DATA BASE ID PYC
     '''
-    p[0] = CreateDB(p[3],p.lineno(2),1)
+    if len(p)== 6:
+        p[0]= CreateDB(p[4],p.lineno(2),1)
+    else:
+        p[0] = CreateDB(p[3],p.lineno(2),1)
     
 def p_createtbl(p):
     '''createtbl : CREATE TABLE ID PARA lcolumnas PARC PYC
@@ -155,7 +158,7 @@ def p_atributos_col(p):
                      | reference
     '''
     if len(p)==3:
-        p[1].append(p[2])
+       # p[1].append(p[2])
         p[0] = p[1]
     else:
         p[0] = [p[1]]
@@ -393,7 +396,7 @@ def p_concatenar(p):
     ''' concatenar : CONCATENA PARA lexpresion PARC
     '''
 def p_sustraer(p):
-    ''' substraer : SUBSTRAER PARA CADENA COMA NUMEROS COMA NUMEROS PARC
+    ''' substraer : SUBSTRAER PARA expresion COMA expresion COMA expresion PARC
     '''
 def p_contar(p):
     ''' count : CONTAR PARA POR PARC

@@ -57,7 +57,7 @@ class CREATE_XML:
         except Exception as e:
             print(e)   
 
-    def insert_db(self,db_name,column):
+    def insert_db(self,db_name):
         
         if  os.path.isfile("dbfile.xml"):
                 
