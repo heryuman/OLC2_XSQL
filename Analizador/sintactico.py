@@ -45,6 +45,7 @@ def p_instrucciones_instruccion(p):
                      | sentencia_while
                      | sent_return
                      | sentencia_case 
+                     | comandoexec
     '''
     p[0]=p[1]
 
@@ -59,10 +60,17 @@ def p_ddl(p):
            | ddl createtbl
            | ddl createpc
            | ddl createfn
+           | ddl alterdb
+           | ddl truncatedb
+           | ddl doptable
            | createdb
            | createtbl
            | createpc
            | createfn
+           | alterdb
+           | truncatedb
+           | doptable
+           
     '''
     if len(p) ==3:
         p[1].append(p[2])
@@ -75,7 +83,8 @@ def p_ddl(p):
     
 #comando create
 def p_createdb(p):
-    '''createdb : CREATE DATABASE ID PYC 
+    '''createdb : CREATE DATABASE ID PYC
+                | CREATE DATA BASE ID PYC
     '''
     p[0] = CreateDB(p[3],p.lineno(2),1)
     
@@ -141,6 +150,7 @@ def p_tipo(p):
 
 def p_atributos_col(p):
     '''atributos_col : atributos_col restriccion
+                     | atributos_col reference
                      | restriccion
                      | reference
     '''
@@ -229,9 +239,11 @@ def p_dml(p):
      dml : dml insert
          | dml select
          | dml update
+         | dml delete
          | insert
          | select
          | update
+         | delete
     '''
 
 def p_insert(p):
@@ -250,11 +262,14 @@ def p_select(p):
         | SELECT POR FROM lselect condicion PYC
         | SELECT lselect FROM lselect PYC
         | SELECT lselect FROM lselect condicion PYC
-        | SELECT nativas PYC
-        | SELECT nativas
-        | SELECT expresion 
-        | SELECT expresion PYC
+        | SELECT lselect 
+        | SELECT lselect PYC
     '''
+def p_funciones_procedure(p):
+    '''
+        funciones_procedure : ID PARA lexpresion PARC
+    '''
+
 def p_lids(p):
     '''
     lselect : lselect COMA ID
@@ -265,7 +280,13 @@ def p_lids(p):
         | variable
         | lselect COMA  variable IGUAL expresion
         | variable IGUAL expresion
+        | lselect COMA expresion
+        | expresion
     '''
+    #agregamos estas produccioens lselect COMA expresion
+    #    | expresion para esta cadena de entrada
+    # SELECT tbcliente.codigocliente,CONCATENA(tbcliente.primer_nombre,tbcliente.primer_apellido)
+
 def p_update(p):
     '''update : UPDATE ID SET lupdate condicion PYC
 
@@ -305,19 +326,21 @@ def p_sentencia_case(p):
     '''
         sentencia_case : CASE lwhen END PYC
                         | CASE lwhen END
+                        | CASE lwhen ELSE THEN instrucciones END PYC
+                        | CASE lwhen ELSE THEN instrucciones END
     '''
 
 def p_lwhen(p):
     '''
-        lwhen : lwhen WHEN expresion BEGIN instrucciones 
-               | lwhen WHEN PARA expresion PARC BEGIN instrucciones 
-               | WHEN expresion BEGIN instrucciones 
-               | WHEN PARA expresion PARC BEGIN instrucciones 
+        lwhen : lwhen WHEN expresion THEN instrucciones 
+               | lwhen WHEN PARA expresion PARC THEN instrucciones 
+               | WHEN expresion THEN instrucciones 
+               | WHEN PARA expresion PARC THEN instrucciones  
     '''
 
 def p_expresion(p):
     '''
-    expresion : PARA expresion PARC
+     expresion : PARA expresion PARC
               | expresion POR expresion
               | expresion MAS expresion
               | expresion MENOS expresion
@@ -338,11 +361,13 @@ def p_expresion(p):
               | NUMEROS
               | CADENA
               | expresion IGUAL expresion
-              | expresion IGUAL ARROBA expresion
+              | expresion IGUAL variable
+              | variable IGUAL expresion
               | operadoressql
               | nativas
-              | ARROBA ID
+              | variable
               | ID PUNTO ID 
+              | funciones_procedure
     '''
 def p_operadoressql(p):
     '''operadoressql : between
@@ -387,6 +412,42 @@ def p_return (p):
     '''
         sent_return : RETURNS expresion PYC
                     | RETURNS expresion 
+    '''
+
+def p_exec(p):
+    '''
+        comandoexec : EXEC ID lexpresion
+                    | EXEC ID PARA lexpresion PARC
+                    | EXEC ID lexpresion PYC
+                    | EXEC ID PARA lexpresion PARC PYC
+    '''
+
+def p_alterdb(p):
+    '''
+        alterdb : ALTER TABLE ID addtable
+                | ALTER TABLE ID DROP COLUMN ID PYC
+    '''
+def p_addtable(p):
+    '''
+        addtable : ADD ID tipo PYC
+                 | ADD COLUMN ID tipo PYC
+                 | ALTER COLUMN ID ID PYC
+    '''
+
+def p_droptable(p):
+    '''
+        doptable : DROP TABLE ID PYC
+    '''
+
+def p_truncatedb(p):
+    '''
+        truncatedb : TRUNCATE TABLE ID PYC
+    '''
+
+def p_delete(p):
+    '''
+        delete : DELETE FROM ID PYC
+               | DELETE FROM ID WHERE expresion PYC
     '''
 
 def p_error(p):

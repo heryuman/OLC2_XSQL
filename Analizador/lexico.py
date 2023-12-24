@@ -10,6 +10,8 @@ reservadas={
         'nvarchar' : 'NVARCHAR',
         'date': 'DATE',
         'database':'DATABASE',
+        'data':'DATA',
+        'base': 'BASE',
         'null':'NULL',
         'not':'NOT',
         'reference' : 'REFERENCE',
@@ -37,10 +39,8 @@ reservadas={
         
         'insert' : 'INSERT',
         'into' : 'INTO',
-        'values' : 'VALUES',
-        
-        'delete' : 'DELETE',
-        
+        'values' : 'VALUES',  
+        'delete' : 'DELETE', 
         'if' : 'IF',
         'as' : 'AS',
         
@@ -65,7 +65,8 @@ reservadas={
         'cast': 'CAS',
         'function': 'FUNCTION',
         'returns': 'RETURNS',
-        'while':'WHILE'
+        'while':'WHILE',
+        'exec' : 'EXEC'
 }
 
 
