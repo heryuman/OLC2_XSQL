@@ -5,7 +5,7 @@ from Analizador.sintactico import parser
 from Analizador.sintactico import useDB
 from Abstract.Instruccion import Instruccion
 from Arbol.AST import AST
-
+from util.manipulador_xml import CREATE_XML
 class GUI_P:
     def __init__(self) :
         self.notebook=None
@@ -20,11 +20,39 @@ class GUI_P:
         frame_treeview= tk.Frame(self.ventana,bd=0,width=15,relief=tk.SOLID,padx=10,pady=10,bg='#3a7fff')
         frame_treeview.pack(side='left',fill=tk.BOTH)
         tree= ttk.Treeview(frame_treeview,height=100)
-        root=tree.insert("","end",text="Raiz")
-        tree.insert(root,"end",text="Hoja1")
-        h2=tree.insert(root,"end",text="Hoja2")
-        rs=tree.insert(h2,"end",text="Rama Secundaria")
-        tree.insert(rs,"end",text="Hoja3")
+        root=tree.insert("","end",text="BASES DE DATOS")
+        resultado = CREATE_XML.xml_gui('dbfile.xml')
+        for database_name, tabla_names in resultado:
+            print(database_name)
+            h2=tree.insert(root,"end",text=database_name)
+            if tabla_names:
+                rs=tree.insert(h2,"end",text="TABLAS")
+                for tabla_name in tabla_names:
+                    print(tabla_name)
+                    tree.insert(rs,"end",text=tabla_name)
+
+        """
+        for database_name, tabla_names, funciones, procedimientos in resultado:
+            print(database_name)
+            h2=tree.insert(root,"end",text=database_name)
+            if tabla_names:
+                rs=tree.insert(h2,"end",text="TABLAS")
+                for tabla_name in tabla_names:
+                    print(tabla_name)
+                    tree.insert(rs,"end",text=tabla_name)
+            if funciones:
+                rs=tree.insert(h2,"end",text="FUNCIONES")
+                for funcion in funciones:
+                    print(funcion)
+                    tree.insert(rs,"end",text=funcion)
+            if procedimientos:
+                rs=tree.insert(h2,"end",text="PROCEDIMIENTOS")
+                for procedimiento in procedimientos:
+                    print(procedimiento)
+                    tree.insert(rs,"end",text=procedimiento)
+        """
+        
+        
        # tree.place(x=0,y=0,relwidth=1,relheight=1)
         tree.pack(side="left")
 
@@ -105,4 +133,3 @@ class GUI_P:
         linea_actual=self.mat_text[index].get(f"{fila}.0", f"{fila}.end-1c")
         print("Texto en la línea actual:", linea_actual)
         parser.parse(linea_actual)
-

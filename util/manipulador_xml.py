@@ -150,5 +150,25 @@ class CREATE_XML:
 
 
 
-
+    def xml_gui(nombre_archivo):
+        #nombre_archivo = 'dbfile.xml' #nombre del archivo
+        if os.path.exists(nombre_archivo): #verificamos si el archivo existe
+            tree = ET.parse(nombre_archivo)
+            root = tree.getroot()
+            #utilizamos variables para guardar los valores que vienen del archivo
+            databases = []
+            
+            #reconocemos los valores del xml
+            #aun no reconoce lo de procedimientos y funciones
+            for database in root.findall('.//DATABASE'):
+                database_name = database.get('name_db')
+                tabla_names = []
+                for tabla in database.findall('.//TABLA'):
+                    tabla_name = tabla.get('tab_name')
+                    tabla_names.append(tabla_name)
+                databases.append((database_name, tabla_names))
+            return databases
+        else:
+            return []
+            
     

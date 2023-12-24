@@ -1,10 +1,39 @@
 <?xml version="1.0" ?>
 <BASE_DE_DATOS>
   <BASES>
-    <DATABASE name_db="tbbanco">
+    <DATABASE name_db="db_test">
       <TABLAS>
-        <CREATE> </CREATE>
-        <INSERT> </INSERT>
+        <TABLA tab_name="my_tab1">
+          <CREATE>
+            <COLUMNAS>
+              <COLUMNA nombrecol="id_cliente" tipo="int" pk="True" isNull="False" valor="" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Nombre_cliente" tipo="nvarchar" pk="False" isNull="True" valor="" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+            </COLUMNAS>
+          </CREATE>
+          <INSERT>
+            <COLUMNAS>
+              <COLUMNAS>
+                <COLUMNA nombrecol="id_cliente" tipo="int" pk="True" isNull="False" valor="1" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Nombre_cliente" tipo="nvarchar" pk="False" isNull="True" valor="val2" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+              </COLUMNAS>
+            </COLUMNAS>
+          </INSERT>
+        </TABLA>
+      </TABLAS>
+    </DATABASE>
+    <DATABASE name_db="test_2">
+      <TABLAS>
+        <TABLA tab_name="my_tab1">
+          <CREATE>
+            <COLUMNAS>
+              <COLUMNA nombrecol="id_pago" tipo="int" pk="True" isNull="False" valor="" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Nombre_servicio" tipo="nvarchar" pk="False" isNull="True" valor="" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+            </COLUMNAS>
+          </CREATE>
+          <INSERT>
+           <COLUMNAS/>
+          </INSERT>
+        </TABLA>
       </TABLAS>
     </DATABASE>
   </BASES>
