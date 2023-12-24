@@ -9,7 +9,7 @@ class column(Instruccion):
         self.tipo = tipo
         self.tamanio = tamanios
         self.presicion = presicion
-        self.restriccion = restriciones
+        self.restriccion = []
     
     def compilar(self, tree, table):
         

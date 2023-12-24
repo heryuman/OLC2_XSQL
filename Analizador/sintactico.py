@@ -6,6 +6,8 @@ from object.tamanio import TAMANIO
 from Instrucciones.CreateTable import CreateTable
 from Instrucciones.CreateDB import CreateDB
 from Instrucciones.Column import column
+from Instrucciones.Reference import Reference
+from Instrucciones.Use import Use
 #diccionario de nombres
 lista=[]
 listaErrores=[]
@@ -59,6 +61,7 @@ def p_cmduse(p):
     useDB.append(p[2])
     print("la base ",useDB[0])
     #validar dentro del xml, si la base existe#
+    p[0] = Use(p[2], p.lineno(2),1)
 
 def p_ddl(p):
     '''ddl : createdb
@@ -91,7 +94,7 @@ def p_createtbl(p):
                  | CREATE TABLE ID PUNTO ID PARA lcolumnas PARC PYC
     '''
     if len(p)==8:
-        p[0] = CreateTable(p[3],"",p[5],p.lineno(2),1,False)
+        p[0] = CreateTable(p[3],None,p[5],p.lineno(2),1,False)
         #print("se crea tabla->",p[3])
         #print("con ",len(p[5]),"columnas")
         #for columnas in p[5]:
@@ -118,7 +121,7 @@ def p_lcolumnas(p):
     elif len(p)==4:
         p[1].append(p[3])
         p[0] = p[1]
-    else:
+    elif len(p) == 5:
         p[3].restriccion = p[4]
         p[1].append(p[3])
         p[0] = p[1]
@@ -144,7 +147,6 @@ def p_tipo(p):
     '''tipo : INT
             | TEXT
             | NVARCHAR
-            | NVARCHAR tamanios
             | DATE 
             | DATETIME
             | DECIMAL
@@ -159,9 +161,9 @@ def p_atributos_col(p):
                      | reference
     '''
     if len(p)==3:
-       # p[1].append(p[2])
+        p[1].append(p[2])
         p[0] = p[1]
-    else:
+    elif len(p)==2:
         p[0] = [p[1]]
 
 def p_restriccion(p):
@@ -172,11 +174,11 @@ def p_restriccion(p):
     '''
     if p[1].lower() == "primary":
         p[0] = "PRIMARY KEY"
-    if p[1].lower() == "foreing":
+    elif p[1].lower() == "foreing":
         p[0] = "FOREING KEY"
-    if p[1].lower() == "NOT":
+    elif p[1].lower() == "not":
         p[0] = "NOT NULL"
-    if p[1].lower() == "null":
+    elif p[1].lower() == "null":
         p[0] = "NULL"
     
     
@@ -184,7 +186,7 @@ def p_restriccion(p):
 def p_reference(p):
     '''reference : REFERENCE ID PARA ID PARC
     '''
-
+    p[0] = Reference(p[2], p[4],p.lineno(2),1)
 #declarar una variable 
 def p_variable(p):
     '''variable :  ARROBA ID

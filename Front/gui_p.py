@@ -3,11 +3,18 @@ from tkinter import ttk
 from util.generic import GENERIC
 from Analizador.sintactico import parser
 from Analizador.sintactico import useDB
+from Simbolo.Ambito import Ambito
+from Simbolo.Simbolo import Simbolo
 from Abstract.Instruccion import Instruccion
 from Arbol.AST import AST
+from enviroment import enviroment
 
 class GUI_P:
     def __init__(self) :
+
+        self.tablaSimbolos = Ambito(None)
+        self.tablaSimbolos.addSimbolo(self.getFirstSimbolo())
+
         self.notebook=None
         self.mat_text=[]
         utl= GENERIC()
@@ -89,11 +96,12 @@ class GUI_P:
         instruccion = parser.parse(entrada)
         ast = AST(instruccion)
 
+        
         try:
             for inst in ast.getInstrucciones():
                 print("el objeto es de tipo ",type(inst))
                 if isinstance(inst,Instruccion):
-                    inst.compilar(ast,None)
+                    inst.compilar(ast,self.tablaSimbolos)
         
         except Exception as e:
             print(f"Error al ejecutar las instrucciones: {e} ")
@@ -105,4 +113,14 @@ class GUI_P:
         linea_actual=self.mat_text[index].get(f"{fila}.0", f"{fila}.end-1c")
         print("Texto en la línea actual:", linea_actual)
         parser.parse(linea_actual)
+
+    def getFirstSimbolo(self)->Simbolo:
+
+        simbolo = Simbolo()
+        simbolo._identificador = enviroment().useDB
+        simbolo._valor=""
+
+        return simbolo
+        
+        
 

@@ -5,3 +5,4 @@ class enviroment:
         self._nameASTFile = "ast.dot"
         self.fullPath=self._rutaAST+"/"+self._nameASTFile
         self._comandoGraphviz = "dot -Tpng "+self.fullPath+" -o ast.png"
+        self.useDB = "UseDB"
