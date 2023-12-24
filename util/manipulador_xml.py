@@ -143,7 +143,10 @@ class CREATE_XML:
          return False
 #FINALIZAN METODOS QUE VALIDAN SI EXISTE LA TABLA O LA BD
 
-                    
+#Area Selvin
+
+#Area Cutzal
+                   
 
 
 
