@@ -100,35 +100,23 @@ class GUI_P:
         if self.notebook is None:
             self.notebook = ttk.Notebook(self.frame_form_fill)
             self.notebook.pack()
-
-        # Incrementamos el contador de pestañas
         self.contador_pestanas += 1
-
-        # Creamos una nueva pestaña con el nombre actualizado
         tab = ttk.Frame(self.notebook)
         self.notebook.add(tab, text=f"Query{self.contador_pestanas}")
         print("size note:", self.contador_pestanas)
         texto = tk.Text(tab)
         texto.pack()
         self.mat_text.append(texto)
-
-        # Asociar la función cerrar_pestana_actual al evento de hacer clic en la pestaña
         tab.bind("<Button-2>", lambda event: self.cerrar_pestana_actual())
         
     def cerrar_pestana_actual(self):
-        # Obtiene el índice de la pestaña actual
         index = self.notebook.index("current")
-
-        # Cierra la pestaña actual
         self.notebook.forget(index) 
         
 
     def run_script(self):
         index = self.notebook.index("current")
         entrada = self.mat_text[index].get("1.0", "end-1c")
-        #print("index: ", index, "- size mat_text: ", len(self.mat_text), entrada)
-        
-        # Suponiendo que 'parser' es una instancia de LRParser
         instruccion = parser.parse(entrada)
         ast = AST(instruccion)
 
@@ -169,19 +157,13 @@ class GUI_P:
                     
                     
     def salir_programa(self):
-        # Función para salir del programa
         self.ventana.destroy()
     
     def guardar_como_archivo(self):
-        # Abre el cuadro de diálogo para seleccionar la ubicación y el nombre del archivo
         ruta_archivo = filedialog.asksaveasfilename(defaultextension=".sql", filetypes=[("Archivos SQL", "*.sql"), ("Todos los archivos", "*.*")])
         if ruta_archivo:
-            # Guarda la ruta del archivo
             self.archivo_guardado = ruta_archivo
-            # Obtiene el índice de la pestaña actual
             index = self.notebook.index("current")
-            # Obtiene el contenido de la pestaña actual
             contenido_actual = self.mat_text[index].get("1.0", tk.END)
-            # Guarda el contenido en el archivo
             with open(ruta_archivo, "w") as archivo:
                 archivo.write(contenido_actual)
