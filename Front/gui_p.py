@@ -6,12 +6,15 @@ from Analizador.sintactico import useDB
 from Abstract.Instruccion import Instruccion
 from Arbol.AST import AST
 from util.manipulador_xml import CREATE_XML
+from tkinter import filedialog
 class GUI_P:
     def __init__(self) :
+        self.contador_pestanas = 0
         self.notebook=None
         self.mat_text=[]
         utl= GENERIC()
         self.ventana=tk.Tk()
+        self.archivo_guardado = None  # Variable para almacenar la ruta del archivo guardado
         self.ventana.title('SQLX')
         self.ventana.config(bg='#ffffff')
         #self.ventana.resizable(width=0, height=0)
@@ -60,9 +63,9 @@ class GUI_P:
         archivo_ops=tk.Menu(btn_archivo)
         archivo_ops.add_command(label="Abrir")
         archivo_ops.add_command(label="Guardar")
-        archivo_ops.add_command(label="Guardar como")
-        archivo_ops.add_command(label="Cerrar")
-        archivo_ops.add_command(label="Salir")
+        archivo_ops.add_command(label="Guardar Como" , command=self.guardar_como_archivo)
+        archivo_ops.add_command(label="Cerrar", command=self.cerrar_pestana_actual)
+        archivo_ops.add_command(label="Salir", command=self.salir_programa)
         btn_archivo.config(menu=archivo_ops)
         btn_archivo.pack(side="left",padx=10,pady=10)
 
@@ -90,16 +93,35 @@ class GUI_P:
         self.ventana.mainloop()
 
 
+
+
+
     def tools_sql(self):
         if self.notebook is None:
-            self.notebook=ttk.Notebook(self.frame_form_fill)
+            self.notebook = ttk.Notebook(self.frame_form_fill)
             self.notebook.pack()
-        tab=ttk.Frame(self.notebook)
-        self.notebook.add(tab,text="Query"+str(len(self.notebook.tabs())+1))
-        print("size note: "+str(len(self.notebook.tabs())))
-        texto=tk.Text(tab)
+
+        # Incrementamos el contador de pestañas
+        self.contador_pestanas += 1
+
+        # Creamos una nueva pestaña con el nombre actualizado
+        tab = ttk.Frame(self.notebook)
+        self.notebook.add(tab, text=f"Query{self.contador_pestanas}")
+        print("size note:", self.contador_pestanas)
+        texto = tk.Text(tab)
         texto.pack()
         self.mat_text.append(texto)
+
+        # Asociar la función cerrar_pestana_actual al evento de hacer clic en la pestaña
+        tab.bind("<Button-2>", lambda event: self.cerrar_pestana_actual())
+        
+    def cerrar_pestana_actual(self):
+        # Obtiene el índice de la pestaña actual
+        index = self.notebook.index("current")
+
+        # Cierra la pestaña actual
+        self.notebook.forget(index) 
+        
 
     def run_script(self):
         index = self.notebook.index("current")
@@ -144,3 +166,22 @@ class GUI_P:
                 rs = self.tree.insert(h2, "end", text="TABLAS")
                 for tabla_name in tabla_names:
                     self.tree.insert(rs, "end", text=tabla_name)
+                    
+                    
+    def salir_programa(self):
+        # Función para salir del programa
+        self.ventana.destroy()
+    
+    def guardar_como_archivo(self):
+        # Abre el cuadro de diálogo para seleccionar la ubicación y el nombre del archivo
+        ruta_archivo = filedialog.asksaveasfilename(defaultextension=".sql", filetypes=[("Archivos SQL", "*.sql"), ("Todos los archivos", "*.*")])
+        if ruta_archivo:
+            # Guarda la ruta del archivo
+            self.archivo_guardado = ruta_archivo
+            # Obtiene el índice de la pestaña actual
+            index = self.notebook.index("current")
+            # Obtiene el contenido de la pestaña actual
+            contenido_actual = self.mat_text[index].get("1.0", tk.END)
+            # Guarda el contenido en el archivo
+            with open(ruta_archivo, "w") as archivo:
+                archivo.write(contenido_actual)
