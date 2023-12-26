@@ -230,6 +230,10 @@ class CREATE_XML:
                 return True
               elif tipo =="nvarchar":
                    return True
+              elif tipo == "date":
+                  return True
+              elif tipo =="datetime":
+                  return True
               else:
                    False
          elif type(valor)== float:
@@ -238,7 +242,8 @@ class CREATE_XML:
               else:
                    False
          else:
-              False    
+              False 
+       
                
 #Area Cutzal
 
