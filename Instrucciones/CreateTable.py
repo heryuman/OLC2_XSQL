@@ -31,8 +31,8 @@ class CreateTable (Instruccion):
             return
         
         for col in self.columnas:
-            
-            column = COLUM(col.id, col.tipo, None, None,None,col.tamanio,"",None,col.presicion)
+                                            #el pk es de tipo False, posterior se hará el cambio sí así amerita
+            column = COLUM(col.id, col.tipo, False, "","",col.tamanio,"",True,col.presicion)
             
             restricciones:List[str] = col.restriccion
             for res in restricciones:

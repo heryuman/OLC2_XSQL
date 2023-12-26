@@ -8,6 +8,8 @@ from Instrucciones.CreateDB import CreateDB
 from Instrucciones.Column import column
 from Instrucciones.Reference import Reference
 from Instrucciones.Use import Use
+from Instrucciones.Insert import Insert
+from Instrucciones.Select import Select
 #diccionario de nombres
 lista=[]
 listaErrores=[]
@@ -136,9 +138,9 @@ def p_columna(p):
                | ID tipo PARA expresion COMA expresion PARC
     '''
     if len(p) ==3:
-        p[0]= column(p[1],p[2],None,None,None,p.lineno(2),3)
+        p[0]= column(p[1],p[2],None,"",None,p.lineno(2),3)
     elif len(p) == 6:
-        p[0]= column(p[1],p[2],p[4],None,None,p.lineno(2),1)
+        p[0]= column(p[1],p[2],p[4],"",None,p.lineno(2),1)
     else:
         p[0]= column(p[1],p[2],p[4],p[6],None,p.lineno(2),1)
 
@@ -247,16 +249,25 @@ def p_dml(p):
          | update
          | delete
     '''
+    p[0] = p[1]
 
 def p_insert(p):
     '''
     insert : INSERT INTO ID  PARA linsert PARC VALUES PARA linsert PARC PYC
     '''
+    p[0] = Insert(p[3],p[5],p[9],p.lineno(2),1)
+
+
 def p_linsert(p):
     '''
       linsert : linsert COMA expresion
               | expresion
         '''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    elif len(p)==4:
+        p[1].append(p[3])
+        p[0] = p[1]
 
 def p_select(p):
     '''
@@ -371,6 +382,9 @@ def p_expresion(p):
               | ID PUNTO ID 
               | funciones_procedure
     '''
+    if len(p)==2:
+        p[0]= p[1]
+
 def p_operadoressql(p):
     '''operadoressql : between
     '''
