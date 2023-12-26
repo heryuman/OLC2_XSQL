@@ -7,7 +7,9 @@ from Abstract.Instruccion import Instruccion
 from Arbol.AST import AST
 from util.manipulador_xml import CREATE_XML
 from tkinter import filedialog
+from tkinter import messagebox
 class GUI_P:
+    _instances = [] #esta instancia permite hacer lo de cerrar una pestaña y luego poder abrir y que si se carge el contenido del archivo
     def __init__(self) :
         self.contador_pestanas = 0
         self.notebook=None
@@ -55,13 +57,14 @@ class GUI_P:
         #frame_menus
         frame_menus = tk.Frame(self.ventana, bd=0, relief=tk.SOLID, bg='#3a7fff',padx=10,pady=10)
         frame_menus.pack(side="right",expand=tk.YES,fill=tk.BOTH)
+        
         #frame_botones
         frame_botones = tk.Frame(frame_menus,height = 50, bd=0, relief=tk.SOLID,bg='black')
         frame_botones.pack(side="top",fill=tk.X)
         #botones
         btn_archivo= tk.Menubutton(frame_botones,text="Archivo")
         archivo_ops=tk.Menu(btn_archivo)
-        archivo_ops.add_command(label="Abrir")
+        archivo_ops.add_command(label="Abrir", command=self.abrir_archivo)
         archivo_ops.add_command(label="Guardar")
         archivo_ops.add_command(label="Guardar Como" , command=self.guardar_como_archivo)
         archivo_ops.add_command(label="Cerrar", command=self.cerrar_pestana_actual)
@@ -90,11 +93,15 @@ class GUI_P:
 
         #title = tk.Label(frame_botones, text="Inicio de sesion",font=('Times', 30), fg="#666a88",bg='#fcfcfc',pady=50)
         #title.pack(expand=tk.YES,fill=tk.BOTH)
+        self.notebook = ttk.Notebook(frame_menus)
+        self.notebook.pack(expand=tk.YES, fill=tk.BOTH)
         self.ventana.mainloop()
 
+        GUI_P._instances.append(self) #son instancias del GUI ya que no funcionaba al momento de eliminar una pestaña y volver a cargar un archivo
 
-
-
+    @classmethod
+    def get_instances(cls):
+        return cls._instances
 
     def tools_sql(self):
         if self.notebook is None:
@@ -110,8 +117,12 @@ class GUI_P:
         tab.bind("<Button-2>", lambda event: self.cerrar_pestana_actual())
         
     def cerrar_pestana_actual(self):
+        if not self.notebook.tabs():
+            messagebox.showerror("Error", "No hay scripts por cerrar")            
+            return
         index = self.notebook.index("current")
-        self.notebook.forget(index) 
+        self.mat_text.pop(index)  # Elimina el Text asociado a la pestaña cerrada
+        self.notebook.forget(index)
         
 
     def run_script(self):
@@ -167,3 +178,21 @@ class GUI_P:
             contenido_actual = self.mat_text[index].get("1.0", tk.END)
             with open(ruta_archivo, "w") as archivo:
                 archivo.write(contenido_actual)
+    
+    def abrir_archivo(self):
+        if not self.notebook.tabs():
+            messagebox.showerror("Error", "No hay scripts para cargar/abrir un archivo.")
+            return
+        ruta_archivo = filedialog.askopenfilename(filetypes=[("Archivos de texto", "*.sql"), ("Todos los archivos", "*.*")])
+        if ruta_archivo:
+            self.archivo_abierto = ruta_archivo
+            index = self.notebook.index("current")
+            contenido_archivo = ""
+            try:
+                with open(ruta_archivo, "r") as archivo:
+                    contenido_archivo = archivo.read()
+            except FileNotFoundError:
+                messagebox.showerror("Error", f"No se pudo encontrar el archivo: {ruta_archivo}")
+                return
+            self.mat_text[index].delete("1.0", tk.END)
+            self.mat_text[index].insert("1.0", contenido_archivo)
