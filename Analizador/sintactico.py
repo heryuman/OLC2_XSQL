@@ -356,10 +356,11 @@ def p_expresion(p):
               | expresion ORPIPE expresion
               | expresion DIFERENTE expresion
               | NOT_TK expresion
+              | TK_FECHA
               | ID
               | NUMEROSDECIMALES
               | NUMEROS
-              | CADENA
+              | CADENA             
               | expresion IGUAL expresion
               | expresion IGUAL variable
               | variable IGUAL expresion
@@ -369,6 +370,7 @@ def p_expresion(p):
               | ID PUNTO ID 
               | funciones_procedure
     '''
+    
 def p_operadoressql(p):
     '''operadoressql : between
     '''
