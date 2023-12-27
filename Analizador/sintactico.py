@@ -369,10 +369,11 @@ def p_expresion(p):
               | expresion ORPIPE expresion
               | expresion DIFERENTE expresion
               | NOT_TK expresion
+              | TK_FECHA
               | ID
               | NUMEROSDECIMALES
               | NUMEROS
-              | CADENA
+              | CADENA             
               | expresion IGUAL expresion
               | expresion IGUAL variable
               | variable IGUAL expresion
@@ -429,7 +430,6 @@ def p_return (p):
         sent_return : RETURNS expresion PYC
                     | RETURNS expresion 
     '''
-
 def p_exec(p):
     '''
         comandoexec : EXEC ID lexpresion
