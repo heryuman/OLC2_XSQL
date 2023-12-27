@@ -7,7 +7,7 @@ class column(Instruccion):
         super().__init__(fila, colum)
         self.id = id
         self.tipo = tipo
-        self.tamanio = tamanios
+        self.tamanio = 0 if tamanios== None else tamanios
         self.presicion = presicion
         self.restriccion = []
     
