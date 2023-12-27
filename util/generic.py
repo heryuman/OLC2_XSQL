@@ -22,7 +22,7 @@ class INSERT:
 #ListaColumnas si no fuera el caso anterior, selectAll debera ser False
 #l_tb_name la lista de en caso vengan mas de una tabla a consultar
 #db_name, nombre de la BD a donde se va a consultar
-#l_condiciones, lista de condiciones de la consulta
+#l_condiciones, lista de condiciones de la consulta la lista contendra objetos de tipo CONDICION
 class SELECT:
     def __init__(self,selectAll,listaColumnas,l_tb_name,db_name,l_condiciones):
         self._SelectAll=selectAll
@@ -30,4 +30,23 @@ class SELECT:
         self._l_tbname=l_tb_name
         self._db_name=db_name
         self._lcondiciones=l_condiciones
+
+class CONDICION:
+    #from util.generic import OPERADOR
+    def __init__(self,exp1,operador,exp2):
+        self._exp1=exp1
+        self._exp2=exp2
+        self._operador=operador
+
+from enum import Enum
+class OPERADOR(Enum):
+    SUMA=0
+    RESTA=1
+    MULTIPLICACION=2
+    DIVISION=3
+    IGUALACION=4
+    OP_AND=5
+    OP_OR=6
+    DIFERENTE=7
+        
     
