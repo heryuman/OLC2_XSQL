@@ -150,7 +150,7 @@ class CREATE_XML:
 
 
 
-    def xml_gui(nombre_archivo):
+    def xml_gui(nombre_archivo): #esta funcion es para mostrar el xml como un arbol en la parte del GUI
         #nombre_archivo = 'dbfile.xml' #nombre del archivo
         if os.path.exists(nombre_archivo): #verificamos si el archivo existe
             tree = ET.parse(nombre_archivo)
