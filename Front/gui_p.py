@@ -8,6 +8,8 @@ from Arbol.AST import AST
 from util.manipulador_xml import CREATE_XML
 from tkinter import filedialog
 from tkinter import messagebox
+from PIL import Image, ImageTk
+import os
 class GUI_P:
     _instances = [] #esta instancia permite hacer lo de cerrar una pestaña y luego poder abrir y que si se carge el contenido del archivo
     def __init__(self) :
@@ -28,28 +30,7 @@ class GUI_P:
         #self.tree.pack(side="left")
         
         
-        self.ventana.after(2000, self.reload_data)
-        """
-        for database_name, tabla_names, funciones, procedimientos in resultado:
-            print(database_name)
-            h2=tree.insert(root,"end",text=database_name)
-            if tabla_names:
-                rs=tree.insert(h2,"end",text="TABLAS")
-                for tabla_name in tabla_names:
-                    print(tabla_name)
-                    tree.insert(rs,"end",text=tabla_name)
-            if funciones:
-                rs=tree.insert(h2,"end",text="FUNCIONES")
-                for funcion in funciones:
-                    print(funcion)
-                    tree.insert(rs,"end",text=funcion)
-            if procedimientos:
-                rs=tree.insert(h2,"end",text="PROCEDIMIENTOS")
-                for procedimiento in procedimientos:
-                    print(procedimiento)
-                    tree.insert(rs,"end",text=procedimiento)
-        """
-        
+        self.ventana.after(2000, self.reload_data)       
         
        # tree.place(x=0,y=0,relwidth=1,relheight=1)
         self.tree.pack(side="left")
@@ -86,6 +67,9 @@ class GUI_P:
 
         btn_run_sql=tk.Button(frame_botones,text="Run SQL",command=self.run_sql)
         btn_run_sql.pack(side="left",padx=10,pady=10)
+        
+        btn_run_sql=tk.Button(frame_botones,text="Abrir AST",command=self.mostrar_ventana_imagen)
+        btn_run_sql.pack(side="left",padx=10,pady=10)
 
         #frame_form_fill
         self.frame_form_fill = tk.Frame(frame_menus,height = 50,  bd=0, relief=tk.SOLID,bg='#fcfcfc')
@@ -95,6 +79,7 @@ class GUI_P:
         #title.pack(expand=tk.YES,fill=tk.BOTH)
         self.notebook = ttk.Notebook(frame_menus)
         self.notebook.pack(expand=tk.YES, fill=tk.BOTH)
+        #ttk.Button(self.ventana, text="Abrir AST", command=self.mostrar_ventana_imagen).pack(padx=10, pady=10)
         self.ventana.mainloop()
 
         GUI_P._instances.append(self) #son instancias del GUI ya que no funcionaba al momento de eliminar una pestaña y volver a cargar un archivo
@@ -165,6 +150,26 @@ class GUI_P:
                 rs = self.tree.insert(h2, "end", text="TABLAS")
                 for tabla_name in tabla_names:
                     self.tree.insert(rs, "end", text=tabla_name)
+        """
+        for database_name, tabla_names, funciones, procedimientos in resultado:
+            print(database_name)
+            h2=tree.insert(root,"end",text=database_name)
+            if tabla_names:
+                rs=tree.insert(h2,"end",text="TABLAS")
+                for tabla_name in tabla_names:
+                    print(tabla_name)
+                    tree.insert(rs,"end",text=tabla_name)
+            if funciones:
+                rs=tree.insert(h2,"end",text="FUNCIONES")
+                for funcion in funciones:
+                    print(funcion)
+                    tree.insert(rs,"end",text=funcion)
+            if procedimientos:
+                rs=tree.insert(h2,"end",text="PROCEDIMIENTOS")
+                for procedimiento in procedimientos:
+                    print(procedimiento)
+                    tree.insert(rs,"end",text=procedimiento)
+        """
                     
                     
     def salir_programa(self):
@@ -196,3 +201,24 @@ class GUI_P:
                 return
             self.mat_text[index].delete("1.0", tk.END)
             self.mat_text[index].insert("1.0", contenido_archivo)
+            
+    def mostrar_ventana_imagen(self):
+        ventana_imagen = tk.Toplevel(self.ventana)
+        ventana_imagen.title('Reporte AST')
+        #para obtener dimenciones de la pantalla
+        ancho_pantalla = self.ventana.winfo_screenwidth()
+        alto_pantalla = self.ventana.winfo_screenheight()
+        #print("valorx " , ancho_pantalla)
+        #print("valory " , alto_pantalla)
+        ventana_imagen.geometry(f"{ancho_pantalla}x{alto_pantalla}") #tamaño de la ventana al tamaño de la pantalla
+        ruta_imagen = "AST.png"
+        if os.path.exists(ruta_imagen):
+            imagen = Image.open(ruta_imagen)
+            #la imagen debe de ocupar toda la ventana para verse completa
+            cambiarDimencion = imagen.resize((ancho_pantalla, alto_pantalla))
+            imagen_tk = ImageTk.PhotoImage(cambiarDimencion)
+            imagen = ttk.Label(ventana_imagen, image=imagen_tk) #para la nueva ventana
+            imagen.image = imagen_tk  #para que se muestre la imagen en la ventana
+            imagen.pack(fill="both", expand=True) #dimenciones de la imagen dentro de la pantalla
+        else:
+            ttk.Label(ventana_imagen, text="El AST aun no se genera.").pack(padx=10, pady=10)
