@@ -10,9 +10,6 @@ from tkinter import filedialog
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from tkinter import simpledialog
-
-from util.table import TBL
-from util.column import COLUM
 import os
 class GUI_P:
     _instances = [] #esta instancia permite hacer lo de cerrar una pestaña y luego poder abrir y que si se carge el contenido del archivo
@@ -61,8 +58,8 @@ class GUI_P:
         tools_ops=tk.Menu(btn_tools)
         bases_datos_submenu = tk.Menu(tools_ops)
         bases_datos_submenu.add_command(label="Crear nueva BD", command = self.CrearBDNueva) #crea una nueva BD
-        bases_datos_submenu.add_command(label="Eliminar BD") #elimina una BD
-        bases_datos_submenu.add_command(label="Crear DUMP") #crear un script de la base de datos crea un archivo con la creación de tablas, funciones y procedimientos. Solamente Estructura
+        bases_datos_submenu.add_command(label="Eliminar BD", command= self.EliminarDB) #elimina una BD
+        bases_datos_submenu.add_command(label="Crear DUMP", command=self.CrearDUMP) #crear un script de la base de datos crea un archivo con la creación de tablas, funciones y procedimientos. Solamente Estructura
         bases_datos_submenu.add_command(label="Seleccionar BD") #Muestra un listado de las bases de datos en el sevidor
         tools_ops.add_cascade(label="Bases de Datos", menu=bases_datos_submenu)
         
@@ -250,3 +247,15 @@ class GUI_P:
         tabla1.insert_column(columna1)
         creardb.insert_table(tabla1)
         """
+        
+    def EliminarDB(self):
+        elimDB = CREATE_XML()
+        nombre_db = simpledialog.askstring("Eliminar Base de Datos", "Ingres el nombre de la base de datos:")
+        #print(f"La base de datos: {nombre_db} fue eliminada con exito")
+        elimDB.delete_db(nombre_db)
+        
+    def CrearDUMP(self):
+        #print("dump")
+        crear= CREATE_XML()
+        nombre = simpledialog.askstring("Crear DUMP", "Ingrese el nombre de la Base de datos:")
+        crear.createDump(nombre)

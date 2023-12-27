@@ -1,7 +1,8 @@
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
-
 import os
+import tkinter as tk
+from tkinter import messagebox
 class CREATE_XML:
     
     
@@ -30,7 +31,7 @@ class CREATE_XML:
                     for base in db :
                         print("nombre db ",base.get("name_db"))
                         if db_name == base.get("name_db"):
-                            print("ERROR!!, la base ya existe, no se puede agregar")
+                            self.mensajeError("ERROR!!, la base ya existe, no se puede agregar")
                             return
                 self.insert_db(db_name)
         
@@ -172,3 +173,91 @@ class CREATE_XML:
             return []
             
     
+    def delete_db(self, db_name):
+        try:
+            if os.path.isfile("dbfile.xml"):
+                with open("dbfile.xml", "r") as f:
+                    tree = ET.parse(f)
+                root = tree.getroot()
+                bases = root.find(".//BASES")
+                if bases is not None:
+                    elements_to_remove = []
+                    for base_elem in bases.findall("DATABASE"):
+                        if db_name == base_elem.get("name_db"):
+                            elements_to_remove.append(base_elem)
+                    if not elements_to_remove:
+                        self.mensajeError("Error", "La base no existe, no se puede eliminar")
+                        return
+                    for elem in elements_to_remove:
+                        bases.remove(elem)
+                    #se guarda el xml actualizado
+                    cadena_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
+                    xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
+                    with open("dbfile.xml", "w", encoding="utf-8") as archivo:
+                        archivo.write(xml_con_formato)
+                else:
+                    self.mensajeError("Error", "No hay bases de datos para eliminar")
+                    return
+            else:
+                self.mensajeError("Error", "El archivo de base de datos no existe")
+        except Exception as e:
+            print(e)
+
+    
+    def mensajeError(self, tituloVentana, mensaje):
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showerror(tituloVentana, mensaje)
+        root.destroy()
+        
+    def createDump(self,db_name):
+        try:
+            if  os.path.isfile(db_name+".xml"):
+                with open(db_name+".xml","r") as f:
+                    tree=ET.parse(f)
+                root=tree.getroot()
+                db=root.findall(".//DATABASE")
+                base=root.find("BASES_DE_DATOS")
+                if db is not None:
+                    for base in db :
+                        print("nombre db ",base.get("name_db"))
+                        if db_name == base.get("name_db"):
+                            self.mensajeError("ERROR!!, la base ya existe, no se puede agregar")
+                            return
+                self.insert_db2(db_name)
+            else:
+                self.root=ET.Element("BASE_DE_DATOS")
+                #se agrega el nombre de la nueva BD
+                new_bd=ET.SubElement(self.root,"BASES")
+                new_bd_name=ET.SubElement(new_bd,"DATABASE")
+                new_bd_name.attrib["name_db"]=db_name
+                new_bd_eschema=ET.SubElement(new_bd_name,"TABLAS")
+                new_bd_eschema=ET.SubElement(new_bd_name,"FUNCIONES")
+                new_bd_eschema=ET.SubElement(new_bd_name,"PROCEDIMIENTOS")
+                new_bd_eschema.text=" "
+                #guardamos el xml
+                cadena_xml = ET.tostring(self.root, encoding="utf-8").decode("utf-8")
+                xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
+                with open(db_name+".xml", "w", encoding="utf-8") as archivo:
+                    archivo.write(xml_con_formato)
+        except Exception as e:
+            print(e)
+    
+    
+    def insert_db2(self,db_name):
+        if  os.path.isfile(db_name+".xml"):
+                with open(db_name+".xml","r") as f:
+                    tree=ET.parse(f)
+                root=tree.getroot()
+                base=root.find("BASES")
+                print("+-+-> ",base)
+                new_bd_name=ET.SubElement(base,"DATABASE")
+                new_bd_name.attrib["name_db"]=db_name
+                new_bd_eschema=ET.SubElement(new_bd_name,"TABLAS")
+                new_bd_eschema=ET.SubElement(new_bd_name,"FUNCIONES")
+                new_bd_eschema=ET.SubElement(new_bd_name,"PROCEDIMIENTOS")
+                new_bd_eschema.text=" "
+                cadena_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
+                xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
+                with open(db_name+".xml", "w", encoding="utf-8") as archivo:
+                    archivo.write(xml_con_formato)
