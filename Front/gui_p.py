@@ -259,3 +259,10 @@ class GUI_P:
         crear= CREATE_XML()
         nombre = simpledialog.askstring("Crear DUMP", "Ingrese el nombre de la Base de datos:")
         crear.createDump(nombre)
+    
+    def exportarDB(self):
+        print("exportar")
+        
+    def importarDB(self):
+        print("importar")
+        nombre = simpledialog.askstring("Crear DUMP", "Ingrese el nombre de la Base de datos:")
