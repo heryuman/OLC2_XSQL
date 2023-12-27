@@ -183,7 +183,7 @@ class CREATE_XML:
                 #print("linto",len(l_into),l_into)
                 #print("cols_into",len(cols_into),cols_into)
                 tab_insert=tb.find(".//INSERT//COLUMNAS")
-                cols_insert=ET.SubElement(tab_insert,"COLUMNAS")
+                #cols_insert=ET.SubElement(tab_insert,"COLUMNA")
                 
                 atri=[]
                 for atr in cols_into:
@@ -193,7 +193,7 @@ class CREATE_XML:
                        if atri[i]["nombrecol"].lower()==l_into[i].lower():
                             if self.compare_type(l_values[i],atri[i]["tipo"].lower()):
                                  print(l_values[i])
-                                 col_insert=ET.SubElement(cols_insert,"COLUMNA")
+                                 col_insert=ET.SubElement(tab_insert,"COLUMNA")
                                  col_insert.attrib["nombrecol"]=atri[i]["nombrecol"]
                                  col_insert.attrib["tipo"]=atri[i]["tipo"]
                                  col_insert.attrib["pk"]=atri[i]["pk"]
@@ -244,8 +244,40 @@ class CREATE_XML:
          else:
               False 
     
-    def select(self):
-        print("")
+    def select(self,obj_select):
+        select_all=obj_select._SelectAll
+        db_name=obj_select._db_name
+        ltb=obj_select._l_tbname
+        lcond=obj_select._lcondiciones
+        
+        if select_all:
+            self.select_all(db_name,ltb)
+    
+    
+    def select_all(self,db_name,ltb):
+        
+        if self.exist_db(db_name):
+            with open("dbfile.xml","r")as f:
+              tree=ET.parse(f)
+            root=tree.getroot()
+
+            db=root.find(".//DATABASE[@name_db='"+db_name.lower()+"']")
+            if db is not None:
+                for tabla in ltb:
+                    tb=root.find(".//DATABASE//TABLAS//TABLA[@tab_name='"+tabla.lower()+"']")
+                    if tb is not None:
+                        colselect=tb.findall(".//INSERT//COLUMNAS//COLUMNA")
+                        for i in range(0,len(colselect)):
+                            print(colselect[i].get("nombrecol")," : ", colselect[i].get("valor"))
+                            
+                        #print(colselect["nombrecol"]," -- ")
+                    
+            else:
+                print(f'Error, la DB {db_name} no existe')
+            
+        
+        
+        
        
                
 #Area Cutzal
