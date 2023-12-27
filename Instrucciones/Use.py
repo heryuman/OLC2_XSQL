@@ -1,4 +1,5 @@
 from Abstract.Instruccion import Instruccion
+from Arbol.Nodo import Nodo
 from Simbolo.Ambito import Ambito
 
 class Use(Instruccion):
@@ -6,9 +7,10 @@ class Use(Instruccion):
         super().__init__(fila, colum)
         self.db_name = db_name
 
-    def compilar(self, tree, table:Ambito):
+    def compilar(self, tree, tablaSim: Ambito, nodo: Nodo, output: []):
+        #return super().compilar(tree, tablaSim, nodo, output)
 
-        ambito = self.getAmbitoPadre(table)
+        ambito = self.getAmbitoPadre(tablaSim)
 
         ambito.setValueFromId(self.env.useDB, self.db_name)
         

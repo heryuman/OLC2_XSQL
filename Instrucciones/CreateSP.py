@@ -1,5 +1,7 @@
 from Abstract.Instruccion import Instruccion
+from Arbol.Nodo import Nodo
 from Instrucciones.Variable import Variable
+from Simbolo.Ambito import Ambito
 
 class CreateSP (Instruccion):
 
@@ -9,5 +11,5 @@ class CreateSP (Instruccion):
         self.parametros = parametros
         self.instrucciones:[Variable] = instrucciones 
     
-    def compilar(self, tree, table):
-        return super().compilar(tree, table)
+    def compilar(self, tree, tablaSim: Ambito, nodo: Nodo, output: []):
+        return super().compilar(tree, tablaSim, nodo, output)

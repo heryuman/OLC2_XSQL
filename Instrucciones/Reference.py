@@ -1,4 +1,6 @@
 from Abstract.Instruccion import Instruccion
+from Arbol.Nodo import Nodo
+from Simbolo.Ambito import Ambito
 
 class Reference(Instruccion):
 
@@ -8,7 +10,7 @@ class Reference(Instruccion):
         self.columReference:str = column
 
 
-    def compilar(self, tree, table):
-        return super().compilar(tree, table)
+    def compilar(self, tree, tablaSim: Ambito, nodo: Nodo, output: []):
+        return super().compilar(tree, tablaSim, nodo, output)
     
     

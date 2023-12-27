@@ -1,0 +1,10 @@
+digraph ast{
+node0[label ="i"];
+node0 -> node00
+node00[label ="inst"];
+node00 -> node000
+node000[label ="create_db"];
+node000 -> node0000
+node0000[label ="BancoCentral"];
+
+}

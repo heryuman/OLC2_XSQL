@@ -47,8 +47,10 @@ class Arbol:
     def crearArchivo(self, path:str, body:str):
         with open(path, 'w') as archivo:
             archivo.write(body)
-
-            result = subprocess.run(self._env._comandoGraphviz)
-            print(result)
+            
+        
+        result = subprocess.run(self._env._comandoGraphviz, shell=True)
+            
+        print(result)
 
         

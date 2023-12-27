@@ -1,4 +1,5 @@
 from Abstract.Instruccion import Instruccion
+from Arbol.Nodo import Nodo
 from util.manipulador_xml import CREATE_XML
 from typing import List
 from Instrucciones.Column import column
@@ -17,7 +18,8 @@ class CreateTable (Instruccion):
         self.manipulador = CREATE_XML()
         self.columnas:List[column] = listaColumns
 
-    def compilar(self, tree, tablaSim:Ambito):
+    def compilar(self, tree, tablaSim: Ambito, nodo: Nodo, output: []):
+        #return super().compilar(tree, tablaSim, nodo, output)
         table = TBL(self.dbAplied,self.id)
         
         if self.dbAplied == None:

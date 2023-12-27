@@ -8,6 +8,8 @@ from Simbolo.Simbolo import Simbolo
 from Abstract.Instruccion import Instruccion
 from Arbol.AST import AST
 from enviroment import enviroment
+from Arbol.Arbol import Arbol
+from Arbol.Nodo import Nodo
 
 class GUI_P:
     def __init__(self) :
@@ -95,13 +97,38 @@ class GUI_P:
         # Suponiendo que 'parser' es una instancia de LRParser
         instruccion = parser.parse(entrada)
         ast = AST(instruccion)
-
-        
+        arbol = Arbol(self.getInitNodo())
+        salidaConsola:[str]=[]
+        c:int = 0
         try:
+            padre = Nodo("","",0,0)
             for inst in ast.getInstrucciones():
                 print("el objeto es de tipo ",type(inst))
+                
+                hijo2 = Nodo("","",0,0)
                 if isinstance(inst,Instruccion):
-                    inst.compilar(ast,self.tablaSimbolos)
+
+                    if padre._token !="":
+                        hijo2._token = padre._token
+                        hijo2._lexema = padre._lexema
+                        hijo2._linea = padre._linea
+                        hijo2._columna = padre._columna
+
+                    hijo = Nodo("","",0,0)
+                    inst.compilar(ast,self.tablaSimbolos,hijo,salidaConsola)
+
+                    padre = Nodo("INSTRUCCION","inst",0,0)
+                    
+                    if hijo2._token != "":
+                        padre.addHijo(hijo2)
+
+                    padre.addHijo(hijo)
+
+
+            arbol._raiz.addHijo(padre)
+
+            ##MANDAMOS A GRAFICAR
+            arbol.graficarAST()
         
         except Exception as e:
             print(f"Error al ejecutar las instrucciones: {e} ")
@@ -121,6 +148,8 @@ class GUI_P:
         simbolo._valor=""
 
         return simbolo
-        
+    def getInitNodo(self)->Nodo:
+
+        return Nodo('INICIO','i',0,0)
         
 

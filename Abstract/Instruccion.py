@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 from enviroment import enviroment
+from Arbol.Nodo import Nodo
+
+from Simbolo.Ambito import Ambito
 #from TablaSimbolos.Tabla_Simbolos import *
 
 class Instruccion(ABC):
@@ -10,5 +13,5 @@ class Instruccion(ABC):
         self.env = enviroment()
     
     @abstractmethod
-    def compilar(self, tree, table):
+    def compilar(self, tree, tablaSim:Ambito,nodo:Nodo,output:[]):
         pass

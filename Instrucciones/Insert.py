@@ -1,4 +1,5 @@
 from Abstract.Instruccion import Instruccion
+from Arbol.Nodo import Nodo
 from Simbolo.Ambito import Ambito
 from util.generic import INSERT
 from util.manipulador_xml import CREATE_XML
@@ -15,8 +16,8 @@ class Insert(Instruccion):
 
 
     
-    def compilar(self, tree, tablaSim:Ambito):
-        
+    def compilar(self, tree, tablaSim: Ambito, nodo: Nodo, output: []):
+        #return super().compilar(tree, tablaSim, nodo, output)
         if self.dbAplied == None:
             simbolo = tablaSim.getValueFromSimbolo(self.env.useDB)
 
