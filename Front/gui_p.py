@@ -132,6 +132,7 @@ class GUI_P:
         
         except Exception as e:
             print(f"Error al ejecutar las instrucciones: {e} ")
+            salidaConsola.append(f"Error encontrado de tipo Exception: {e}")
 
     def run_sql(self):
         index=self.notebook.index("current")
