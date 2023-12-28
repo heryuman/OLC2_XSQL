@@ -20,6 +20,25 @@ class CreateTable (Instruccion):
 
     def compilar(self, tree, tablaSim: Ambito, nodo: Nodo, output: []):
         #return super().compilar(tree, tablaSim, nodo, output)
+
+        
+        nodo._token = "CREATE_TABLE"
+        nodo._lexema = "create_table"
+        nodo._columna = self.colum
+        nodo._linea = self.fila
+
+        hijo = Nodo("Table",self.id,self.fila, self.colum)
+
+
+        nodo.addHijo(hijo)
+
+        for col in self.columnas:
+            tipo = Nodo("TIPO",col.tipo,col.fila,col.colum)
+            identi = Nodo("ID",col.id,col.fila, col.colum)
+            tipo.addHijo(identi)
+            hijo.addHijo(tipo)
+        
+
         table = TBL(self.dbAplied,self.id)
         
         if self.dbAplied == None:

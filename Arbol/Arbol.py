@@ -17,7 +17,7 @@ class Arbol:
     def graficaNodos(self, nodo:Nodo, i:str)->str:
         k:int=0
         r:str = ""
-        nodoTerm:str =  nodo._lexema
+        nodoTerm:str =  str(nodo._lexema)
         nodoTerm= nodoTerm.replace("\"", "")
 
         r = "node"+i+"[label =\""+nodoTerm +"\"];\n"
