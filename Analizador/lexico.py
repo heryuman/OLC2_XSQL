@@ -93,6 +93,7 @@ tokens=[
         'ARROBA',
         'CADENA',
         'DIFERENTE',
+        'TK_FECHA',
         'NOT_TK'
 ]+list(reservadas.values())
 
@@ -135,7 +136,10 @@ def t_NUMEROS(t):
         t.value = 0
     return t
 #esto es para la parte de los decimales
-
+def t_TK_FECHA(t):
+    r'(\'\d{4}-\d{2}-\d{2}\')'
+    t.value = t.value[1:-1]
+    return t
 
 def t_ID(t):
     r'[a-zA-Z_0-9][a-zA-Z_0-9]*'
