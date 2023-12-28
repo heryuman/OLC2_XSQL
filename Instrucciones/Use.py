@@ -21,7 +21,7 @@ class Use(Instruccion):
         ambito = self.getAmbitoPadre(tablaSim)
 
         ambito.setValueFromId(self.env.useDB, self.db_name)
-        
+        output.append("Se ha selecionado una base de datos.")
         #return super().compilar(tree, table)
 
     ##El useDB, solo debe de estar dentro del padre

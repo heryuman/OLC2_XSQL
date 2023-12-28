@@ -19,23 +19,22 @@ class Insert(Instruccion):
     def compilar(self, tree, tablaSim: Ambito, nodo: Nodo, output: []):
         #return super().compilar(tree, tablaSim, nodo, output)
 
-        nodo._token = "INSERT"
-        nodo._lexema = "insert"
-        nodo._linea = self.fila
-        nodo._columna = self.colum
-
-        
-
-
         if self.dbAplied == None:
             simbolo = tablaSim.getValueFromSimbolo(self.env.useDB)
 
             self.dbAplied = simbolo._valor
 
-        if self.dbAplied == None:
+        if self.dbAplied == None or self.dbAplied=="":
             print("No hay una BBDD previamente selecionada")
+            output.append(self.env.dbNotFound)
             return
-        
+    
+        nodo._token = "INSERT"
+        nodo._lexema = "insert"
+        nodo._linea = self.fila
+        nodo._columna = self.colum
+
+    
         hijo1=Nodo("DBAPLIED", self.dbAplied,self.fila, self.colum)
         hijo2=Nodo("TBLAPLIED", self.tb_name,self.fila, self.colum)
         

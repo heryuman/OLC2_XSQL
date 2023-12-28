@@ -5,93 +5,43 @@ node00[label ="inst"];
 node00 -> node000
 node000[label ="inst"];
 node000 -> node0000
-node0000[label ="inst"];
+node0000[label ="insert"];
 node0000 -> node00000
-node00000[label ="inst"];
-node00000 -> node000000
-node000000[label ="inst"];
-node000000 -> node0000000
-node0000000[label ="create_db"];
-node0000000 -> node00000000
-node00000000[label ="tbbanco"];
-node00000 -> node000001
-node000001[label ="use"];
-node000001 -> node0000010
-node0000010[label ="tbbanco"];
+node00000[label ="tbbanco"];
 node0000 -> node00001
-node00001[label ="create_table"];
+node00001[label ="tbcliente"];
 node00001 -> node000010
-node000010[label ="tbcliente"];
+node000010[label ="codigocliente"];
 node000010 -> node0000100
-node0000100[label ="nvarchar"];
-node0000100 -> node00001000
-node00001000[label ="codigocliente"];
-node000010 -> node0000101
-node0000101[label ="nvarchar"];
-node0000101 -> node00001010
-node00001010[label ="primer_nombre"];
-node000010 -> node0000102
-node0000102[label ="nvarchar"];
-node0000102 -> node00001020
-node00001020[label ="segundo_nombre"];
-node000010 -> node0000103
-node0000103[label ="nvarchar"];
-node0000103 -> node00001030
-node00001030[label ="primer_apellido"];
-node000010 -> node0000104
-node0000104[label ="nvarchar"];
-node0000104 -> node00001040
-node00001040[label ="segundo_apellido"];
-node000010 -> node0000105
-node0000105[label ="date"];
-node0000105 -> node00001050
-node00001050[label ="fecha_nacimiento"];
-node000010 -> node0000106
-node0000106[label ="nvarchar"];
-node0000106 -> node00001060
-node00001060[label ="genero"];
-node000010 -> node0000107
-node0000107[label ="int"];
-node0000107 -> node00001070
-node00001070[label ="idestado"];
-node000 -> node0001
-node0001[label ="insert"];
-node0001 -> node00010
-node00010[label ="tbbanco"];
-node0001 -> node00011
-node00011[label ="tbcliente"];
-node00011 -> node000110
-node000110[label ="codigocliente"];
-node000110 -> node0001100
-node0001100[label ="GT-0001"];
-node00011 -> node000111
-node000111[label ="primer_nombre"];
-node000111 -> node0001110
-node0001110[label ="PETER"];
-node00011 -> node000112
-node000112[label ="segundo_nombre"];
-node000112 -> node0001120
-node0001120[label ="JUAN"];
-node00011 -> node000113
-node000113[label ="primer_apellido"];
-node000113 -> node0001130
-node0001130[label ="PARKER"];
-node00011 -> node000114
-node000114[label ="segundo_apellido"];
-node000114 -> node0001140
-node0001140[label ="SEGUNDO"];
-node00011 -> node000115
-node000115[label ="fecha_nacimiento"];
-node000115 -> node0001150
-node0001150[label ="1990-01-01"];
-node00011 -> node000116
-node000116[label ="genero"];
-node000116 -> node0001160
-node0001160[label ="M"];
-node00011 -> node000117
-node000117[label ="idestado"];
-node000117 -> node0001170
-node0001170[label ="1"];
+node0000100[label ="GT-0001"];
+node00001 -> node000011
+node000011[label ="primer_nombre"];
+node000011 -> node0000110
+node0000110[label ="PETER"];
+node00001 -> node000012
+node000012[label ="segundo_nombre"];
+node000012 -> node0000120
+node0000120[label ="JUAN"];
+node00001 -> node000013
+node000013[label ="primer_apellido"];
+node000013 -> node0000130
+node0000130[label ="PARKER"];
+node00001 -> node000014
+node000014[label ="segundo_apellido"];
+node000014 -> node0000140
+node0000140[label ="SEGUNDO"];
+node00001 -> node000015
+node000015[label ="fecha_nacimiento"];
+node000015 -> node0000150
+node0000150[label ="1990-01-01"];
+node00001 -> node000016
+node000016[label ="genero"];
+node000016 -> node0000160
+node0000160[label ="M"];
+node00001 -> node000017
+node000017[label ="idestado"];
+node000017 -> node0000170
+node0000170[label ="1"];
 node00 -> node001
 node001[label ="insert"];
 node001 -> node0010

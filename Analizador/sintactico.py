@@ -10,6 +10,9 @@ from Instrucciones.Reference import Reference
 from Instrucciones.Use import Use
 from Instrucciones.Insert import Insert
 from Instrucciones.Select import Select
+from Instrucciones.Variable import Variable
+from Instrucciones.ColumnWithoutFrom import ColumnWithoutFrom
+from Instrucciones.Expresion import Expresion
 #diccionario de nombres
 lista=[]
 listaErrores=[]
@@ -87,9 +90,9 @@ def p_createdb(p):
                 | CREATE DATA BASE ID PYC
     '''
     if len(p)== 6:
-        p[0]= CreateDB(p[4],p.lineno(2),1)
+        p[0]= CreateDB(p[4],p.lineno(2),find_column(input,p.slice[1]))
     else:
-        p[0] = CreateDB(p[3],p.lineno(2),1)
+        p[0] = CreateDB(p[3],p.lineno(2),find_column(input,p.slice[1]))
     
 def p_createtbl(p):
     '''createtbl : CREATE TABLE ID PARA lcolumnas PARC PYC
@@ -193,6 +196,7 @@ def p_reference(p):
 def p_variable(p):
     '''variable :  ARROBA ID
     '''
+    p[0]= Variable(p[2],None,p.lineno(2),find_column())
 def p_declaravar(p):
    ''' declaracion : DECLARE variable tipo PYC
                     | DECLARE ID tipo PYC 
@@ -278,6 +282,22 @@ def p_select(p):
         | SELECT lselect 
         | SELECT lselect PYC
     '''
+    if len(p)==6:
+        ntabs = True if len(p[4])==1 else False
+        if p[2]=="*":
+            
+            p[0]=Select(ntabs,p[4],[],None,[],p.lineno(2),1)
+        else:
+            p[0]=Select(ntabs,p[4],p[2],None,[],p.lineno(),1)
+
+
+    elif len(p)==7:
+        ntabs = True if len(p[4])==1 else False
+        if p[2] =="*":
+            p[0]=Select(ntabs,p[4],[],None,p[5],p.lineno(2),1)
+        else:
+            p[0]=Select(ntabs,p[4],p[2],None,p[5],p.lineno(2),1)
+    
 def p_funciones_procedure(p):
     '''
         funciones_procedure : ID PARA lexpresion PARC
@@ -299,7 +319,18 @@ def p_lids(p):
     #agregamos estas produccioens lselect COMA expresion
     #    | expresion para esta cadena de entrada
     # SELECT tbcliente.codigocliente,CONCATENA(tbcliente.primer_nombre,tbcliente.primer_apellido)
+    if len(p)==2:
+        p[0] = [p[1]]
+    elif len(p)==4:
+        if p[3]==".":
+            p[0]=[ColumnWithoutFrom(p[1],p[3],p.lineno(2),1)]
+        else:
 
+            p[1].append(p[3])
+            p[0]= p[1]
+
+
+    
 def p_update(p):
     '''update : UPDATE ID SET lupdate condicion PYC
 
@@ -385,7 +416,9 @@ def p_expresion(p):
     '''
     if len(p)==2:
         p[0]= p[1]
-
+    else:
+        p[0]=Expresion(p.lineno, find_column(input,p.slice[1]))
+    
 def p_operadoressql(p):
     '''operadoressql : between
     '''
@@ -473,3 +506,13 @@ def p_error(p):
 
 import ply.yacc as yacc
 parser=yacc.yacc()
+
+##para ejecutar
+
+def parse(inp):
+    global parser
+
+    parser = yacc.yacc()
+    global input
+    input = inp
+    return parser.parse(inp)

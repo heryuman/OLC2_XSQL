@@ -20,8 +20,19 @@ class CreateTable (Instruccion):
 
     def compilar(self, tree, tablaSim: Ambito, nodo: Nodo, output: []):
         #return super().compilar(tree, tablaSim, nodo, output)
+        table = TBL(self.dbAplied,self.id)
 
-        
+
+        if self.dbAplied == None:
+            simbolo = tablaSim.getValueFromSimbolo(self.env.useDB)
+
+            self.dbAplied = simbolo._valor
+            table._db_name = self.dbAplied
+
+        if self.dbAplied == None or self.dbAplied =="":
+            print("No hay una BBDD previamente selecionada")
+            output.append(self.env.dbNotFound)
+            return
         nodo._token = "CREATE_TABLE"
         nodo._lexema = "create_table"
         nodo._columna = self.colum
@@ -39,17 +50,6 @@ class CreateTable (Instruccion):
             hijo.addHijo(tipo)
         
 
-        table = TBL(self.dbAplied,self.id)
-        
-        if self.dbAplied == None:
-            simbolo = tablaSim.getValueFromSimbolo(self.env.useDB)
-
-            self.dbAplied = simbolo._valor
-            table._db_name = self.dbAplied
-
-        if self.dbAplied == None:
-            print("No hay una BBDD previamente selecionada")
-            return
         
         for col in self.columnas:
                                             #el pk es de tipo False, posterior se hará el cambio sí así amerita

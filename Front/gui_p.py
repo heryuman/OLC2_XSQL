@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from util.generic import GENERIC
-from Analizador.sintactico import parser
+from Analizador.sintactico import parse as Analizar
 from Analizador.sintactico import useDB
 from Simbolo.Ambito import Ambito
 from Simbolo.Simbolo import Simbolo
@@ -134,7 +134,7 @@ class GUI_P:
     def run_script(self):
         index = self.notebook.index("current")
         entrada = self.mat_text[index].get("1.0", "end-1c")
-        instruccion = parser.parse(entrada)
+        instruccion = Analizar(entrada)
         ast = AST(instruccion)
         arbol = Arbol(self.getInitNodo())
         salidaConsola:[str]=[]
@@ -159,10 +159,11 @@ class GUI_P:
 
                     padre = Nodo("INSTRUCCION","inst",0,0)
                     
-                    if hijo2._token != "":
+                    if hijo2._token != "" and hijo._token!="":
                         padre.addHijo(hijo2)
 
-                    padre.addHijo(hijo)
+                    if not hijo._token=="":
+                        padre.addHijo(hijo)
 
 
             arbol._raiz.addHijo(padre)
@@ -173,6 +174,8 @@ class GUI_P:
         except Exception as e:
             print(f"Error al ejecutar las instrucciones: {e} ")
             salidaConsola.append(f"Error encontrado de tipo Exception: {e}")
+
+        print(salidaConsola)
 
     def run_sql(self):
         index=self.notebook.index("current")
