@@ -113,6 +113,7 @@ class GUI_P:
                         hijo2._lexema = padre._lexema
                         hijo2._linea = padre._linea
                         hijo2._columna = padre._columna
+                        hijo2._hijos = padre._hijos
 
                     hijo = Nodo("","",0,0)
                     inst.compilar(ast,self.tablaSimbolos,hijo,salidaConsola)
