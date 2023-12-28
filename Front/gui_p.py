@@ -8,7 +8,7 @@ from Arbol.AST import AST
 from util.manipulador_xml import CREATE_XML
 from tkinter import filedialog
 from tkinter import messagebox
-from PIL import Image, ImageTk
+import subprocess
 from tkinter import simpledialog
 import os
 class GUI_P:
@@ -31,7 +31,7 @@ class GUI_P:
         #self.tree.pack(side="left")
         
         
-        self.ventana.after(2000, self.reload_data)       
+        self.ventana.after(20000, self.reload_data)       
         
        # tree.place(x=0,y=0,relwidth=1,relheight=1)
         self.tree.pack(side="left")
@@ -147,7 +147,7 @@ class GUI_P:
     def reload_data(self):
         resultados = CREATE_XML.xml_gui('dbfile.xml')
         self.update_gui(resultados)
-        self.ventana.after(2000, self.reload_data)
+        self.ventana.after(20000, self.reload_data)
 
     def update_gui(self, resultados):
         for item in self.tree.get_children():
@@ -214,25 +214,23 @@ class GUI_P:
             self.mat_text[index].insert("1.0", contenido_archivo)
             
     def mostrar_ventana_imagen(self):
-        ventana_imagen = tk.Toplevel(self.ventana)
-        ventana_imagen.title('Reporte AST')
-        #para obtener dimenciones de la pantalla
-        ancho_pantalla = self.ventana.winfo_screenwidth()
-        alto_pantalla = self.ventana.winfo_screenheight()
-        #print("valorx " , ancho_pantalla)
-        #print("valory " , alto_pantalla)
-        ventana_imagen.geometry(f"{ancho_pantalla}x{alto_pantalla}") #tamaño de la ventana al tamaño de la pantalla
-        ruta_imagen = "AST.png"
-        if os.path.exists(ruta_imagen):
-            imagen = Image.open(ruta_imagen)
-            #la imagen debe de ocupar toda la ventana para verse completa
-            cambiarDimencion = imagen.resize((ancho_pantalla, alto_pantalla))
-            imagen_tk = ImageTk.PhotoImage(cambiarDimencion)
-            imagen = ttk.Label(ventana_imagen, image=imagen_tk) #para la nueva ventana
-            imagen.image = imagen_tk  #para que se muestre la imagen en la ventana
-            imagen.pack(fill="both", expand=True) #dimenciones de la imagen dentro de la pantalla
-        else:
-            ttk.Label(ventana_imagen, text="El AST aun no se genera.").pack(padx=10, pady=10)
+        try:
+            # Obtén el directorio del script actual (front)
+            directorio_script = os.path.dirname(__file__)
+            # Construye la ruta relativa al directorio raíz
+            ruta_imagen = os.path.join(directorio_script, '..', 'AST.png')
+            # Normaliza la ruta para manejar barras inclinadas y barras invertidas
+            ruta_imagen = os.path.normpath(ruta_imagen)
+            # Verifica si el archivo de imagen existe
+            if os.path.exists(ruta_imagen):
+                # Intenta abrir la imagen con el visor de imágenes del sistema operativo
+                subprocess.Popen(['start', ruta_imagen], shell=True)
+            else:
+                print("La imagen 'AST.png' no existe en la ubicación especificada.")
+
+        except Exception as e:
+            # Maneja cualquier excepción que pueda ocurrir al intentar abrir la imagen
+            print(f"Error al abrir la imagen: {e}")
     
     
     
