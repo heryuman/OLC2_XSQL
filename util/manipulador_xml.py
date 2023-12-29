@@ -210,54 +210,91 @@ class CREATE_XML:
         messagebox.showerror(tituloVentana, mensaje)
         root.destroy()
         
-    def createDump(self,db_name):
+    def createDump(self, db_name):
         try:
-            if  os.path.isfile(db_name+".xml"):
-                with open(db_name+".xml","r") as f:
-                    tree=ET.parse(f)
-                root=tree.getroot()
-                db=root.findall(".//DATABASE")
-                base=root.find("BASES_DE_DATOS")
-                if db is not None:
-                    for base in db :
-                        print("nombre db ",base.get("name_db"))
-                        if db_name == base.get("name_db"):
-                            self.mensajeError("ERROR!!, la base ya existe, no se puede agregar")
-                            return
-                self.insert_db2(db_name)
+            dbfile_path = "dbfile.xml"
+
+            if not os.path.isfile(dbfile_path):
+                self.mensajeError("ERROR!!, el archivo 'dbfile.xml' no existe")
+                return
+
+            tree = ET.parse(dbfile_path)
+            root = tree.getroot()
+            databases = root.findall(".//DATABASE")
+            if databases is not None:
+                for database in databases:
+                    if db_name == database.get("name_db"):
+                        self.insert_db2(db_name, root)
+                        return
+
+                self.mensajeError(f"ERROR!!, la base '{db_name}' no existe en 'dbfile.xml'")
             else:
-                self.root=ET.Element("BASE_DE_DATOS")
-                #se agrega el nombre de la nueva BD
-                new_bd=ET.SubElement(self.root,"BASES")
-                new_bd_name=ET.SubElement(new_bd,"DATABASE")
-                new_bd_name.attrib["name_db"]=db_name
-                new_bd_eschema=ET.SubElement(new_bd_name,"TABLAS")
-                new_bd_eschema=ET.SubElement(new_bd_name,"FUNCIONES")
-                new_bd_eschema=ET.SubElement(new_bd_name,"PROCEDIMIENTOS")
-                new_bd_eschema.text=" "
-                #guardamos el xml
-                cadena_xml = ET.tostring(self.root, encoding="utf-8").decode("utf-8")
-                xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
-                with open(db_name+".xml", "w", encoding="utf-8") as archivo:
-                    archivo.write(xml_con_formato)
+                self.mensajeError("ERROR!!, no hay bases de datos en 'dbfile.xml'")
         except Exception as e:
             print(e)
-    
-    
-    def insert_db2(self,db_name):
-        if  os.path.isfile(db_name+".xml"):
-                with open(db_name+".xml","r") as f:
-                    tree=ET.parse(f)
-                root=tree.getroot()
-                base=root.find("BASES")
-                print("+-+-> ",base)
-                new_bd_name=ET.SubElement(base,"DATABASE")
-                new_bd_name.attrib["name_db"]=db_name
-                new_bd_eschema=ET.SubElement(new_bd_name,"TABLAS")
-                new_bd_eschema=ET.SubElement(new_bd_name,"FUNCIONES")
-                new_bd_eschema=ET.SubElement(new_bd_name,"PROCEDIMIENTOS")
-                new_bd_eschema.text=" "
-                cadena_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
-                xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
-                with open(db_name+".xml", "w", encoding="utf-8") as archivo:
-                    archivo.write(xml_con_formato)
+
+    def insert_db2(self, db_name, root):
+        original_database = root.find(f".//DATABASE[@name_db='{db_name}']")
+        if original_database is None:
+            self.mensajeError(f"ERROR!!, la base '{db_name}' no existe")
+            return
+
+        existing_database = root.find(f".//DATABASE[@name_db='{db_name}_DUMP']")
+        if existing_database is not None:
+            self.mensajeError(f"ERROR!!, la base '{db_name}_DUMP' ya existe")
+            return
+
+        new_base_datos = ET.Element("BASE_DE_DATOS")
+        new_bases = ET.SubElement(new_base_datos, "BASES")
+
+        new_database = ET.SubElement(new_bases, "DATABASE")
+        new_database.attrib["name_db"] = f"{db_name}_DUMP"
+
+        # Copiar estructura de tablas
+        original_tables = original_database.find("TABLAS")
+        if original_tables is not None:
+            new_tables = ET.SubElement(new_database, "TABLAS")
+            for original_table in original_tables.findall("TABLA"):
+                new_table = ET.SubElement(new_tables, "TABLA", attrib={"tab_name": original_table.get("tab_name")})
+                create_element = original_table.find("CREATE")
+                if create_element is not None:
+                    new_create = ET.SubElement(new_table, "CREATE")
+                    self.copy_element(create_element, new_create)
+
+        # Copiar FUNCIONES
+        original_functions = original_database.find("FUNCIONES")
+        if original_functions is not None:
+            new_functions = ET.SubElement(new_database, "FUNCIONES")
+            for original_function in original_functions.findall("FUNCION"):
+                new_function = ET.SubElement(new_functions, "FUNCION", attrib=original_function.attrib)
+                create_element = original_function.find("CREATE")
+                if create_element is not None:
+                    new_create = ET.SubElement(new_function, "CREATE")
+                    self.copy_element(create_element, new_create)
+
+        # Copiar PROCEDIMIENTOS
+        original_procedures = original_database.find("PROCEDIMIENTOS")
+        if original_procedures is not None:
+            new_procedures = ET.SubElement(new_database, "PROCEDIMIENTOS")
+            for original_procedure in original_procedures.findall("PROCEDIMIENTO"):
+                new_procedure = ET.SubElement(new_procedures, "PROCEDIMIENTO", attrib=original_procedure.attrib)
+                create_element = original_procedure.find("CREATE")
+                if create_element is not None:
+                    new_create = ET.SubElement(new_procedure, "CREATE")
+                    self.copy_element(create_element, new_create)
+
+        cadena_xml = ET.tostring(new_base_datos, encoding="utf-8").decode("utf-8")
+        xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
+        with open(f"{db_name}_DUMP.xml", "w", encoding="utf-8") as archivo:
+            archivo.write(xml_con_formato)
+
+    def copy_element(self, original, new_element):
+        for original_column in original.findall("*"):
+            new_create_column = ET.SubElement(new_element, original_column.tag, attrib=original_column.attrib)
+            for inner_column in original_column.findall("*"):
+                new_inner_column = ET.SubElement(new_create_column, inner_column.tag, attrib=inner_column.attrib)
+                if inner_column.text:
+                    new_inner_column.text = inner_column.text
+
+    def mensajeError(self, mensaje):
+        print("Error:", mensaje)
