@@ -6,3 +6,7 @@ class Iexpresion:
     @abstractmethod
     def getValor(controlador,tablaSimbolo):
         pass
+    
+    @abstractmethod
+    def getSize(controlador,tablaSimbolo):
+        pass
