@@ -177,9 +177,22 @@ class CREATE_XML:
                 #cols_insert=ET.SubElement(tab_insert,"COLUMNA")
                 
                 atri=[]
+                colNulls=[]
                 for atr in cols_into:
                     atri.append(atr.attrib) 
-                if len(l_into)==len(cols_into):
+                print("tamaño inicial de atri", len(atri))
+                for colum in atri:
+                    if colum["nombrecol"] in l_into:
+                        print("existe la colummna",colum["nombrecol"])
+                    else:
+                        print("No existe la colummna",colum["nombrecol"])
+                        print("Pero es Null ",colum["isNull"])
+                        colNulls.append(colum)
+                        atri.remove(colum)
+                print("el nuevo tamañao de atri", len(atri))
+                
+                
+                if len(l_into)==len(atri):
                     for i in range(0,len(l_into)):
                        if atri[i]["nombrecol"].lower()==l_into[i].lower():
                             if self.compare_type(l_values[i],atri[i]["tipo"].lower()):
@@ -194,13 +207,27 @@ class CREATE_XML:
                                  col_insert.attrib["presicion"]=atri[i]["presicion"]
                                  col_insert.attrib["col_ref"]=atri[i]["col_ref"]
                                  col_insert.attrib["tab_ref"]=atri[i]["tab_ref"]
-                                 cadena_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
-                                 xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="")
-                                 # Guardar el XML en un archivo
-                                 with open("dbfile.xml", "w", encoding="utf-8") as archivo:
-                                        archivo.write(xml_con_formato)
+                                 
                             else:
                                  print("ERROR!!,tipo de datos Incorrecto")
+                    if len(colNulls)>0:
+                        for colnull in colNulls:
+                            col_insert=ET.SubElement(tab_insert,"COLUMNA")
+                            col_insert.attrib["nombrecol"]=colnull["nombrecol"]
+                            col_insert.attrib["tipo"]=colnull["tipo"]
+                            col_insert.attrib["pk"]=colnull["pk"]
+                            col_insert.attrib["isNull"]=colnull["isNull"]
+                            col_insert.attrib["valor"]="null"
+                            col_insert.attrib["col_size"]=colnull["col_size"]
+                            col_insert.attrib["presicion"]=colnull["presicion"]
+                            col_insert.attrib["col_ref"]=colnull["col_ref"]
+                            col_insert.attrib["tab_ref"]=colnull["tab_ref"]
+                    cadena_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
+                    xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="")
+                                 # Guardar el XML en un archivo
+                    with open("dbfile.xml", "w", encoding="utf-8") as archivo:
+                                        archivo.write(xml_con_formato)        
+                        
                 else:
                      print("Error!!,no coinciden la lista de parametros de la tabla")
             else:
