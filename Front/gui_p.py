@@ -183,7 +183,7 @@ class GUI_P:
         fila=cursor_posicion.split(".")[0]
         linea_actual=self.mat_text[index].get(f"{fila}.0", f"{fila}.end-1c")
         print("Texto en la línea actual:", linea_actual)
-        parser.parse(linea_actual)
+        #parser.parse(linea_actual)
 
     def getFirstSimbolo(self)->Simbolo:
 
