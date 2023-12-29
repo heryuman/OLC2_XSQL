@@ -96,14 +96,27 @@ class CREATE_XML:
             create=ET.SubElement(n_tb,"CREATE")
             insert=ET.SubElement(n_tb,"INSERT")
             colums=ET.SubElement(create,"COLUMNAS")
+            col_i=ET.SubElement(insert,"COLUMNAS")
             for col in table._columns:
                 nc=col._column_name
                 nt=col._type
-                #cz=col._col_size
+                cpk=col._pk
+                cisnull=col._isNull
+                cval=col._valor
+                cz=col._col_size
+                cpresicion=col._presicion
+                crefer=col._col_fer
+                tbrefe=col._tab_refernce
                 n_col=ET.SubElement(colums,"COLUMNA")
                 n_col.attrib["nombrecol"]=nc
                 n_col.attrib["tipo"]=nt
-                #n_col.attrib["col_size"]=str(cz)
+                n_col.attrib["pk"]=str(cpk)
+                n_col.attrib["isNull"]=str(cisnull)
+                n_col.attrib["valor"]=str(cval)
+                n_col.attrib["col_size"]=str(cz)
+                n_col.attrib["presicion"]=str(cpresicion)
+                n_col.attrib["col_ref"]=crefer
+                n_col.attrib["tab_ref"]=tbrefe
             cadena_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
             xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
             # Guardar el XML en un archivo
