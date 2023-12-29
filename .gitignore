@@ -14,6 +14,9 @@ Analizador/parser.out
 Analizador/parsetab.py
 #XML PARA LA BD
 dbfile.xml
+#para graphviz
+*.dot
+*.png
 # Distribution / packaging
 .Python
 build/

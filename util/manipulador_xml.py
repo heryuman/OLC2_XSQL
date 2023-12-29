@@ -10,6 +10,7 @@ class CREATE_XML:
         self._tb_name=None
         self.root=None
         self._colums=[]
+        
     
     """def insert_columns(self,columna:COLUM):
         self._colums.append(columna)
@@ -124,7 +125,7 @@ class CREATE_XML:
         
         if db is not None:
             print("existe la BD",db.get("name_db"))
-            tb=root.find(".//DATABASE//TABLAS//CREATE//TABLA[@tab_name='"+tb_name+"']")
+            tb=root.find(".//DATABASE//TABLAS//TABLA[@tab_name='"+tb_name+"']")
             if tb is not None:
                  print("Existe la tb ",tb.get("tab_name"))
                  return True
@@ -157,7 +158,7 @@ class CREATE_XML:
         db=root.find(".//DATABASE[@name_db='"+db_name.lower()+"']")
         
         if db is not None:
-            print("existe la BD",db.get("name_db"))
+            print("-->existe la BD",db.get("name_db"))
             tb=root.find(".//DATABASE//TABLAS//TABLA[@tab_name='"+tb_name.lower()+"']")
             if tb is not None:
                 cols_into=tb.findall(".//CREATE//COLUMNAS//COLUMNA")
