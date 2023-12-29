@@ -356,11 +356,11 @@ class CREATE_XML:
             print(e)
 
     
-    def mensajeError(self, tituloVentana, mensaje):
-        root = tk.Tk()
-        root.withdraw()
-        messagebox.showerror(tituloVentana, mensaje)
-        root.destroy()
+    #def mensajeError(self, tituloVentana, mensaje):
+        #root = tk.Tk()
+        #root.withdraw()
+        #messagebox.showerror(tituloVentana, mensaje)
+        #root.destroy()
         
     def createDump(self,db_name):
         try:
