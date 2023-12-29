@@ -43,10 +43,6 @@ class CREATE_XML:
                 new_bd_name=ET.SubElement(new_bd,"DATABASE")
                 new_bd_name.attrib["name_db"]=db_name
                 new_bd_eschema=ET.SubElement(new_bd_name,"TABLAS")
-                new_bd_tables_space=ET.SubElement(new_bd_eschema,"CREATE")
-                new_bd_tables_space_I=ET.SubElement(new_bd_eschema,"INSERT")
-                new_bd_tables_space.text=" "
-                new_bd_tables_space_I.text=" "
 
                 #guardamos el xml
                 cadena_xml = ET.tostring(self.root, encoding="utf-8").decode("utf-8")
