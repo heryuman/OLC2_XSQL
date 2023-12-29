@@ -73,10 +73,6 @@ class CREATE_XML:
                 new_bd_name=ET.SubElement(base,"DATABASE")
                 new_bd_name.attrib["name_db"]=db_name
                 new_bd_eschema=ET.SubElement(new_bd_name,"TABLAS")
-                new_bd_tables_space=ET.SubElement(new_bd_eschema,"CREATE")
-                new_bd_tables_space_I=ET.SubElement(new_bd_eschema,"INSERT")
-                new_bd_tables_space.text=" "
-                new_bd_tables_space_I.text=" "
                 #guardamos el xml
                 cadena_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
                 xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
@@ -86,18 +82,20 @@ class CREATE_XML:
                     archivo.write(xml_con_formato)
     
     def insert_table(self,table):
-        db_name=table.get_db_name()
-        tb_name=table.get_tb_name()
+        db_name=table.get_db_name().lower()
+        tb_name=table.get_tb_name().lower()
         with open("dbfile.xml","r") as f:        
                 tree=ET.parse(f)
         root=tree.getroot()
         n_db=root.find(".//DATABASE[@name_db='"+db_name+"']")
         if n_db is not None:
               
-            n_create=n_db.find("./TABLAS/CREATE")
+            n_create=n_db.find("./TABLAS")
             n_tb= ET.SubElement(n_create,"TABLA")
             n_tb.attrib["tab_name"]=tb_name
-            colums=ET.SubElement(n_tb,"COLUMNAS")
+            create=ET.SubElement(n_tb,"CREATE")
+            insert=ET.SubElement(n_tb,"INSERT")
+            colums=ET.SubElement(create,"COLUMNAS")
             for col in table._columns:
                 nc=col._column_name
                 nt=col._type
