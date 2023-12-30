@@ -17,6 +17,7 @@ class GUI_P:
         self.contador_pestanas = 0
         self.notebook=None
         self.mat_text=[]
+        self.mat_consola = []
         utl= GENERIC()
         self.ventana=tk.Tk()
         self.archivo_guardado = None  # Variable para almacenar la ruta del archivo guardado
@@ -91,8 +92,9 @@ class GUI_P:
         self.notebook = ttk.Notebook(frame_menus)
         self.notebook.pack(expand=tk.YES, fill=tk.BOTH)
         #ttk.Button(self.ventana, text="Abrir AST", command=self.mostrar_ventana_imagen).pack(padx=10, pady=10)
+        self.tools_sql()
+        self.consola()
         self.ventana.mainloop()
-
         GUI_P._instances.append(self) #son instancias del GUI ya que no funcionaba al momento de eliminar una pestaña y volver a cargar un archivo
 
     @classmethod
@@ -122,19 +124,29 @@ class GUI_P:
         
 
     def run_script(self):
+        self.mat_consola[0].config(state="normal")
+        self.mat_consola[0].delete("1.0", tk.END)
         index = self.notebook.index("current")
-        entrada = self.mat_text[index].get("1.0", "end-1c")
+        text_widget = self.mat_text[index]
+        entrada = text_widget.get("1.0", "end-1c")
         instruccion = parser.parse(entrada)
         ast = AST(instruccion)
-
         try:
             for inst in ast.getInstrucciones():
-                print("el objeto es de tipo ",type(inst))
-                if isinstance(inst,Instruccion):
-                    inst.compilar(ast,None)
-        
+                print("el objeto es de tipo ", type(inst))
+                if isinstance(inst, Instruccion):
+                    inst.compilar(ast, None)
+            # Muestra el resultado en la consola
+            resultado = "Instrucciones ejecutadas en la pestaña Query{}.".format(index + 1)
+            self.mat_consola[0].config(state="normal")
+            self.mat_consola[0].insert(tk.END, resultado + "\n")
         except Exception as e:
-            print(f"Error al ejecutar las instrucciones: {e} ")
+            # Muestra el error en la consola
+            error_msg = "Error al ejecutar las instrucciones en la pestaña Query{}: {}".format(index + 1, e)
+            self.mat_consola[0].config(state="normal")
+            self.mat_consola[0].insert(tk.END, error_msg + "\n")
+        # Después de ejecutar la pestaña actual, deshabilita la edición en la consola
+        self.mat_consola[0].config(state="disabled")
 
     def run_sql(self):
         index=self.notebook.index("current")
@@ -264,3 +276,15 @@ class GUI_P:
     def importarDB(self):
         print("importar")
         nombre = simpledialog.askstring("Crear DUMP", "Ingrese el nombre de la Base de datos:")
+        
+        
+    def consola(self):
+        frame_consola = tk.Frame(self.frame_form_fill)
+        frame_consola.pack(side="bottom", expand=tk.YES, fill=tk.BOTH)
+        notebook_consola = ttk.Notebook(frame_consola)
+        notebook_consola.pack(expand=tk.YES, fill=tk.BOTH)
+        tab_consola = ttk.Frame(notebook_consola)
+        notebook_consola.add(tab_consola, text="Consola")
+        consola_texto = tk.Text(tab_consola, wrap=tk.WORD, width=80, height=15, state="disabled") #para que no se pueda modificar la consola
+        consola_texto.pack(expand=True, fill=tk.BOTH)
+        self.mat_consola.append(consola_texto)
