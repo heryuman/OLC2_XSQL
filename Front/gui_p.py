@@ -166,13 +166,6 @@ class GUI_P:
             arbol._raiz.addHijo(padre)
             ##MANDAMOS A GRAFICAR
             arbol.graficarAST()
-            print("el objeto es de tipo ", type(inst))
-            if isinstance(inst, Instruccion):
-                inst.compilar(ast, None)
-            # Muestra el resultado en la consola
-            resultado = "Instrucciones ejecutadas en la pestaña Query{}.".format(index + 1)
-            self.mat_consola[0].config(state="normal")
-            self.mat_consola[0].insert(tk.END, resultado + "\n")
         except Exception as e:
             # Muestra el error en la consola
             error_msg = "Error al ejecutar las instrucciones en la pestaña Query{}: {}".format(index + 1, e)
@@ -182,6 +175,10 @@ class GUI_P:
         # Después de ejecutar la pestaña actual, deshabilita la edición en la consola
         self.mat_consola[0].config(state="disabled")
         print(salidaConsola)
+        #resultado = "Instrucciones ejecutadas en la pestaña Query{}.".format(index + 1)
+        self.mat_consola[0].config(state="normal")
+        self.mat_consola[0].insert(tk.END, salidaConsola)
+        # Muestra el resultado en la consola
 
     def run_sql(self):
         index=self.notebook.index("current")
