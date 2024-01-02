@@ -35,6 +35,7 @@ class CREATE_XML:
                             output.append("ERROR!!, la base ya existe, no se puede agregar")
                             return
                 self.insert_db(db_name,output)
+                
         
             else:
                 self.root=ET.Element("BASE_DE_DATOS")
@@ -52,6 +53,7 @@ class CREATE_XML:
                 # Guardar el XML en un archivo
                 with open("dbfile.xml", "w", encoding="utf-8") as archivo:
                     archivo.write(xml_con_formato)
+                output.append(f"se ha creado la BD : {db_name}")
         except Exception as e:
             print(e)   
             output.append(f"Error con: {e}")
@@ -78,6 +80,7 @@ class CREATE_XML:
                 # Guardar el XML en un archivo
                 with open("dbfile.xml", "w", encoding="utf-8") as archivo:
                     archivo.write(xml_con_formato)
+                output.append(f"se ha creado la BD : {db_name}")
         else:
             output.append("ERROR!!,no existe un archivo de BD")
     
@@ -122,6 +125,7 @@ class CREATE_XML:
             # Guardar el XML en un archivo
             with open("dbfile.xml", "w", encoding="utf-8") as archivo:
                     archivo.write(xml_con_formato)
+            output.append(f"se creó la tabla : {tb_name}")
         else:
             print("no existe la BD"+ db_name)
             output.append(f"Error, no existe la BD: {db_name}")
@@ -232,7 +236,8 @@ class CREATE_XML:
                     xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="")
                                  # Guardar el XML en un archivo
                     with open("dbfile.xml", "w", encoding="utf-8") as archivo:
-                                        archivo.write(xml_con_formato)        
+                                        archivo.write(xml_con_formato)
+                    output.append(f"se insertó en  la tabla : {tb_name}")        
                         
                 else:
                      print("Error!!,no coinciden la lista de parametros de la tabla")
@@ -302,7 +307,7 @@ class CREATE_XML:
             else:
                 print(f'Error, la DB {db_name} no existe')
                 output.append(f'Error, la DB {db_name} no existe')
-            
+                
         
         
         
