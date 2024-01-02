@@ -303,23 +303,35 @@ class CREATE_XML:
 
 
 
-    def xml_gui(nombre_archivo): #esta funcion es para mostrar el xml como un arbol en la parte del GUI
-        #nombre_archivo = 'dbfile.xml' #nombre del archivo
-        if os.path.exists(nombre_archivo): #verificamos si el archivo existe
+    def xml_gui(nombre_archivo):  # Esta función es para mostrar el XML como un árbol en la parte del GUI
+        if os.path.exists(nombre_archivo):  # Verificamos si el archivo existe
             tree = ET.parse(nombre_archivo)
             root = tree.getroot()
-            #utilizamos variables para guardar los valores que vienen del archivo
             databases = []
-            
-            #reconocemos los valores del xml
-            #aun no reconoce lo de procedimientos y funciones
+
             for database in root.findall('.//DATABASE'):
                 database_name = database.get('name_db')
                 tabla_names = []
+                funciones = []  # Lista para almacenar funciones
+                procedimientos = []  # Lista para almacenar procedimientos
+
                 for tabla in database.findall('.//TABLA'):
                     tabla_name = tabla.get('tab_name')
                     tabla_names.append(tabla_name)
-                databases.append((database_name, tabla_names))
+
+                # Agrega reconocimiento de funciones
+                for funcion in database.findall('.//FUNCION'):
+                    funcion_name = funcion.get('func_name')
+                    funciones.append(funcion_name)
+
+                # Agrega reconocimiento de procedimientos
+                for procedimiento in database.findall('.//PROCEDIMIENTO'):
+                    procedimiento_name = procedimiento.get('proc_name')
+                    procedimientos.append(procedimiento_name)
+
+                # Agrega la tupla con los cuatro elementos a la lista de bases de datos
+                databases.append((database_name, tabla_names, funciones, procedimientos))
+
             return databases
         else:
             return []

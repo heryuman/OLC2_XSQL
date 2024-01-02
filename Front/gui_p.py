@@ -214,32 +214,32 @@ class GUI_P:
 
         # Agregar los nuevos datos al Treeview
         root = self.tree.insert("", "end", text="BASES DE DATOS")
-        for database_name, tabla_names in resultados:
+        """for database_name, tabla_names in resultados:
             h2 = self.tree.insert(root, "end", text=database_name)
             if tabla_names:
                 rs = self.tree.insert(h2, "end", text="TABLAS")
                 for tabla_name in tabla_names:
                     self.tree.insert(rs, "end", text=tabla_name)
-        """
-        for database_name, tabla_names, funciones, procedimientos in resultado:
+"""
+        for database_name, tabla_names, funciones, procedimientos in resultados:
             print(database_name)
-            h2=tree.insert(root,"end",text=database_name)
+            h2=self.tree.insert(root,"end",text=database_name)
             if tabla_names:
-                rs=tree.insert(h2,"end",text="TABLAS")
+                rs=self.tree.insert(h2,"end",text="TABLAS")
                 for tabla_name in tabla_names:
                     print(tabla_name)
-                    tree.insert(rs,"end",text=tabla_name)
+                    self.tree.insert(rs,"end",text=tabla_name)
             if funciones:
-                rs=tree.insert(h2,"end",text="FUNCIONES")
+                rs=self.tree.insert(h2,"end",text="FUNCIONES")
                 for funcion in funciones:
                     print(funcion)
-                    tree.insert(rs,"end",text=funcion)
+                    self.tree.insert(rs,"end",text=funcion)
             if procedimientos:
-                rs=tree.insert(h2,"end",text="PROCEDIMIENTOS")
+                rs=self.tree.insert(h2,"end",text="PROCEDIMIENTOS")
                 for procedimiento in procedimientos:
                     print(procedimiento)
-                    tree.insert(rs,"end",text=procedimiento)
-        """
+                    self.tree.insert(rs,"end",text=procedimiento)
+
                     
                     
     def salir_programa(self):
