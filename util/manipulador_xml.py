@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
-
+import sqlite3
 import os
 class CREATE_XML:
     
@@ -520,3 +520,49 @@ class CREATE_XML:
 
             return insert_statements
         return [f"-- No INSERT statement found for table {table_name}"]
+
+    def import_tables_from_sql(self, source_db_name, destination_db_name):
+        try:
+            with open("dbfile.xml", "r") as f:
+                tree = ET.parse(f)
+            root = tree.getroot()
+
+            source_db = root.find(f".//DATABASE[@name_db='{source_db_name.lower()}']")
+            destination_db = root.find(f".//DATABASE[@name_db='{destination_db_name.lower()}']")
+
+            if source_db is not None and destination_db is not None:
+                source_tables = source_db.findall(".//TABLA")
+                destination_tables = destination_db.findall(".//TABLA")
+
+                for source_table in source_tables:
+                    source_table_name = source_table.get("tab_name")
+                    destination_table = next((t for t in destination_tables if t.get("tab_name") == source_table_name), None)
+
+                    if destination_table is not None:
+                        # Extract data from source table
+                        insert_statements = self.generate_insert_table_statements(source_table_name, source_table)
+
+                        # Insert data into destination table
+                        self.execute_insert_statements(destination_table, insert_statements)
+
+                        print(f"Datos de la tabla '{source_table_name}' importados con éxito a '{destination_db_name}'.")
+                    else:
+                        print(f"La tabla '{source_table_name}' no existe en la base de datos de destino.")
+
+            else:
+                print(f"La base de datos de origen ('{source_db_name}') o destino ('{destination_db_name}') no existe.")
+        except Exception as e:
+            print(e)
+
+    def execute_insert_statements(self, destination_table, insert_statements):
+        # Implementar la ejecución de las sentencias INSERT en la base de datos de destino
+        # Puedes utilizar la biblioteca sqlite3 u otra adecuada para tu base de datos
+        # En este ejemplo, se asume que se está utilizando SQLite como base de datos de destino
+        connection = sqlite3.connect(f"{destination_table.get('tab_name')}_db.sqlite")
+        cursor = connection.cursor()
+
+        for insert_statement in insert_statements:
+            cursor.execute(insert_statement)
+
+        connection.commit()
+        connection.close()

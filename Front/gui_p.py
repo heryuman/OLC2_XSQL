@@ -16,7 +16,7 @@ import os
 from enviroment import enviroment
 from Arbol.Arbol import Arbol
 from Arbol.Nodo import Nodo
-
+import sqlite3
 class GUI_P:
     _instances = [] #esta instancia permite hacer lo de cerrar una pestaña y luego poder abrir y que si se carge el contenido del archivo
     def __init__(self) :
@@ -80,7 +80,7 @@ class GUI_P:
         tools_ops.add_cascade(label="SQL", menu = sql_submenu)
         
         tools_ops.add_command(label="Exportar", command=self.exportarDB) # exportar el contenido de una tabla o varias tablas
-        tools_ops.add_command(label="Importar") #importar los datos de una o varias tablas a otra base de datos, ya debe existir la estructura
+        tools_ops.add_command(label="Importar", command=self.importarDB) #importar los datos de una o varias tablas a otra base de datos, ya debe existir la estructura
         btn_tools.config(menu=tools_ops)
         btn_tools.pack(side="left",padx=10,pady=10)
 
@@ -322,7 +322,14 @@ class GUI_P:
         
     def importarDB(self):
         print("importar")
-        nombre = simpledialog.askstring("Crear DUMP", "Ingrese el nombre de la Base de datos:")
+        crear = CREATE_XML()
+        
+        # Pedir al usuario los nombres de las bases de datos
+        source_db_name = simpledialog.askstring("Importar", "Ingrese el nombre de la Base de datos de origen:")
+        destination_db_name = simpledialog.askstring("Importar", "Ingrese el nombre de la Base de datos de destino:")
+
+        # Llamar al método de importación
+        crear.import_tables_from_sql(source_db_name, destination_db_name)
         
         
     def consola(self):
