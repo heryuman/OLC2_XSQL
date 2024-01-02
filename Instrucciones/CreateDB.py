@@ -20,6 +20,6 @@ class CreateDB (Instruccion):
 
         nodo.addHijo(hijo)
         try:
-            self.manipulador.create_db(self.dbName)
+            self.manipulador.create_db(self.dbName,output)
         except Exception as e:
             print(f"Error al crear la BBDD {e}")

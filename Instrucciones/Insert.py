@@ -57,7 +57,7 @@ class Insert(Instruccion):
         
         obj_insert = INSERT(self.dbAplied, self.tb_name,self.lcolumns,self.lvalues)
 
-        self.manipulador.insert_ontbl(obj_insert)
+        self.manipulador.insert_ontbl(obj_insert,output)
     
 
     
