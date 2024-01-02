@@ -6,6 +6,13 @@ from object.tamanio import TAMANIO
 from Instrucciones.CreateTable import CreateTable
 from Instrucciones.CreateDB import CreateDB
 from Instrucciones.Column import column
+from Instrucciones.Reference import Reference
+from Instrucciones.Use import Use
+from Instrucciones.Insert import Insert
+from Instrucciones.Select import Select
+from Instrucciones.Variable import Variable
+from Instrucciones.ColumnWithoutFrom import ColumnWithoutFrom
+from Instrucciones.Expresion import Expresion
 #diccionario de nombres
 lista=[]
 listaErrores=[]
@@ -59,6 +66,7 @@ def p_cmduse(p):
     useDB.append(p[2])
     print("la base ",useDB[0])
     #validar dentro del xml, si la base existe#
+    p[0] = Use(p[2], p.lineno(2),1)
 
 def p_ddl(p):
     '''ddl : createdb
@@ -82,16 +90,16 @@ def p_createdb(p):
                 | CREATE DATA BASE ID PYC
     '''
     if len(p)== 6:
-        p[0]= CreateDB(p[4],p.lineno(2),1)
+        p[0]= CreateDB(p[4],p.lineno(2),find_column(input,p.slice[1]))
     else:
-        p[0] = CreateDB(p[3],p.lineno(2),1)
+        p[0] = CreateDB(p[3],p.lineno(2),find_column(input,p.slice[1]))
     
 def p_createtbl(p):
     '''createtbl : CREATE TABLE ID PARA lcolumnas PARC PYC
                  | CREATE TABLE ID PUNTO ID PARA lcolumnas PARC PYC
     '''
     if len(p)==8:
-        p[0] = CreateTable(p[3],"",p[5],p.lineno(2),1,False)
+        p[0] = CreateTable(p[3],None,p[5],p.lineno(2),1,False)
         #print("se crea tabla->",p[3])
         #print("con ",len(p[5]),"columnas")
         #for columnas in p[5]:
@@ -118,7 +126,7 @@ def p_lcolumnas(p):
     elif len(p)==4:
         p[1].append(p[3])
         p[0] = p[1]
-    else:
+    elif len(p) == 5:
         p[3].restriccion = p[4]
         p[1].append(p[3])
         p[0] = p[1]
@@ -133,9 +141,9 @@ def p_columna(p):
                | ID tipo PARA expresion COMA expresion PARC
     '''
     if len(p) ==3:
-        p[0]= column(p[1],p[2],None,None,None,p.lineno(2),3)
+        p[0]= column(p[1],p[2],None,"",None,p.lineno(2),3)
     elif len(p) == 6:
-        p[0]= column(p[1],p[2],p[4],None,None,p.lineno(2),1)
+        p[0]= column(p[1],p[2],p[4],"",None,p.lineno(2),1)
     else:
         p[0]= column(p[1],p[2],p[4],p[6],None,p.lineno(2),1)
 
@@ -144,7 +152,6 @@ def p_tipo(p):
     '''tipo : INT
             | TEXT
             | NVARCHAR
-            | NVARCHAR tamanios
             | DATE 
             | DATETIME
             | DECIMAL
@@ -159,9 +166,9 @@ def p_atributos_col(p):
                      | reference
     '''
     if len(p)==3:
-       # p[1].append(p[2])
+        p[1].append(p[2])
         p[0] = p[1]
-    else:
+    elif len(p)==2:
         p[0] = [p[1]]
 
 def p_restriccion(p):
@@ -172,11 +179,11 @@ def p_restriccion(p):
     '''
     if p[1].lower() == "primary":
         p[0] = "PRIMARY KEY"
-    if p[1].lower() == "foreing":
+    elif p[1].lower() == "foreing":
         p[0] = "FOREING KEY"
-    if p[1].lower() == "NOT":
+    elif p[1].lower() == "not":
         p[0] = "NOT NULL"
-    if p[1].lower() == "null":
+    elif p[1].lower() == "null":
         p[0] = "NULL"
     
     
@@ -184,11 +191,12 @@ def p_restriccion(p):
 def p_reference(p):
     '''reference : REFERENCE ID PARA ID PARC
     '''
-
+    p[0] = Reference(p[2], p[4],p.lineno(2),1)
 #declarar una variable 
 def p_variable(p):
     '''variable :  ARROBA ID
     '''
+    p[0]= Variable(p[2],None,p.lineno(2),find_column())
 def p_declaravar(p):
    ''' declaracion : DECLARE variable tipo PYC
                     | DECLARE ID tipo PYC 
@@ -245,16 +253,25 @@ def p_dml(p):
          | update
          | delete
     '''
+    p[0] = p[1]
 
 def p_insert(p):
     '''
     insert : INSERT INTO ID  PARA linsert PARC VALUES PARA linsert PARC PYC
     '''
+    p[0] = Insert(p[3],p[5],p[9],p.lineno(2),1)
+
+
 def p_linsert(p):
     '''
       linsert : linsert COMA expresion
               | expresion
         '''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    elif len(p)==4:
+        p[1].append(p[3])
+        p[0] = p[1]
 
 def p_select(p):
     '''
@@ -265,6 +282,22 @@ def p_select(p):
         | SELECT lselect 
         | SELECT lselect PYC
     '''
+    if len(p)==6:
+        ntabs = True if len(p[4])==1 else False
+        if p[2]=="*":
+            
+            p[0]=Select(ntabs,p[4],[],None,[],p.lineno(2),1)
+        else:
+            p[0]=Select(ntabs,p[4],p[2],None,[],p.lineno(),1)
+
+
+    elif len(p)==7:
+        ntabs = True if len(p[4])==1 else False
+        if p[2] =="*":
+            p[0]=Select(ntabs,p[4],[],None,p[5],p.lineno(2),1)
+        else:
+            p[0]=Select(ntabs,p[4],p[2],None,p[5],p.lineno(2),1)
+    
 def p_funciones_procedure(p):
     '''
         funciones_procedure : ID PARA lexpresion PARC
@@ -286,7 +319,18 @@ def p_lids(p):
     #agregamos estas produccioens lselect COMA expresion
     #    | expresion para esta cadena de entrada
     # SELECT tbcliente.codigocliente,CONCATENA(tbcliente.primer_nombre,tbcliente.primer_apellido)
+    if len(p)==2:
+        p[0] = [p[1]]
+    elif len(p)==4:
+        if p[3]==".":
+            p[0]=[ColumnWithoutFrom(p[1],p[3],p.lineno(2),1)]
+        else:
 
+            p[1].append(p[3])
+            p[0]= p[1]
+
+
+    
 def p_update(p):
     '''update : UPDATE ID SET lupdate condicion PYC
 
@@ -370,6 +414,10 @@ def p_expresion(p):
               | ID PUNTO ID 
               | funciones_procedure
     '''
+    if len(p)==2:
+        p[0]= p[1]
+    else:
+        p[0]=Expresion(p.lineno, find_column(input,p.slice[1]))
     
 def p_operadoressql(p):
     '''operadoressql : between
@@ -458,3 +506,13 @@ def p_error(p):
 
 import ply.yacc as yacc
 parser=yacc.yacc()
+
+##para ejecutar
+
+def parse(inp):
+    global parser
+
+    parser = yacc.yacc()
+    global input
+    input = inp
+    return parser.parse(inp)

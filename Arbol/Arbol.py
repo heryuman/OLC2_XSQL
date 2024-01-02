@@ -17,7 +17,7 @@ class Arbol:
     def graficaNodos(self, nodo:Nodo, i:str)->str:
         k:int=0
         r:str = ""
-        nodoTerm:str =  nodo._lexema
+        nodoTerm:str =  str(nodo._lexema)
         nodoTerm= nodoTerm.replace("\"", "")
 
         r = "node"+i+"[label =\""+nodoTerm +"\"];\n"
@@ -47,8 +47,10 @@ class Arbol:
     def crearArchivo(self, path:str, body:str):
         with open(path, 'w') as archivo:
             archivo.write(body)
-
-            result = subprocess.run(self._env._comandoGraphviz)
-            print(result)
+            
+        
+        result = subprocess.run(self._env._comandoGraphviz, shell=True)
+            
+        print(result)
 
         

@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from util.generic import GENERIC
-from Analizador.sintactico import parser
+from Analizador.sintactico import parse as Analizar
 from Analizador.sintactico import useDB
+from Simbolo.Ambito import Ambito
+from Simbolo.Simbolo import Simbolo
 from Abstract.Instruccion import Instruccion
 from Arbol.AST import AST
 from util.manipulador_xml import CREATE_XML
@@ -11,10 +13,18 @@ from tkinter import messagebox
 import subprocess
 from tkinter import simpledialog
 import os
+from enviroment import enviroment
+from Arbol.Arbol import Arbol
+from Arbol.Nodo import Nodo
+
 class GUI_P:
     _instances = [] #esta instancia permite hacer lo de cerrar una pestaña y luego poder abrir y que si se carge el contenido del archivo
     def __init__(self) :
         self.contador_pestanas = 0
+
+        self.tablaSimbolos = Ambito(None)
+        self.tablaSimbolos.addSimbolo(self.getFirstSimbolo())
+
         self.notebook=None
         self.mat_text=[]
         self.mat_consola = []
@@ -129,13 +139,46 @@ class GUI_P:
         index = self.notebook.index("current")
         text_widget = self.mat_text[index]
         entrada = text_widget.get("1.0", "end-1c")
-        instruccion = parser.parse(entrada)
+        instruccion = Analizar(entrada)
         ast = AST(instruccion)
+        arbol = Arbol(self.getInitNodo())
+        salidaConsola:[str]=[]
+        c:int = 0
         try:
+            padre = Nodo("","",0,0)
             for inst in ast.getInstrucciones():
-                print("el objeto es de tipo ", type(inst))
-                if isinstance(inst, Instruccion):
-                    inst.compilar(ast, None)
+                print("el objeto es de tipo ",type(inst))
+                
+                hijo2 = Nodo("","",0,0)
+                if isinstance(inst,Instruccion):
+
+                    if padre._token !="":
+                        hijo2._token = padre._token
+                        hijo2._lexema = padre._lexema
+                        hijo2._linea = padre._linea
+                        hijo2._columna = padre._columna
+                        hijo2._hijos = padre._hijos
+
+                    hijo = Nodo("","",0,0)
+                    inst.compilar(ast,self.tablaSimbolos,hijo,salidaConsola)
+
+                    padre = Nodo("INSTRUCCION","inst",0,0)
+                    
+                    if hijo2._token != "" and hijo._token!="":
+                        padre.addHijo(hijo2)
+
+                    if not hijo._token=="":
+                        padre.addHijo(hijo)
+
+
+            arbol._raiz.addHijo(padre)
+
+            ##MANDAMOS A GRAFICAR
+            arbol.graficarAST()
+        
+            print("el objeto es de tipo ", type(inst))
+            if isinstance(inst, Instruccion):
+                inst.compilar(ast, None)
             # Muestra el resultado en la consola
             resultado = "Instrucciones ejecutadas en la pestaña Query{}.".format(index + 1)
             self.mat_consola[0].config(state="normal")
@@ -147,6 +190,9 @@ class GUI_P:
             self.mat_consola[0].insert(tk.END, error_msg + "\n")
         # Después de ejecutar la pestaña actual, deshabilita la edición en la consola
         self.mat_consola[0].config(state="disabled")
+        salidaConsola.append(f"Error encontrado de tipo Exception: {e}")
+
+        print(salidaConsola)
 
     def run_sql(self):
         index=self.notebook.index("current")
@@ -154,7 +200,19 @@ class GUI_P:
         fila=cursor_posicion.split(".")[0]
         linea_actual=self.mat_text[index].get(f"{fila}.0", f"{fila}.end-1c")
         print("Texto en la línea actual:", linea_actual)
-        parser.parse(linea_actual)
+        #parser.parse(linea_actual)
+
+    def getFirstSimbolo(self)->Simbolo:
+
+        simbolo = Simbolo()
+        simbolo._identificador = enviroment().useDB
+        simbolo._valor=""
+
+        return simbolo
+    def getInitNodo(self)->Nodo:
+
+        return Nodo('INICIO','i',0,0)
+        
 
     def reload_data(self):
         resultados = CREATE_XML.xml_gui('dbfile.xml')
