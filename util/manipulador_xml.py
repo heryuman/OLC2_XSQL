@@ -462,3 +462,61 @@ class CREATE_XML:
 
     def mensajeError(self, mensaje):
         print("Error:", mensaje)
+        
+    def export_tables_to_sql(self, db_name):
+        try:
+            with open("dbfile.xml", "r") as f:
+                tree = ET.parse(f)
+            root = tree.getroot()
+
+            db = root.find(f".//DATABASE[@name_db='{db_name.lower()}']")
+            if db is not None:
+                tables = db.findall(".//TABLA")
+                if tables:
+                    sql_file_path = f"{db_name}.sql"
+
+                    with open(sql_file_path, "w") as sql_file:
+                        for table in tables:
+                            table_name = table.get("tab_name")
+                            create_statement = self.generate_create_table_statement(table_name, table)
+                            insert_statements = self.generate_insert_table_statements(table_name, table)
+
+                            sql_file.write(create_statement)
+                            sql_file.write("\n")
+                            sql_file.write("\n".join(insert_statements))
+                            sql_file.write("\n\n")
+
+                    print(f"Tablas exportadas exitosamente a '{sql_file_path}'")
+                else:
+                    print(f"No hay tablas en la base de datos '{db_name}' para exportar.")
+            else:
+                print(f"La base de datos '{db_name}' no existe.")
+        except Exception as e:
+            print(e)
+
+    def generate_create_table_statement(self, table_name, table_element):
+        create_element = table_element.find(".//CREATE")
+        if create_element is not None:
+            create_statement = create_element.text.strip()
+            return f"CREATE TABLE {table_name} ({create_statement});"
+        return f"-- No CREATE statement found for table {table_name}"
+
+    def generate_insert_table_statements(self, table_name, table_element):
+        insert_element = table_element.find(".//INSERT")
+        if insert_element is not None:
+            columns = insert_element.findall(".//COLUMNAS/COLUMNA")
+            values = insert_element.findall(".//COLUMNAS")
+            columns_names = [col.get("nombrecol") for col in columns]
+            values_rows = []
+
+            for value_element in values:
+                values_row = [col.get("valor") for col in value_element.findall(".//COLUMNA")]
+                values_rows.append(values_row)
+
+            insert_statements = []
+            for values_row in values_rows:
+                values_str = ", ".join(f"'{value}'" if value is not None else "NULL" for value in values_row)
+                insert_statements.append(f"INSERT INTO {table_name} ({', '.join(columns_names)}) VALUES ({values_str});")
+
+            return insert_statements
+        return [f"-- No INSERT statement found for table {table_name}"]

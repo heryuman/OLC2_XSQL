@@ -79,7 +79,7 @@ class GUI_P:
         sql_submenu.add_command(label="Ejecutar Query", command=self.run_script)
         tools_ops.add_cascade(label="SQL", menu = sql_submenu)
         
-        tools_ops.add_command(label="Exportar") # exportar el contenido de una tabla o varias tablas
+        tools_ops.add_command(label="Exportar", command=self.exportarDB) # exportar el contenido de una tabla o varias tablas
         tools_ops.add_command(label="Importar") #importar los datos de una o varias tablas a otra base de datos, ya debe existir la estructura
         btn_tools.config(menu=tools_ops)
         btn_tools.pack(side="left",padx=10,pady=10)
@@ -316,6 +316,9 @@ class GUI_P:
     
     def exportarDB(self):
         print("exportar")
+        crear= CREATE_XML()
+        nombre = simpledialog.askstring("Exportar", "Ingrese el nombre de la Base de datos:")
+        crear.export_tables_to_sql(nombre)
         
     def importarDB(self):
         print("importar")
