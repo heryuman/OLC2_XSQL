@@ -76,7 +76,7 @@ class CreateTable (Instruccion):
 
 
 
-        self.manipulador.insert_table(table)
+        self.manipulador.insert_table(table,output)
 
 
         
