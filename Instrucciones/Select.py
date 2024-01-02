@@ -22,7 +22,7 @@ class Select(Instruccion):
             simbolo = tablaSim.getValueFromSimbolo(self.env.useDB)
             self.dbAplied = simbolo._valor
 
-        if self.dbAplied == None:
+        if self.dbAplied == None or self.dbAplied =="":
             #print("No hay una BBDD previamente selecionada")
             output.append(self.env.dbNotFound)
             return
@@ -33,7 +33,7 @@ class Select(Instruccion):
         nodo._columna = self.colum
 
 
-        hijo = Nodo("COLMUNAS","columnas",self.fila,self.colum)
+        hijo = Nodo("COLUMNAS","columnas",self.fila,self.colum)
         nodo.addHijo(hijo)
 
         if len(self.columnas) == 0:
@@ -58,7 +58,7 @@ class Select(Instruccion):
                 co = Nodo("CONDICION", cond, self.fila, self.colum)
                 hijo3.addHijo(co)
         
-        obj_select = Select(self.sonVariasTablas,self.listaTablas,self.columnas,self.dbAplied,self.condiciones,self.fila,self.colum) 
         
+        obj_select = SELECT(self.sonVariasTablas,self.columnas,self.listaTablas,self.dbAplied,self.condiciones)
         
         self.manipulador.select(obj_select)
