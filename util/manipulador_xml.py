@@ -15,7 +15,7 @@ class CREATE_XML:
     """def insert_columns(self,columna:COLUM):
         self._colums.append(columna)
     """
-    def create_db(self,db_name):
+    def create_db(self,db_name,output):
         #validamos si existe el archivo
         try:
             if  os.path.isfile("dbfile.xml"):
@@ -32,8 +32,9 @@ class CREATE_XML:
                         print("nombre db ",base.get("name_db"))
                         if db_name == base.get("name_db"):
                             print("ERROR!!, la base ya existe, no se puede agregar")
+                            output.append("ERROR!!, la base ya existe, no se puede agregar")
                             return
-                self.insert_db(db_name)
+                self.insert_db(db_name,output)
         
             else:
                 self.root=ET.Element("BASE_DE_DATOS")
@@ -53,9 +54,10 @@ class CREATE_XML:
                     archivo.write(xml_con_formato)
         except Exception as e:
             print(e)   
+            output.append(f"Error con: {e}")
 
 
-    def insert_db(self,db_name):
+    def insert_db(self,db_name,output):
         
         if  os.path.isfile("dbfile.xml"):
                 
@@ -76,8 +78,10 @@ class CREATE_XML:
                 # Guardar el XML en un archivo
                 with open("dbfile.xml", "w", encoding="utf-8") as archivo:
                     archivo.write(xml_con_formato)
+        else:
+            output.append("ERROR!!,no existe un archivo de BD")
     
-    def insert_table(self,table):
+    def insert_table(self,table,output):
         db_name=table.get_db_name().lower()
         tb_name=table.get_tb_name().lower()
         with open("dbfile.xml","r") as f:        
@@ -120,9 +124,10 @@ class CREATE_XML:
                     archivo.write(xml_con_formato)
         else:
             print("no existe la BD"+ db_name)
+            output.append(f"Error, no existe la BD: {db_name}")
                 # Guardar el XML en un archivo
-            with open("dbfile.xml", "w", encoding="utf-8") as archivo:
-                archivo.write(xml_con_formato)
+            #with open("dbfile.xml", "w", encoding="utf-8") as archivo:
+            #    archivo.write(xml_con_formato)
 #METODOS QUE VALIDAN SI EXISTE LA TABLA O LA BD
     def exist_table(self,db_name,tb_name):
         with open("dbfile.xml","r") as f:        
@@ -153,7 +158,7 @@ class CREATE_XML:
 
 #Area Selvin
 #Metodo insert
-    def insert_ontbl(self,obj_insert):
+    def insert_ontbl(self,obj_insert,output):
         l_into=obj_insert._linto
         l_values=obj_insert._lvalues
         db_name=obj_insert._db_name
@@ -210,6 +215,7 @@ class CREATE_XML:
                                  
                             else:
                                  print("ERROR!!,tipo de datos Incorrecto")
+                                 output.append("ERROR!!,tipo de datos Incorrecto")
                     if len(colNulls)>0:
                         for colnull in colNulls:
                             col_insert=ET.SubElement(tab_insert,"COLUMNA")
@@ -230,10 +236,13 @@ class CREATE_XML:
                         
                 else:
                      print("Error!!,no coinciden la lista de parametros de la tabla")
+                     output.append("Error!!,no coinciden la lista de parametros de la tabla")
             else:
                  print("ERROR!!,La tabla ",tb_name," no existe")
+                 output.append("ERROR!!,La tabla ",tb_name," no existe")
         else:
             print("ERROR!!,La Base ",db_name," no existe")
+            output.append("ERROR!!,La Base ",db_name," no existe")
                 
     def compare_type(self,valor,tipo):
          if type(valor)==int:
@@ -272,7 +281,7 @@ class CREATE_XML:
             self.select_all(db_name,ltb)
     
     
-    def select_all(self,db_name,ltb):
+    def select_all(self,db_name,ltb,output):
         
         if self.exist_db(db_name):
             with open("dbfile.xml","r")as f:
@@ -292,6 +301,7 @@ class CREATE_XML:
                     
             else:
                 print(f'Error, la DB {db_name} no existe')
+                output.append(f'Error, la DB {db_name} no existe')
             
         
         
