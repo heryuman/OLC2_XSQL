@@ -276,14 +276,14 @@ class CREATE_XML:
          else:
               False 
     
-    def select(self,obj_select):
+    def select(self,obj_select,output):
         select_all=obj_select._SelectAll
         db_name=obj_select._db_name
         ltb=obj_select._l_tbname
         lcond=obj_select._lcondiciones
         
         if select_all:
-            self.select_all(db_name,ltb)
+            self.select_all(db_name,ltb,output)
     
     
     def select_all(self,db_name,ltb,output):
@@ -301,7 +301,8 @@ class CREATE_XML:
                         colselect=tb.findall(".//INSERT//COLUMNAS//COLUMNA")
                         for i in range(0,len(colselect)):
                             print(colselect[i].get("nombrecol")," : ", colselect[i].get("valor"))
-                            
+                            output.append(colselect[i].get("nombrecol") + " : "+colselect[i].get("valor"))
+                        output.append("---------------------------")
                         #print(colselect["nombrecol"]," -- ")
                     
             else:
