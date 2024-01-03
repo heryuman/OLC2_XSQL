@@ -97,8 +97,7 @@ class GUI_P:
         btn_reportes = tk.Menubutton(frame_botones, text="Reportes")
         reportes_ops = tk.Menu(btn_reportes)
         reportes_ops.add_command(label="Abrir AST", command=self.mostrar_ventana_imagen)
-        reportes_ops.add_command(label="Recuperación de errores léxicos")
-        reportes_ops.add_command(label="Recuperación de errores sintácticos")
+        reportes_ops.add_command(label="Reporte de errores", command= self.mostrarErrores)
         reportes_ops.add_command(label="Reporte Gramatical", command=self.mostrarReporteGramatical)
         btn_reportes.config(menu=reportes_ops)
         btn_reportes.pack(side="left", padx=10, pady=10)
@@ -196,11 +195,20 @@ class GUI_P:
         # Muestra el resultado en la consola
 
     def mostrarErrores(self):
-        self.mat_consola[0].insert(tk.END,"")
-        txterror=""
+        # Borrar contenido actual de la consola
+        self.mat_consola[0].config(state="normal")
+        self.mat_consola[0].delete(1.0, tk.END)  # Elimina desde el inicio hasta el final
+        self.mat_consola[0].config(state="disabled")
+        txterror = ""
         for error in ListaErrores:
-            txterror= txterror+"Descripcion: "+error._descripcion+" tipo: "+error._tipo+" linea: "+error._linea+" columna: "+error._columna+"\n"
-        self.mat_consola[0].insert(tk.END,txterror)
+            txterror = txterror + "Descripcion: " + error._descripcion + " tipo: " + error._tipo + " linea: " + str(
+                error._linea) + " columna: " + str(error._columna) + "\n"
+
+        # Mostrar nuevos errores
+        self.mat_consola[0].config(state="normal")
+        self.mat_consola[0].insert(tk.END, txterror)
+        self.mat_consola[0].config(state="disabled")
+        
     def run_sql(self):
         index=self.notebook.index("current")
         cursor_posicion=self.mat_text[index].index(tk.INSERT)
@@ -240,22 +248,22 @@ class GUI_P:
                     self.tree.insert(rs, "end", text=tabla_name)
 """
         for database_name, tabla_names, funciones, procedimientos in resultados:
-            print(database_name)
+            #print(database_name)
             h2=self.tree.insert(root,"end",text=database_name)
             if tabla_names:
                 rs=self.tree.insert(h2,"end",text="TABLAS")
                 for tabla_name in tabla_names:
-                    print(tabla_name)
+                    #print(tabla_name)
                     self.tree.insert(rs,"end",text=tabla_name)
             if funciones:
                 rs=self.tree.insert(h2,"end",text="FUNCIONES")
                 for funcion in funciones:
-                    print(funcion)
+                    #print(funcion)
                     self.tree.insert(rs,"end",text=funcion)
             if procedimientos:
                 rs=self.tree.insert(h2,"end",text="PROCEDIMIENTOS")
                 for procedimiento in procedimientos:
-                    print(procedimiento)
+                    #print(procedimiento)
                     self.tree.insert(rs,"end",text=procedimiento)
 
                     
