@@ -66,7 +66,7 @@ def p_cmduse(p):
     useDB.append(p[2])
     print("la base ",useDB[0])
     #validar dentro del xml, si la base existe#
-    p[0] = Use(p[2], p.lineno(2),1)
+    p[0] = Use(p[2], p.lineno(2),find_column(input,p.slice[1]))
 
 def p_ddl(p):
     '''ddl : createdb
@@ -99,14 +99,14 @@ def p_createtbl(p):
                  | CREATE TABLE ID PUNTO ID PARA lcolumnas PARC PYC
     '''
     if len(p)==8:
-        p[0] = CreateTable(p[3],None,p[5],p.lineno(2),1,False)
+        p[0] = CreateTable(p[3],None,p[5],p.lineno(2),find_column(input,p.slice[1]),False)
         #print("se crea tabla->",p[3])
         #print("con ",len(p[5]),"columnas")
         #for columnas in p[5]:
             #print("colname->",columnas.id," restricciones->",columnas.restriccion)
             
     else:
-        p[0] = CreateTable(p[5],p[3],p[7],p.lineno(2),1,False)
+        p[0] = CreateTable(p[5],p[3],p[7],p.lineno(2), find_column(input,p.slice[1]),False)
 
     
 
@@ -141,11 +141,11 @@ def p_columna(p):
                | ID tipo PARA expresion COMA expresion PARC
     '''
     if len(p) ==3:
-        p[0]= column(p[1],p[2],None,"",None,p.lineno(2),3)
+        p[0]= column(p[1],p[2],None,"",None,p.lineno(2),find_column(input,p.slice[1]))
     elif len(p) == 6:
-        p[0]= column(p[1],p[2],p[4],"",None,p.lineno(2),1)
+        p[0]= column(p[1],p[2],p[4],"",None,p.lineno(2),find_column(input,p.slice[1]))
     else:
-        p[0]= column(p[1],p[2],p[4],p[6],None,p.lineno(2),1)
+        p[0]= column(p[1],p[2],p[4],p[6],None,p.lineno(2),find_column(input,p.slice[1]))
 
 
 def p_tipo(p):
@@ -191,12 +191,12 @@ def p_restriccion(p):
 def p_reference(p):
     '''reference : REFERENCE ID PARA ID PARC
     '''
-    p[0] = Reference(p[2], p[4],p.lineno(2),1)
+    p[0] = Reference(p[2], p[4],p.lineno(2),find_column(input,p.slice[1]))
 #declarar una variable 
 def p_variable(p):
     '''variable :  ARROBA ID
     '''
-    p[0]= Variable(p[2],None,p.lineno(2),find_column())
+    p[0]= Variable(p[2],None,p.lineno(2),find_column(input,p.slice[1]))
 def p_declaravar(p):
    ''' declaracion : DECLARE variable tipo PYC
                     | DECLARE ID tipo PYC 
@@ -259,7 +259,7 @@ def p_insert(p):
     '''
     insert : INSERT INTO ID  PARA linsert PARC VALUES PARA linsert PARC PYC
     '''
-    p[0] = Insert(p[3],p[5],p[9],p.lineno(2),1)
+    p[0] = Insert(p[3],p[5],p[9],p.lineno(2),find_column(input,p.slice[1]))
 
 
 def p_linsert(p):
@@ -286,17 +286,17 @@ def p_select(p):
         ntabs = True if len(p[4])==1 else False
         if p[2]=="*":
             
-            p[0]=Select(ntabs,p[4],[],None,[],p.lineno(2),1)
+            p[0]=Select(ntabs,p[4],[],None,[],p.lineno(2),find_column(input,p.slice[1]))
         else:
-            p[0]=Select(ntabs,p[4],p[2],None,[],p.lineno(),1)
+            p[0]=Select(ntabs,p[4],p[2],None,[],p.lineno(),find_column(input,p.slice[1]))
 
 
     elif len(p)==7:
         ntabs = True if len(p[4])==1 else False
         if p[2] =="*":
-            p[0]=Select(ntabs,p[4],[],None,p[5],p.lineno(2),1)
+            p[0]=Select(ntabs,p[4],[],None,p[5],p.lineno(2),find_column(input,p.slice[1]))
         else:
-            p[0]=Select(ntabs,p[4],p[2],None,p[5],p.lineno(2),1)
+            p[0]=Select(ntabs,p[4],p[2],None,p[5],p.lineno(2),find_column(input,p.slice[1]))
     
 def p_funciones_procedure(p):
     '''
@@ -323,7 +323,7 @@ def p_lids(p):
         p[0] = [p[1]]
     elif len(p)==4:
         if p[3]==".":
-            p[0]=[ColumnWithoutFrom(p[1],p[3],p.lineno(2),1)]
+            p[0]=[ColumnWithoutFrom(p[1],p[3],p.lineno(2),find_column(input,p.slice[1]))]
         else:
 
             p[1].append(p[3])
