@@ -17,6 +17,7 @@ from enviroment import enviroment
 from Arbol.Arbol import Arbol
 from Arbol.Nodo import Nodo
 import sqlite3
+from Analizador.lexico import ListaErrores
 class GUI_P:
     _instances = [] #esta instancia permite hacer lo de cerrar una pestaña y luego poder abrir y que si se carge el contenido del archivo
     def __init__(self) :
@@ -190,8 +191,16 @@ class GUI_P:
             txsalida=txsalida+salida+"\n"
         self.mat_consola[0].config(state="normal")
         self.mat_consola[0].insert(tk.END, txsalida)
+        for error in ListaErrores:
+            print("en gui"+error._descripcion)
         # Muestra el resultado en la consola
 
+    def mostrarErrores(self):
+        self.mat_consola[0].insert(tk.END,"")
+        txterror=""
+        for error in ListaErrores:
+            txterror= txterror+"Descripcion: "+error._descripcion+" tipo: "+error._tipo+" linea: "+error._linea+" columna: "+error._columna+"\n"
+        self.mat_consola[0].insert(tk.END,txterror)
     def run_sql(self):
         index=self.notebook.index("current")
         cursor_posicion=self.mat_text[index].index(tk.INSERT)

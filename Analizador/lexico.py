@@ -1,3 +1,5 @@
+from Arbol.Errores import Errores
+ListaErrores=[]
 reservadas={
 
         'create':'CREATE',
@@ -159,7 +161,9 @@ def t_CADENA(t):
 
 
 def t_error(t):
-    print(f"Error Lexico {t.value!r}")
+    print(f"Error Lexico {t.value!r} en linea : {t.lineno} y columna {t.lexpos+1} ")
+    error= Errores(f"Error Lexcico con : {t.value!r} ",1,t.lineno,t.lexpos+1)
+    ListaErrores.append(error)
     t.lexer.skip(1)
 
 def find_column(inp, tk):
