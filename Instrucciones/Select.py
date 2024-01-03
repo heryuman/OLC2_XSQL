@@ -61,4 +61,4 @@ class Select(Instruccion):
         
         obj_select = SELECT(self.sonVariasTablas,self.columnas,self.listaTablas,self.dbAplied,self.condiciones)
         
-        self.manipulador.select(obj_select)
+        self.manipulador.select(obj_select,output)

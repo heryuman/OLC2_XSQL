@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
-
+import sqlite3
 import os
 class CREATE_XML:
     
@@ -35,6 +35,7 @@ class CREATE_XML:
                             output.append("ERROR!!, la base ya existe, no se puede agregar")
                             return
                 self.insert_db(db_name,output)
+                
         
             else:
                 self.root=ET.Element("BASE_DE_DATOS")
@@ -52,6 +53,7 @@ class CREATE_XML:
                 # Guardar el XML en un archivo
                 with open("dbfile.xml", "w", encoding="utf-8") as archivo:
                     archivo.write(xml_con_formato)
+                output.append(f"se ha creado la BD : {db_name}")
         except Exception as e:
             print(e)   
             output.append(f"Error con: {e}")
@@ -78,6 +80,7 @@ class CREATE_XML:
                 # Guardar el XML en un archivo
                 with open("dbfile.xml", "w", encoding="utf-8") as archivo:
                     archivo.write(xml_con_formato)
+                output.append(f"se ha creado la BD : {db_name}")
         else:
             output.append("ERROR!!,no existe un archivo de BD")
     
@@ -122,6 +125,7 @@ class CREATE_XML:
             # Guardar el XML en un archivo
             with open("dbfile.xml", "w", encoding="utf-8") as archivo:
                     archivo.write(xml_con_formato)
+            output.append(f"se creó la tabla : {tb_name}")
         else:
             print("no existe la BD"+ db_name)
             output.append(f"Error, no existe la BD: {db_name}")
@@ -232,7 +236,8 @@ class CREATE_XML:
                     xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="")
                                  # Guardar el XML en un archivo
                     with open("dbfile.xml", "w", encoding="utf-8") as archivo:
-                                        archivo.write(xml_con_formato)        
+                                        archivo.write(xml_con_formato)
+                    output.append(f"se insertó en  la tabla : {tb_name}")        
                         
                 else:
                      print("Error!!,no coinciden la lista de parametros de la tabla")
@@ -271,14 +276,14 @@ class CREATE_XML:
          else:
               False 
     
-    def select(self,obj_select):
+    def select(self,obj_select,output):
         select_all=obj_select._SelectAll
         db_name=obj_select._db_name
         ltb=obj_select._l_tbname
         lcond=obj_select._lcondiciones
         
         if select_all:
-            self.select_all(db_name,ltb)
+            self.select_all(db_name,ltb,output)
     
     
     def select_all(self,db_name,ltb,output):
@@ -296,13 +301,14 @@ class CREATE_XML:
                         colselect=tb.findall(".//INSERT//COLUMNAS//COLUMNA")
                         for i in range(0,len(colselect)):
                             print(colselect[i].get("nombrecol")," : ", colselect[i].get("valor"))
-                            
+                            output.append(colselect[i].get("nombrecol") + " : "+colselect[i].get("valor"))
+                        output.append("---------------------------")
                         #print(colselect["nombrecol"]," -- ")
                     
             else:
                 print(f'Error, la DB {db_name} no existe')
                 output.append(f'Error, la DB {db_name} no existe')
-            
+                
         
         
         
@@ -313,23 +319,35 @@ class CREATE_XML:
 
 
 
-    def xml_gui(nombre_archivo): #esta funcion es para mostrar el xml como un arbol en la parte del GUI
-        #nombre_archivo = 'dbfile.xml' #nombre del archivo
-        if os.path.exists(nombre_archivo): #verificamos si el archivo existe
+    def xml_gui(nombre_archivo):  # Esta función es para mostrar el XML como un árbol en la parte del GUI
+        if os.path.exists(nombre_archivo):  # Verificamos si el archivo existe
             tree = ET.parse(nombre_archivo)
             root = tree.getroot()
-            #utilizamos variables para guardar los valores que vienen del archivo
             databases = []
-            
-            #reconocemos los valores del xml
-            #aun no reconoce lo de procedimientos y funciones
+
             for database in root.findall('.//DATABASE'):
                 database_name = database.get('name_db')
                 tabla_names = []
+                funciones = []  # Lista para almacenar funciones
+                procedimientos = []  # Lista para almacenar procedimientos
+
                 for tabla in database.findall('.//TABLA'):
                     tabla_name = tabla.get('tab_name')
                     tabla_names.append(tabla_name)
-                databases.append((database_name, tabla_names))
+
+                # Agrega reconocimiento de funciones
+                for funcion in database.findall('.//FUNCION'):
+                    funcion_name = funcion.get('func_name')
+                    funciones.append(funcion_name)
+
+                # Agrega reconocimiento de procedimientos
+                for procedimiento in database.findall('.//PROCEDIMIENTO'):
+                    procedimiento_name = procedimiento.get('proc_name')
+                    procedimientos.append(procedimiento_name)
+
+                # Agrega la tupla con los cuatro elementos a la lista de bases de datos
+                databases.append((database_name, tabla_names, funciones, procedimientos))
+
             return databases
         else:
             return []
@@ -372,54 +390,195 @@ class CREATE_XML:
         #messagebox.showerror(tituloVentana, mensaje)
         #root.destroy()
         
-    def createDump(self,db_name):
+    def createDump(self, db_name):
         try:
-            if  os.path.isfile(db_name+".xml"):
-                with open(db_name+".xml","r") as f:
-                    tree=ET.parse(f)
-                root=tree.getroot()
-                db=root.findall(".//DATABASE")
-                base=root.find("BASES_DE_DATOS")
-                if db is not None:
-                    for base in db :
-                        print("nombre db ",base.get("name_db"))
-                        if db_name == base.get("name_db"):
-                            self.mensajeError("ERROR!!, la base ya existe, no se puede agregar")
-                            return
-                self.insert_db2(db_name)
+            dbfile_path = "dbfile.xml"
+
+            if not os.path.isfile(dbfile_path):
+                self.mensajeError("ERROR!!, el archivo 'dbfile.xml' no existe")
+                return
+
+            tree = ET.parse(dbfile_path)
+            root = tree.getroot()
+            databases = root.findall(".//DATABASE")
+            if databases is not None:
+                for database in databases:
+                    if db_name == database.get("name_db"):
+                        self.insert_db2(db_name, root)
+                        return
+
+                self.mensajeError(f"ERROR!!, la base '{db_name}' no existe en 'dbfile.xml'")
             else:
-                self.root=ET.Element("BASE_DE_DATOS")
-                #se agrega el nombre de la nueva BD
-                new_bd=ET.SubElement(self.root,"BASES")
-                new_bd_name=ET.SubElement(new_bd,"DATABASE")
-                new_bd_name.attrib["name_db"]=db_name
-                new_bd_eschema=ET.SubElement(new_bd_name,"TABLAS")
-                new_bd_eschema=ET.SubElement(new_bd_name,"FUNCIONES")
-                new_bd_eschema=ET.SubElement(new_bd_name,"PROCEDIMIENTOS")
-                new_bd_eschema.text=" "
-                #guardamos el xml
-                cadena_xml = ET.tostring(self.root, encoding="utf-8").decode("utf-8")
-                xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
-                with open(db_name+".xml", "w", encoding="utf-8") as archivo:
-                    archivo.write(xml_con_formato)
+                self.mensajeError("ERROR!!, no hay bases de datos en 'dbfile.xml'")
         except Exception as e:
             print(e)
-    
-    
-    def insert_db2(self,db_name):
-        if  os.path.isfile(db_name+".xml"):
-                with open(db_name+".xml","r") as f:
-                    tree=ET.parse(f)
-                root=tree.getroot()
-                base=root.find("BASES")
-                print("+-+-> ",base)
-                new_bd_name=ET.SubElement(base,"DATABASE")
-                new_bd_name.attrib["name_db"]=db_name
-                new_bd_eschema=ET.SubElement(new_bd_name,"TABLAS")
-                new_bd_eschema=ET.SubElement(new_bd_name,"FUNCIONES")
-                new_bd_eschema=ET.SubElement(new_bd_name,"PROCEDIMIENTOS")
-                new_bd_eschema.text=" "
-                cadena_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
-                xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
-                with open(db_name+".xml", "w", encoding="utf-8") as archivo:
-                    archivo.write(xml_con_formato)
+
+    def insert_db2(self, db_name, root):
+        original_database = root.find(f".//DATABASE[@name_db='{db_name}']")
+        if original_database is None:
+            self.mensajeError(f"ERROR!!, la base '{db_name}' no existe")
+            return
+
+        existing_database = root.find(f".//DATABASE[@name_db='{db_name}_DUMP']")
+        if existing_database is not None:
+            self.mensajeError(f"ERROR!!, la base '{db_name}_DUMP' ya existe")
+            return
+
+        new_base_datos = ET.Element("BASE_DE_DATOS")
+        new_bases = ET.SubElement(new_base_datos, "BASES")
+
+        new_database = ET.SubElement(new_bases, "DATABASE")
+        new_database.attrib["name_db"] = f"{db_name}_DUMP"
+
+        # Copiar estructura de tablas
+        original_tables = original_database.find("TABLAS")
+        if original_tables is not None:
+            new_tables = ET.SubElement(new_database, "TABLAS")
+            for original_table in original_tables.findall("TABLA"):
+                new_table = ET.SubElement(new_tables, "TABLA", attrib={"tab_name": original_table.get("tab_name")})
+                create_element = original_table.find("CREATE")
+                if create_element is not None:
+                    new_create = ET.SubElement(new_table, "CREATE")
+                    self.copy_element(create_element, new_create)
+
+        # Copiar FUNCIONES
+        original_functions = original_database.find("FUNCIONES")
+        if original_functions is not None:
+            new_functions = ET.SubElement(new_database, "FUNCIONES")
+            for original_function in original_functions.findall("FUNCION"):
+                new_function = ET.SubElement(new_functions, "FUNCION", attrib=original_function.attrib)
+                create_element = original_function.find("CREATE")
+                if create_element is not None:
+                    new_create = ET.SubElement(new_function, "CREATE")
+                    self.copy_element(create_element, new_create)
+
+        # Copiar PROCEDIMIENTOS
+        original_procedures = original_database.find("PROCEDIMIENTOS")
+        if original_procedures is not None:
+            new_procedures = ET.SubElement(new_database, "PROCEDIMIENTOS")
+            for original_procedure in original_procedures.findall("PROCEDIMIENTO"):
+                new_procedure = ET.SubElement(new_procedures, "PROCEDIMIENTO", attrib=original_procedure.attrib)
+                create_element = original_procedure.find("CREATE")
+                if create_element is not None:
+                    new_create = ET.SubElement(new_procedure, "CREATE")
+                    self.copy_element(create_element, new_create)
+
+        cadena_xml = ET.tostring(new_base_datos, encoding="utf-8").decode("utf-8")
+        xml_con_formato = minidom.parseString(cadena_xml).toprettyxml(indent="  ")
+        with open(f"{db_name}_DUMP.xml", "w", encoding="utf-8") as archivo:
+            archivo.write(xml_con_formato)
+
+    def copy_element(self, original, new_element):
+        for original_column in original.findall("*"):
+            new_create_column = ET.SubElement(new_element, original_column.tag, attrib=original_column.attrib)
+            for inner_column in original_column.findall("*"):
+                new_inner_column = ET.SubElement(new_create_column, inner_column.tag, attrib=inner_column.attrib)
+                if inner_column.text:
+                    new_inner_column.text = inner_column.text
+
+    def mensajeError(self, mensaje):
+        print("Error:", mensaje)
+        
+    def export_tables_to_sql(self, db_name):
+        try:
+            with open("dbfile.xml", "r") as f:
+                tree = ET.parse(f)
+            root = tree.getroot()
+
+            db = root.find(f".//DATABASE[@name_db='{db_name.lower()}']")
+            if db is not None:
+                tables = db.findall(".//TABLA")
+                if tables:
+                    sql_file_path = f"{db_name}.sql"
+
+                    with open(sql_file_path, "w") as sql_file:
+                        for table in tables:
+                            table_name = table.get("tab_name")
+                            create_statement = self.generate_create_table_statement(table_name, table)
+                            insert_statements = self.generate_insert_table_statements(table_name, table)
+
+                            sql_file.write(create_statement)
+                            sql_file.write("\n")
+                            sql_file.write("\n".join(insert_statements))
+                            sql_file.write("\n\n")
+
+                    print(f"Tablas exportadas exitosamente a '{sql_file_path}'")
+                else:
+                    print(f"No hay tablas en la base de datos '{db_name}' para exportar.")
+            else:
+                print(f"La base de datos '{db_name}' no existe.")
+        except Exception as e:
+            print(e)
+
+    def generate_create_table_statement(self, table_name, table_element):
+        create_element = table_element.find(".//CREATE")
+        if create_element is not None:
+            create_statement = create_element.text.strip()
+            return f"CREATE TABLE {table_name} ({create_statement});"
+        return f"-- No CREATE statement found for table {table_name}"
+
+    def generate_insert_table_statements(self, table_name, table_element):
+        insert_element = table_element.find(".//INSERT")
+        if insert_element is not None:
+            columns = insert_element.findall(".//COLUMNAS/COLUMNA")
+            values = insert_element.findall(".//COLUMNAS")
+            columns_names = [col.get("nombrecol") for col in columns]
+            values_rows = []
+
+            for value_element in values:
+                values_row = [col.get("valor") for col in value_element.findall(".//COLUMNA")]
+                values_rows.append(values_row)
+
+            insert_statements = []
+            for values_row in values_rows:
+                values_str = ", ".join(f"'{value}'" if value is not None else "NULL" for value in values_row)
+                insert_statements.append(f"INSERT INTO {table_name} ({', '.join(columns_names)}) VALUES ({values_str});")
+
+            return insert_statements
+        return [f"-- No INSERT statement found for table {table_name}"]
+
+    def import_tables_from_sql(self, source_db_name, destination_db_name):
+        try:
+            with open("dbfile.xml", "r") as f:
+                tree = ET.parse(f)
+            root = tree.getroot()
+
+            source_db = root.find(f".//DATABASE[@name_db='{source_db_name.lower()}']")
+            destination_db = root.find(f".//DATABASE[@name_db='{destination_db_name.lower()}']")
+
+            if source_db is not None and destination_db is not None:
+                source_tables = source_db.findall(".//TABLA")
+                destination_tables = destination_db.findall(".//TABLA")
+
+                for source_table in source_tables:
+                    source_table_name = source_table.get("tab_name")
+                    destination_table = next((t for t in destination_tables if t.get("tab_name") == source_table_name), None)
+
+                    if destination_table is not None:
+                        # Extract data from source table
+                        insert_statements = self.generate_insert_table_statements(source_table_name, source_table)
+
+                        # Insert data into destination table
+                        self.execute_insert_statements(destination_table, insert_statements)
+
+                        print(f"Datos de la tabla '{source_table_name}' importados con éxito a '{destination_db_name}'.")
+                    else:
+                        print(f"La tabla '{source_table_name}' no existe en la base de datos de destino.")
+
+            else:
+                print(f"La base de datos de origen ('{source_db_name}') o destino ('{destination_db_name}') no existe.")
+        except Exception as e:
+            print(e)
+
+    def execute_insert_statements(self, destination_table, insert_statements):
+        # Implementar la ejecución de las sentencias INSERT en la base de datos de destino
+        # Puedes utilizar la biblioteca sqlite3 u otra adecuada para tu base de datos
+        # En este ejemplo, se asume que se está utilizando SQLite como base de datos de destino
+        connection = sqlite3.connect(f"{destination_table.get('tab_name')}_db.sqlite")
+        cursor = connection.cursor()
+
+        for insert_statement in insert_statements:
+            cursor.execute(insert_statement)
+
+        connection.commit()
+        connection.close()

@@ -10,13 +10,13 @@ from Arbol.AST import AST
 from util.manipulador_xml import CREATE_XML
 from tkinter import filedialog
 from tkinter import messagebox
-from PIL import Image, ImageTk
+import subprocess
 from tkinter import simpledialog
 import os
 from enviroment import enviroment
 from Arbol.Arbol import Arbol
 from Arbol.Nodo import Nodo
-
+import sqlite3
 class GUI_P:
     _instances = [] #esta instancia permite hacer lo de cerrar una pestaña y luego poder abrir y que si se carge el contenido del archivo
     def __init__(self) :
@@ -27,6 +27,7 @@ class GUI_P:
 
         self.notebook=None
         self.mat_text=[]
+        self.mat_consola = []
         utl= GENERIC()
         self.ventana=tk.Tk()
         self.archivo_guardado = None  # Variable para almacenar la ruta del archivo guardado
@@ -41,7 +42,7 @@ class GUI_P:
         #self.tree.pack(side="left")
         
         
-        self.ventana.after(2000, self.reload_data)       
+        self.ventana.after(20000, self.reload_data)       
         
        # tree.place(x=0,y=0,relwidth=1,relheight=1)
         self.tree.pack(side="left")
@@ -78,8 +79,8 @@ class GUI_P:
         sql_submenu.add_command(label="Ejecutar Query", command=self.run_script)
         tools_ops.add_cascade(label="SQL", menu = sql_submenu)
         
-        tools_ops.add_command(label="Exportar") # exportar el contenido de una tabla o varias tablas
-        tools_ops.add_command(label="Importar") #importar los datos de una o varias tablas a otra base de datos, ya debe existir la estructura
+        tools_ops.add_command(label="Exportar", command=self.exportarDB) # exportar el contenido de una tabla o varias tablas
+        tools_ops.add_command(label="Importar", command=self.importarDB) #importar los datos de una o varias tablas a otra base de datos, ya debe existir la estructura
         btn_tools.config(menu=tools_ops)
         btn_tools.pack(side="left",padx=10,pady=10)
 
@@ -101,8 +102,9 @@ class GUI_P:
         self.notebook = ttk.Notebook(frame_menus)
         self.notebook.pack(expand=tk.YES, fill=tk.BOTH)
         #ttk.Button(self.ventana, text="Abrir AST", command=self.mostrar_ventana_imagen).pack(padx=10, pady=10)
+        self.tools_sql()
+        self.consola()
         self.ventana.mainloop()
-
         GUI_P._instances.append(self) #son instancias del GUI ya que no funcionaba al momento de eliminar una pestaña y volver a cargar un archivo
 
     @classmethod
@@ -132,8 +134,11 @@ class GUI_P:
         
 
     def run_script(self):
+        self.mat_consola[0].config(state="normal")
+        self.mat_consola[0].delete("1.0", tk.END)
         index = self.notebook.index("current")
-        entrada = self.mat_text[index].get("1.0", "end-1c")
+        text_widget = self.mat_text[index]
+        entrada = text_widget.get("1.0", "end-1c")
         instruccion = Analizar(entrada)
         ast = AST(instruccion)
         arbol = Arbol(self.getInitNodo())
@@ -143,39 +148,40 @@ class GUI_P:
             padre = Nodo("","",0,0)
             for inst in ast.getInstrucciones():
                 print("el objeto es de tipo ",type(inst))
-                
                 hijo2 = Nodo("","",0,0)
                 if isinstance(inst,Instruccion):
-
                     if padre._token !="":
                         hijo2._token = padre._token
                         hijo2._lexema = padre._lexema
                         hijo2._linea = padre._linea
                         hijo2._columna = padre._columna
                         hijo2._hijos = padre._hijos
-
                     hijo = Nodo("","",0,0)
                     inst.compilar(ast,self.tablaSimbolos,hijo,salidaConsola)
-
                     padre = Nodo("INSTRUCCION","inst",0,0)
-                    
                     if hijo2._token != "" and hijo._token!="":
                         padre.addHijo(hijo2)
-
                     if not hijo._token=="":
                         padre.addHijo(hijo)
-
-
             arbol._raiz.addHijo(padre)
-
             ##MANDAMOS A GRAFICAR
             arbol.graficarAST()
-        
         except Exception as e:
-            print(f"Error al ejecutar las instrucciones: {e} ")
+            # Muestra el error en la consola
+            error_msg = "Error al ejecutar las instrucciones en la pestaña Query{}: {}".format(index + 1, e)
+            self.mat_consola[0].config(state="normal")
+            self.mat_consola[0].insert(tk.END, error_msg + "\n")
             salidaConsola.append(f"Error encontrado de tipo Exception: {e}")
-
+        # Después de ejecutar la pestaña actual, deshabilita la edición en la consola
+        self.mat_consola[0].config(state="disabled")
         print(salidaConsola)
+        #resultado = "Instrucciones ejecutadas en la pestaña Query{}.".format(index + 1)
+        txsalida=""
+        for salida in salidaConsola:
+            txsalida=txsalida+salida+"\n"
+        self.mat_consola[0].config(state="normal")
+        self.mat_consola[0].insert(tk.END, txsalida)
+        # Muestra el resultado en la consola
 
     def run_sql(self):
         index=self.notebook.index("current")
@@ -200,7 +206,7 @@ class GUI_P:
     def reload_data(self):
         resultados = CREATE_XML.xml_gui('dbfile.xml')
         self.update_gui(resultados)
-        self.ventana.after(2000, self.reload_data)
+        self.ventana.after(20000, self.reload_data)
 
     def update_gui(self, resultados):
         for item in self.tree.get_children():
@@ -208,32 +214,32 @@ class GUI_P:
 
         # Agregar los nuevos datos al Treeview
         root = self.tree.insert("", "end", text="BASES DE DATOS")
-        for database_name, tabla_names in resultados:
+        """for database_name, tabla_names in resultados:
             h2 = self.tree.insert(root, "end", text=database_name)
             if tabla_names:
                 rs = self.tree.insert(h2, "end", text="TABLAS")
                 for tabla_name in tabla_names:
                     self.tree.insert(rs, "end", text=tabla_name)
-        """
-        for database_name, tabla_names, funciones, procedimientos in resultado:
+"""
+        for database_name, tabla_names, funciones, procedimientos in resultados:
             print(database_name)
-            h2=tree.insert(root,"end",text=database_name)
+            h2=self.tree.insert(root,"end",text=database_name)
             if tabla_names:
-                rs=tree.insert(h2,"end",text="TABLAS")
+                rs=self.tree.insert(h2,"end",text="TABLAS")
                 for tabla_name in tabla_names:
                     print(tabla_name)
-                    tree.insert(rs,"end",text=tabla_name)
+                    self.tree.insert(rs,"end",text=tabla_name)
             if funciones:
-                rs=tree.insert(h2,"end",text="FUNCIONES")
+                rs=self.tree.insert(h2,"end",text="FUNCIONES")
                 for funcion in funciones:
                     print(funcion)
-                    tree.insert(rs,"end",text=funcion)
+                    self.tree.insert(rs,"end",text=funcion)
             if procedimientos:
-                rs=tree.insert(h2,"end",text="PROCEDIMIENTOS")
+                rs=self.tree.insert(h2,"end",text="PROCEDIMIENTOS")
                 for procedimiento in procedimientos:
                     print(procedimiento)
-                    tree.insert(rs,"end",text=procedimiento)
-        """
+                    self.tree.insert(rs,"end",text=procedimiento)
+
                     
                     
     def salir_programa(self):
@@ -267,25 +273,23 @@ class GUI_P:
             self.mat_text[index].insert("1.0", contenido_archivo)
             
     def mostrar_ventana_imagen(self):
-        ventana_imagen = tk.Toplevel(self.ventana)
-        ventana_imagen.title('Reporte AST')
-        #para obtener dimenciones de la pantalla
-        ancho_pantalla = self.ventana.winfo_screenwidth()
-        alto_pantalla = self.ventana.winfo_screenheight()
-        #print("valorx " , ancho_pantalla)
-        #print("valory " , alto_pantalla)
-        ventana_imagen.geometry(f"{ancho_pantalla}x{alto_pantalla}") #tamaño de la ventana al tamaño de la pantalla
-        ruta_imagen = "AST.png"
-        if os.path.exists(ruta_imagen):
-            imagen = Image.open(ruta_imagen)
-            #la imagen debe de ocupar toda la ventana para verse completa
-            cambiarDimencion = imagen.resize((ancho_pantalla, alto_pantalla))
-            imagen_tk = ImageTk.PhotoImage(cambiarDimencion)
-            imagen = ttk.Label(ventana_imagen, image=imagen_tk) #para la nueva ventana
-            imagen.image = imagen_tk  #para que se muestre la imagen en la ventana
-            imagen.pack(fill="both", expand=True) #dimenciones de la imagen dentro de la pantalla
-        else:
-            ttk.Label(ventana_imagen, text="El AST aun no se genera.").pack(padx=10, pady=10)
+        try:
+            # Obtén el directorio del script actual (front)
+            directorio_script = os.path.dirname(__file__)
+            # Construye la ruta relativa al directorio raíz
+            ruta_imagen = os.path.join(directorio_script, '..', 'AST.png')
+            # Normaliza la ruta para manejar barras inclinadas y barras invertidas
+            ruta_imagen = os.path.normpath(ruta_imagen)
+            # Verifica si el archivo de imagen existe
+            if os.path.exists(ruta_imagen):
+                # Intenta abrir la imagen con el visor de imágenes del sistema operativo
+                subprocess.Popen(['start', ruta_imagen], shell=True)
+            else:
+                print("La imagen 'AST.png' no existe en la ubicación especificada.")
+
+        except Exception as e:
+            # Maneja cualquier excepción que pueda ocurrir al intentar abrir la imagen
+            print(f"Error al abrir la imagen: {e}")
     
     
     
@@ -315,7 +319,29 @@ class GUI_P:
     
     def exportarDB(self):
         print("exportar")
+        crear= CREATE_XML()
+        nombre = simpledialog.askstring("Exportar", "Ingrese el nombre de la Base de datos:")
+        crear.export_tables_to_sql(nombre)
         
     def importarDB(self):
         print("importar")
-        nombre = simpledialog.askstring("Crear DUMP", "Ingrese el nombre de la Base de datos:")
+        crear = CREATE_XML()
+        
+        # Pedir al usuario los nombres de las bases de datos
+        source_db_name = simpledialog.askstring("Importar", "Ingrese el nombre de la Base de datos de origen:")
+        destination_db_name = simpledialog.askstring("Importar", "Ingrese el nombre de la Base de datos de destino:")
+
+        # Llamar al método de importación
+        crear.import_tables_from_sql(source_db_name, destination_db_name)
+        
+        
+    def consola(self):
+        frame_consola = tk.Frame(self.frame_form_fill)
+        frame_consola.pack(side="bottom", expand=tk.YES, fill=tk.BOTH)
+        notebook_consola = ttk.Notebook(frame_consola)
+        notebook_consola.pack(expand=tk.YES, fill=tk.BOTH)
+        tab_consola = ttk.Frame(notebook_consola)
+        notebook_consola.add(tab_consola, text="Consola")
+        consola_texto = tk.Text(tab_consola, wrap=tk.WORD, width=80, height=15, state="disabled") #para que no se pueda modificar la consola
+        consola_texto.pack(expand=True, fill=tk.BOTH)
+        self.mat_consola.append(consola_texto)

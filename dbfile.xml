@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+<BASE_DE_DATOS>
+  <BASES>
+    <DATABASE name_db="testeo">
+      <TABLAS>
+          <TABLA tab_name="my_tab1">
+            <CREATE>
+              <COLUMNAS>
+                <COLUMNA nombrecol="id_cliente" tipo="int" pk="True" isNull="False" valor="" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Nombre_cliente" tipo="nvarchar" pk="False" isNull="True" valor="" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUNA nombrecol="Apellido_cliente" tipo="nvarchar" pk="False" isNull="False" valor="" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              </COLUMNAS>
+            </CREATE>
+            <INSERT>
+              <COLUMNAS>
+                <COLUMNA nombrecol="id_cliente" tipo="int" pk="True" isNull="False" valor="1" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Nombre_cliente" tipo="nvarchar" pk="False" isNull="True" valor="selvin" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Apellido_cliente" tipo="nvarchar" pk="False" isNull="False" valor="Hernandez" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="id_cliente" tipo="int" pk="True" isNull="False" valor="2" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Nombre_cliente" tipo="nvarchar" pk="False" isNull="True" valor="luis" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Apellido_cliente" tipo="nvarchar" pk="False" isNull="False" valor="cutzal" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="id_cliente" tipo="int" pk="True" isNull="False" valor="3" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Nombre_cliente" tipo="nvarchar" pk="False" isNull="True" valor="elder" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Apellido_cliente" tipo="nvarchar" pk="False" isNull="False" valor="lopez" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="id_cliente" tipo="int" pk="True" isNull="False" valor="4" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Nombre_cliente" tipo="nvarchar" pk="False" isNull="True" valor="carlos" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Apellido_cliente" tipo="nvarchar" pk="False" isNull="False" valor="gonzalez" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              </COLUMNAS>
+            </INSERT>
+          </TABLA>
+          <TABLA tab_name="my_tab2">
+            <CREATE>
+              <COLUMNAS>
+                <COLUMNA nombrecol="id_producto" tipo="int" pk="True" isNull="False" valor="" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Nombre_producto" tipo="nvarchar" pk="False" isNull="True" valor="" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="descripcion" tipo="nvarchar" pk="False" isNull="False" valor="" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              </COLUMNAS>
+            </CREATE>
+            <INSERT>
+              <COLUMNAS>
+                <COLUMNA nombrecol="id_producto" tipo="int" pk="True" isNull="False" valor="1" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="nombre_producto" tipo="nvarchar" pk="False" isNull="True" valor="teclado" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="teclado pc bluetooth" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="id_producto" tipo="int" pk="True" isNull="False" valor="2" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="nombre_producto" tipo="nvarchar" pk="False" isNull="True" valor="mouse gaming" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="mouse reddragon" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="id_producto" tipo="int" pk="True" isNull="False" valor="3" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="nombre_producto" tipo="nvarchar" pk="False" isNull="True" valor="monitor 20Plg" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="monitor de alta Frec." col_size="20" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="id_producto" tipo="int" pk="True" isNull="False" valor="4" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="nombre_producto" tipo="nvarchar" pk="False" isNull="True" valor="audifonos gaming" col_size="11" presicion="0" col_ref="" tab_ref=""/>
+                <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              </COLUMNAS>
+            </INSERT>
+          </TABLA>
+      </TABLAS>
+      <FUNCIONES>
+        <FUNCION func_name="funcion">
+          <CREATE>
+            <COLUMNAS>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+            </COLUMNAS>
+          </CREATE>
+        </FUNCION>
+      </FUNCIONES>
+      <PROCEDIMIENTOS>
+        <PROCEDIMIENTO proc_name="procedimiento">
+          <CREATE>
+            <COLUMNAS>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+            </COLUMNAS>
+          </CREATE>
+        </PROCEDIMIENTO>
+        <PROCEDIMIENTO proc_name="procedimiento2">
+          <CREATE>
+            <COLUMNAS>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+              <COLUMNA nombrecol="Descripcion" tipo="nvarchar" pk="False" isNull="False" valor="headsets de alta fidelidad" col_size="20" presicion="0" col_ref="" tab_ref=""/>
+            </COLUMNAS>
+          </CREATE>
+        </PROCEDIMIENTO>
+      </PROCEDIMIENTOS>
+    </DATABASE>
+  </BASES>
+</BASE_DE_DATOS>
