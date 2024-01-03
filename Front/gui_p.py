@@ -90,8 +90,17 @@ class GUI_P:
         btn_run_sql=tk.Button(frame_botones,text="Run SQL",command=self.run_sql)
         btn_run_sql.pack(side="left",padx=10,pady=10)"""
         
-        btn_run_sql=tk.Button(frame_botones,text="Abrir AST",command=self.mostrar_ventana_imagen)
-        btn_run_sql.pack(side="left",padx=10,pady=10)
+        #btn_run_sql=tk.Button(frame_botones,text="Abrir AST",command=self.mostrar_ventana_imagen)
+        #btn_run_sql.pack(side="left",padx=10,pady=10)
+        
+        btn_reportes = tk.Menubutton(frame_botones, text="Reportes")
+        reportes_ops = tk.Menu(btn_reportes)
+        reportes_ops.add_command(label="Abrir AST", command=self.mostrar_ventana_imagen)
+        reportes_ops.add_command(label="Recuperación de errores léxicos")
+        reportes_ops.add_command(label="Recuperación de errores sintácticos")
+        reportes_ops.add_command(label="Reporte Gramatical", command=self.mostrarReporteGramatical)
+        btn_reportes.config(menu=reportes_ops)
+        btn_reportes.pack(side="left", padx=10, pady=10)
 
         #frame_form_fill
         self.frame_form_fill = tk.Frame(frame_menus,height = 50,  bd=0, relief=tk.SOLID,bg='#fcfcfc')
@@ -342,3 +351,7 @@ class GUI_P:
         consola_texto = tk.Text(tab_consola, wrap=tk.WORD, width=80, height=15, state="disabled") #para que no se pueda modificar la consola
         consola_texto.pack(expand=True, fill=tk.BOTH)
         self.mat_consola.append(consola_texto)
+
+    def mostrarReporteGramatical(self):
+        print("Reporte Gramatical")
+        subprocess.Popen(["start", "", "Manuales/Reporte_Gramatical.pdf"], shell=True)
