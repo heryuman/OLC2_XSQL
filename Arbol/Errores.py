@@ -1,6 +1,6 @@
 class Errores:
     def __init__(self,descripcion,tipo, linea, columna):
-        self._Descripcion =descripcion
+        self._descripcion =descripcion
         if tipo== 1:
             self._tipo="Lexico"
         else:
