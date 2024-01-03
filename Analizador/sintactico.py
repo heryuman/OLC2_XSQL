@@ -504,7 +504,7 @@ def p_error(p):
         print(f"Error de sintaxis en '{p.value}' linea {p.lineno} columna {p.lexpos+1}") 
         from Arbol.Errores import Errores
         from Analizador.lexico import ListaErrores  
-        error = Errores(f"Error lexico con {p.value}",2,p.lineno,p.lexpos+1)
+        error = Errores(f"Error Sintactico con {p.value}",2,p.lineno,p.lexpos+1)
         ListaErrores.append(error)
 
 

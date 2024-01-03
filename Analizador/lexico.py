@@ -162,7 +162,7 @@ def t_CADENA(t):
 
 def t_error(t):
     print(f"Error Lexico {t.value!r} en linea : {t.lineno} y columna {t.lexpos+1} ")
-    error= Errores(f"Error Sintactico con : {t.value!r} ",1,t.lineno,t.lexpos+1)
+    error= Errores(f"Error Lexcico con : {t.value!r} ",1,t.lineno,t.lexpos+1)
     ListaErrores.append(error)
     t.lexer.skip(1)
 
