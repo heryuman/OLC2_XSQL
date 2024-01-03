@@ -186,6 +186,12 @@ class GUI_P:
             print("en gui"+error._descripcion)
         # Muestra el resultado en la consola
 
+    def mostrarErrores(self):
+        self.mat_consola[0].insert(tk.END,"")
+        txterror=""
+        for error in ListaErrores:
+            txterror= txterror+"Descripcion: "+error._descripcion+" tipo: "+error._tipo+" linea: "+error._linea+" columna: "+error._columna+"\n"
+        self.mat_consola[0].insert(tk.END,txterror)
     def run_sql(self):
         index=self.notebook.index("current")
         cursor_posicion=self.mat_text[index].index(tk.INSERT)
