@@ -176,8 +176,11 @@ class GUI_P:
         self.mat_consola[0].config(state="disabled")
         print(salidaConsola)
         #resultado = "Instrucciones ejecutadas en la pestaña Query{}.".format(index + 1)
+        txsalida=""
+        for salida in salidaConsola:
+            txsalida=txsalida+salida+"\n"
         self.mat_consola[0].config(state="normal")
-        self.mat_consola[0].insert(tk.END, salidaConsola)
+        self.mat_consola[0].insert(tk.END, txsalida)
         # Muestra el resultado en la consola
 
     def run_sql(self):

@@ -302,6 +302,7 @@ class CREATE_XML:
                         for i in range(0,len(colselect)):
                             print(colselect[i].get("nombrecol")," : ", colselect[i].get("valor"))
                             output.append(colselect[i].get("nombrecol") + " : "+colselect[i].get("valor"))
+                        output.append("---------------------------")
                         #print(colselect["nombrecol"]," -- ")
                     
             else:
